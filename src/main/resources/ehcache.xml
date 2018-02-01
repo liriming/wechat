@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="false">
+
+    <cache name="getBuyTime" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getInstalledTime" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getUsername" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getDiskId" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getValueByName" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getModelNumber" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getOpenudid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getUtdid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+
+</ehcache>
