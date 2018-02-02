@@ -1,0 +1,31 @@
+# 开发环境默认的profile，其他环境需要指定启动参数，比如：java -jar store-manager.jar --spring.profiles.active=prod
+spring:
+  profiles:
+    active: dev
+    include:
+      - pphb
+      - cache
+  application:
+    name: pphb
+#  boot:
+#    admin:
+#      client:
+#        prefer-ip: true
+#  mail:
+#    host: smtp.exmail.qq.com
+#    username: service@ysbang.cn
+#    password: gzsd@2015
+#    properties:
+#      mail:
+#        smtp:
+#          connectiontimeout: 5000
+#          timeout: 3000
+#          writetimeout: 5000
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://120.79.63.21:3306/pphb?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: uAiqwVwjJ8-i
+    hikari:
+      maxLifetime: 1765000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
+      maximumPoolSize: 60 #连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)

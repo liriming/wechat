@@ -293,8 +293,7 @@ public class PPController {
 
     @RequestMapping(value = "getDiskId2", method = RequestMethod.GET)
     public String getDiskId2() {
-
-        return dictionaryDao.getValueByName("disk_id2");
+        return dictionaryDao.getValueByName("disk_id");
     }
 
 
