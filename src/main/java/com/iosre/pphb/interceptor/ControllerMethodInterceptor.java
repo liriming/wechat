@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -114,7 +115,7 @@ public class ControllerMethodInterceptor {
             result = "发生异常：" + e.getMessage();
         }
 
-        userOpLog.setResult( result.toString());
+        userOpLog.setResult(Optional.ofNullable(result).orElse("").toString());
         userOpLog.setAllParams(allParams);
         userOpLog.setCostMs(System.currentTimeMillis() - beginTime);
         logService.saveUserOpLog(userOpLog, "ppMgrOpLog");
