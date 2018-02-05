@@ -7,7 +7,6 @@ import com.iosre.pphb.dto.UserOpLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -65,8 +64,8 @@ public class LogServiceImpl {
 
 		//记录log到文件中
 		//用tab分隔，以方便后期处理。
-		logger.info("请求已处理.	Method={},	Cost={}ms,	Ip={},	Params={},	Result={}",
-				userOpLog.getMethod(), userOpLog.getCostMs(), userOpLog.getIp(),
+		logger.info("请求已处理.	Method={},	Cost={}ms,	Ip={}, Controller={},	Params={},	Result={}",
+				userOpLog.getMethod(), userOpLog.getCostMs(), userOpLog.getIp(),userOpLog.getController(),
 				allParamsString, resultString);
 		
 		//是否保存到mongo中

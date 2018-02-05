@@ -57,7 +57,7 @@ public class ControllerMethodInterceptor {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
-        String controller = method.getDeclaringClass().getName().substring(25);
+        String controller = method.getDeclaringClass().getName().substring(26);
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
