@@ -22,10 +22,14 @@ spring:
 #          timeout: 3000
 #          writetimeout: 5000
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://120.79.63.21:3306/pphb?useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: root
-    password: uAiqwVwjJ8-i
-    hikari:
-      maxLifetime: 1765000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
-      maximumPoolSize: 60 #连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://120.79.63.21:3306/pphb?useUnicode=true&characterEncoding=utf8&useSSL=false
+      username: root
+      password: uAiqwVwjJ8-i
+      hikari:
+        maxLifetime: 1765000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
+        maximumPoolSize: 60 #连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+
+  data:
+      mongodb:
+        uri: mongodb://120.79.63.21:27017/ppLog
