@@ -20,7 +20,7 @@ public class PPController {
 
     @RequestMapping(value = "uploadDecrypt", method = RequestMethod.GET)
     public void uploadDecrypt(HttpServletRequest request, @RequestParam(value = "val") String val) {
-        ppService.uploadDecrypt(request, val);
+        ppService.uploadDecrypt(val);
     }
 
     @RequestMapping(value = "checkIP", method = RequestMethod.GET)

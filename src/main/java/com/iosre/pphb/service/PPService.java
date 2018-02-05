@@ -45,7 +45,7 @@ public class PPService {
     private static Set<String> idfaMap = new ConcurrentSkipListSet();
 
 
-    public void uploadDecrypt(HttpServletRequest request, @RequestParam(value = "val")String val) {
+    public void uploadDecrypt(String val) {
         /*try {
             if (val.contains("bundleids")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(val, Map.class);
