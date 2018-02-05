@@ -57,7 +57,7 @@ public class ControllerMethodInterceptor {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
-        String controller = method.getDeclaringClass().getName();
+        String controller = method.getDeclaringClass().getName().split(".")[4];
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
@@ -69,13 +69,7 @@ public class ControllerMethodInterceptor {
         //处理参数列表：
         Object[] args = pjp.getArgs();
         for (Object arg : args) {
-            if (arg instanceof Map<?, ?>) {
-                allParams.add(arg);
-                userOpLog.setIp("0.0.0.0");
-
-                //获取url到log中：
-                userOpLog.setUrl("");
-            } else if (arg instanceof String) {
+            if (arg instanceof String) {
                 if(((String) arg).length() >= 100) {
                     try {
                         String deuri = URLDecoder.decode((String) arg, "UTF-8");
@@ -106,10 +100,7 @@ public class ControllerMethodInterceptor {
         }
 
         try {
-            if (result == null) {
-                // 一切正常的情况下，继续执行被拦截的方法
-                result = pjp.proceed();
-            }
+            result = pjp.proceed();
         } catch (Throwable e) {
             logger.info("exception: ", e);
             result = "发生异常：" + e.getMessage();
