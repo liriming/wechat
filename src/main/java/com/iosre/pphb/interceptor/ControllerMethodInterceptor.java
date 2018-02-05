@@ -92,11 +92,11 @@ public class ControllerMethodInterceptor {
                 //获取url到log中：
                 userOpLog.setUrl(request.getRequestURL().toString());
 
-                //获取query string 或 posted form data参数
+              /*  //获取query string 或 posted form data参数
                 Map<String, String[]> paramMap = ((HttpServletRequest) arg).getParameterMap();
                 if (paramMap != null && paramMap.size() > 0) {
                     allParams.add(paramMap);
-                }
+                }*/
             }
         }
 

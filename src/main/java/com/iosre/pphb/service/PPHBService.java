@@ -1,4 +1,4 @@
-package com.iosre.pphb.controller;
+package com.iosre.pphb.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iosre.pphb.dao.DictionaryDao;
