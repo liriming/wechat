@@ -83,6 +83,8 @@ public class ControllerMethodInterceptor {
                 }else{
                     allParams.add(arg);
                 }
+                userOpLog.setIp("0.0.0.0");
+                userOpLog.setUrl("");
             } else if (arg instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest) arg;
                 //获取请求方的IP地址到log中
