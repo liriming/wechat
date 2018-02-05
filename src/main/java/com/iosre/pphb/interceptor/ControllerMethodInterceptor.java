@@ -65,6 +65,7 @@ public class ControllerMethodInterceptor {
         UserOpLog userOpLog = new UserOpLog();
         userOpLog.setMethod(methodName);
         userOpLog.setCtime(beginTime / 1000);
+        userOpLog.setController(controller);
 
         //处理参数列表：
         Object[] args = pjp.getArgs();
@@ -100,20 +101,17 @@ public class ControllerMethodInterceptor {
         }
 
         try {
-            result = pjp.proceed();
+            if(result == null) {
+                result = pjp.proceed();
+            }
         } catch (Throwable e) {
             logger.info("exception: ", e);
             result = "发生异常：" + e.getMessage();
         }
 
-        if(StringUtils.isEmpty(userOpLog.getIp())){
-            userOpLog.setIp("0.0.0.0");
-        }
-
         userOpLog.setResult(Optional.ofNullable(result).orElse("").toString());
         userOpLog.setAllParams(allParams);
         userOpLog.setCostMs(System.currentTimeMillis() - beginTime);
-        userOpLog.setController(controller);
         logService.saveUserOpLog(userOpLog, "ppMgrOpLog");
 
         return result;
