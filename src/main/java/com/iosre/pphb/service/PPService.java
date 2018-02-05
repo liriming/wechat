@@ -45,7 +45,7 @@ public class PPService {
     private static Set<String> idfaMap = new ConcurrentSkipListSet();
 
 
-    public void uploadDecrypt(HttpServletRequest request,@RequestParam(value = "val") String val) {
+    public void uploadDecrypt(HttpServletRequest request, String val) {
         /*try {
             if (val.contains("bundleids")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(val, Map.class);
@@ -83,12 +83,12 @@ public class PPService {
         return false;
     }
 
-    public Boolean sWitch(@RequestParam(value = "content") String content) {
+    public Boolean sWitch(String content) {
         //logger.info(content);
         return true;
     }
 
-    public Boolean log(@RequestParam(value = "devicename") String devicename) {
+    public Boolean log(String devicename) {
 
         logDao.insertLog(devicename);
 
@@ -96,7 +96,7 @@ public class PPService {
     }
 
 
-    public Double getLuminance(@RequestParam(value = "content") String content) {
+    public Double getLuminance( String content) {
 
         try {
             if (content.contains("idfv")) {
@@ -129,7 +129,7 @@ public class PPService {
     }
 
 
-    public Integer getBattery(@RequestParam(value = "content") String content) {
+    public Integer getBattery(String content) {
 
         try {
             if (content.contains("idfv")) {
@@ -153,7 +153,7 @@ public class PPService {
     }
 
 
-    public String getDiskId(@RequestParam(value = "content") String content) {
+    public String getDiskId(String content) {
 
         try {
             if (content.contains("idfv")) {
@@ -190,7 +190,7 @@ public class PPService {
     }
 
 
-    public String getModelNumber(@RequestParam(value = "content") String content) {
+    public String getModelNumber(String content) {
 
 
         try {
@@ -219,7 +219,7 @@ public class PPService {
         return "";
     }
 
-    public String getOpenudid(@RequestParam(value = "content") String content) {
+    public String getOpenudid(String content) {
 
 
         try {
@@ -249,7 +249,7 @@ public class PPService {
     }
 
 
-    public String getUtdid(@RequestParam(value = "content") String content) {
+    public String getUtdid(String content) {
 
 
         try {
@@ -284,7 +284,7 @@ public class PPService {
 
 
     //120.79.53.150:8080/updateDiskId?disk_id=
-    public String updateDiskId(@RequestParam(value = "disk_id") String diskid) {
+    public String updateDiskId(String diskid) {
 
         String oldDiskId = dictionaryDao.getValueByName("disk_id");
 
@@ -297,7 +297,6 @@ public class PPService {
 
 
     public String getBuyTime(HttpServletRequest request, @RequestParam(value = "content") String content) {
-
         try {
             if (content.contains("idfv")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
@@ -332,7 +331,7 @@ public class PPService {
     }
 
 
-    public Integer getInstalledTime(@RequestParam(value = "content") String content) {
+    public Integer getInstalledTime(String content) {
 
         try {
             if (content.contains("idfv")) {
@@ -361,7 +360,7 @@ public class PPService {
         return 0;
     }
 
-    public String getBundleids(@RequestParam(value = "content") String content) {
+    public String getBundleids(String content) {
 
         try {
             if (content.contains("bundleids")) {

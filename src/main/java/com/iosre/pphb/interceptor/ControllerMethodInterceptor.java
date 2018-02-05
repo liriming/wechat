@@ -73,19 +73,20 @@ public class ControllerMethodInterceptor {
                 //获取url到log中：
                 userOpLog.setUrl("");
             } else if (arg instanceof String) {
-                try {
-                    String deuri = URLDecoder.decode((String)arg , "UTF-8");
-                    logger.info(deuri.length() + "");
-                    Map map = jsonMapper.readValue(deuri, Map.class);
-                    allParams.add(map);
-                    userOpLog.setIp("0.0.0.0");
-
-                    //获取url到log中：
-                    userOpLog.setUrl("");
-                } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
+                if(((String) arg).length() >= 30) {
+                    try {
+                        String deuri = URLDecoder.decode((String) arg, "UTF-8");
+                        logger.info(deuri.length() + "");
+                        Map map = jsonMapper.readValue(deuri, Map.class);
+                        allParams.add(map);
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }else{
+                    allParams.add(arg);
                 }
-
+                userOpLog.setIp("0.0.0.0");
+                userOpLog.setUrl("");
             } else if (arg instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest) arg;
                 //获取请求方的IP地址到log中
@@ -113,9 +114,7 @@ public class ControllerMethodInterceptor {
             result = "发生异常：" + e.getMessage();
         }
 
-        if (result instanceof String) {
-            userOpLog.setResult((String) result);
-        }
+        userOpLog.setResult( result.toString());
         userOpLog.setAllParams(allParams);
         userOpLog.setCostMs(System.currentTimeMillis() - beginTime);
         logService.saveUserOpLog(userOpLog, "ppMgrOpLog");

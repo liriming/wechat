@@ -33,7 +33,7 @@ public class PPController {
     }
 
     @RequestMapping(value = "sWitch", method = RequestMethod.GET)
-    public Boolean sWitch(@RequestParam(value = "content") String content) {
+    public Boolean sWitch(@RequestParam(value = "val") String content) {
         return ppService.sWitch(content);
     }
 
