@@ -1,5 +1,6 @@
 package com.iosre.pphb.controller;
 
+import com.iosre.pphb.service.VoiceMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class VoiceMsgController {
 
     @Autowired
-    private com.iosre.pphb.controller.VoiceMsgService voiceMsgService;
+    private VoiceMsgService voiceMsgService;
 
 
     @RequestMapping(value = "getHm", method = RequestMethod.GET)

@@ -1,5 +1,6 @@
 package com.iosre.pphb.controller;
 
+import com.iosre.pphb.service.PPHBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PPHBController {
 
     @Autowired
-    private com.iosre.pphb.controller.PPHBService pphbService;
+    private PPHBService pphbService;
 
 
     @RequestMapping(value = "uploadDecrypt", method = RequestMethod.GET)
