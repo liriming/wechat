@@ -57,7 +57,7 @@ public class ControllerMethodInterceptor {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
-        String controller = method.getDeclaringClass().getName();
+        String controller = method.getDeclaringClass().getName().split(".")[4];
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
@@ -83,8 +83,6 @@ public class ControllerMethodInterceptor {
                 }else{
                     allParams.add(arg);
                 }
-                userOpLog.setIp("0.0.0.0");
-                userOpLog.setUrl("");
             } else if (arg instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest) arg;
                 //获取请求方的IP地址到log中
