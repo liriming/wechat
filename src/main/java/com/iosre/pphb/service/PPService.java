@@ -83,7 +83,7 @@ public class PPService {
         return false;
     }
 
-    public Boolean sWitch(String content) {
+    public Boolean sWitch(HttpServletRequest request, String content) {
         //logger.info(content);
         return true;
     }

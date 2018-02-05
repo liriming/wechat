@@ -40,7 +40,7 @@ public class ControllerMethodInterceptor {
     /**
      * 定义拦截规则
      */
-    @Pointcut("execution(* com.iosre.pphb.controller..*(..))")
+    @Pointcut("execution(* com.iosre.pphb.controller..*(..)) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void controllerMethodPointcut() {
     }
 
@@ -57,7 +57,7 @@ public class ControllerMethodInterceptor {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
-        String controller = method.getDeclaringClass().getName().split(".")[3];
+        String controller = method.getDeclaringClass().getName();
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
