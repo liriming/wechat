@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class ControllerMethodInterceptor {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
+        String controller = method.getDeclaringClass().getName();
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
@@ -86,8 +88,6 @@ public class ControllerMethodInterceptor {
                 }else{
                     allParams.add(arg);
                 }
-                userOpLog.setIp("0.0.0.0");
-                userOpLog.setUrl("");
             } else if (arg instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest) arg;
                 //获取请求方的IP地址到log中
@@ -115,9 +115,14 @@ public class ControllerMethodInterceptor {
             result = "发生异常：" + e.getMessage();
         }
 
+        if(StringUtils.isEmpty(userOpLog.getIp())){
+            userOpLog.setIp("0.0.0.0");
+        }
+
         userOpLog.setResult(Optional.ofNullable(result).orElse("").toString());
         userOpLog.setAllParams(allParams);
         userOpLog.setCostMs(System.currentTimeMillis() - beginTime);
+        userOpLog.setController(controller);
         logService.saveUserOpLog(userOpLog, "ppMgrOpLog");
 
         return result;

@@ -20,6 +20,7 @@ public class UserOpLog {
 	private String method;//方法名
 	
 	private String url;//请求URL
+	private String controller;//controller
 
 	@Field("rMsg")
 	private String resultMsg;//返回信息

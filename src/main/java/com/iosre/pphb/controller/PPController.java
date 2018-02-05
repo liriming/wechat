@@ -1,8 +1,6 @@
 package com.iosre.pphb.controller;
 
 import com.iosre.pphb.service.PPService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +29,7 @@ public class PPController {
     }
 
     @RequestMapping(value = "sWitch", method = RequestMethod.GET)
-    public Boolean sWitch(HttpServletRequest request,@RequestParam(value = "val") String content) {
+    public Boolean sWitch(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.sWitch(content);
     }
 
