@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/pp/")
 public class PPController {
 
-    public final static Logger logger = LoggerFactory.getLogger(PPController.class);
-
     @Autowired
     private PPService ppService;
 
@@ -33,47 +31,47 @@ public class PPController {
     }
 
     @RequestMapping(value = "sWitch", method = RequestMethod.GET)
-    public Boolean sWitch(@RequestParam(value = "val") String content) {
+    public Boolean sWitch(HttpServletRequest request,@RequestParam(value = "val") String content) {
         return ppService.sWitch(content);
     }
 
     @RequestMapping(value = "log", method = RequestMethod.GET)
-    public Boolean log(@RequestParam(value = "devicename") String devicename) {
+    public Boolean log(HttpServletRequest request,@RequestParam(value = "devicename") String devicename) {
         return ppService.log(devicename);
     }
 
 
     @RequestMapping(value = "getLuminance", method = RequestMethod.GET)
-    public Double getLuminance(@RequestParam(value = "content") String content) {
+    public Double getLuminance(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getLuminance(content);
     }
 
 
     @RequestMapping(value = "getBattery", method = RequestMethod.GET)
-    public Integer getBattery(@RequestParam(value = "content") String content) {
+    public Integer getBattery(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getBattery(content);
     }
 
 
     @RequestMapping(value = "getDiskId", method = RequestMethod.GET)
-    public String getDiskId(@RequestParam(value = "content") String content) {
+    public String getDiskId(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getDiskId(content);
     }
 
 
     @RequestMapping(value = "getModelNumber", method = RequestMethod.GET)
-    public String getModelNumber(@RequestParam(value = "content") String content) {
+    public String getModelNumber(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getModelNumber(content);
     }
 
     @RequestMapping(value = "getOpenudid", method = RequestMethod.GET)
-    public String getOpenudid(@RequestParam(value = "content") String content) {
+    public String getOpenudid(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getOpenudid(content);
     }
 
 
     @RequestMapping(value = "getUtdid", method = RequestMethod.GET)
-    public String getUtdid(@RequestParam(value = "content") String content) {
+    public String getUtdid(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getUtdid(content);
     }
 
@@ -86,7 +84,7 @@ public class PPController {
 
     //120.79.53.150:8080/updateDiskId?disk_id=
     @RequestMapping(value = "updateDiskId", method = RequestMethod.GET)
-    public String updateDiskId(@RequestParam(value = "disk_id") String diskid) {
+    public String updateDiskId(HttpServletRequest request,@RequestParam(value = "disk_id") String diskid) {
         return ppService.updateDiskId(diskid);
     }
 
@@ -98,12 +96,12 @@ public class PPController {
 
 
     @RequestMapping(value = "getInstallTime", method = RequestMethod.GET)
-    public Integer getInstalledTime(@RequestParam(value = "content") String content) {
-        return ppService.getInstalledTime( content);
+    public Integer getInstalledTime(HttpServletRequest request,@RequestParam(value = "content") String content) {
+        return ppService.getInstalledTime(content);
     }
 
     @RequestMapping(value = "getBundleids", method = RequestMethod.GET)
-    public String getBundleids(@RequestParam(value = "content") String content) {
+    public String getBundleids(HttpServletRequest request,@RequestParam(value = "content") String content) {
         return ppService.getBundleids(content);
     }
 

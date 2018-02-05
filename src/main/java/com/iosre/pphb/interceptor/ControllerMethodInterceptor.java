@@ -74,7 +74,7 @@ public class ControllerMethodInterceptor {
                 //获取url到log中：
                 userOpLog.setUrl("");
             } else if (arg instanceof String) {
-                if(((String) arg).length() >= 30) {
+                if(((String) arg).length() >= 100) {
                     try {
                         String deuri = URLDecoder.decode((String) arg, "UTF-8");
                         logger.info(deuri.length() + "");
