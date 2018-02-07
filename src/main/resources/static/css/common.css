@@ -1,0 +1,8 @@
+.important {color : red;}
+.perfect {color : green;}
+.highlight {color : blue;}
+.bold {font-weight:bold;}
+.attention {color : orange;}
+
+/*html,body{text-align:center;margin:0px auto;}*/
+form, div{margin: 5px;}
