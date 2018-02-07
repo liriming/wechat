@@ -110,8 +110,8 @@ public class ControllerMethodInterceptor {
         }
 
         userOpLog.setResult(Optional.ofNullable(result).orElse("").toString());
-        userOpLog.setAllParams(allParams);
-        userOpLog.setCostMs(System.currentTimeMillis() - beginTime);
+        userOpLog.setParams(allParams);
+        userOpLog.setMs(System.currentTimeMillis() - beginTime);
         logService.saveUserOpLog(userOpLog, "ppMgrOpLog");
 
         return result;

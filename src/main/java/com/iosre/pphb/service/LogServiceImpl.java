@@ -28,14 +28,14 @@ public class LogServiceImpl {
 		String allParamsString = null;
 		
 		//转换params对象为JSON字符串
-		if(userOpLog.getAllParams().size()>0){
+		if(userOpLog.getParams().size()>0){
 			try {
-				allParamsString = jsonMapper.writeValueAsString(userOpLog.getAllParams());
+				allParamsString = jsonMapper.writeValueAsString(userOpLog.getParams());
 			} catch (JsonGenerationException | JsonMappingException e) {
 				//allParamsString = userOpLog.getAllParams().toString();
-				logger.warn("转换params为String时发生了异常！{}", userOpLog.getAllParams());
+				logger.warn("转换params为String时发生了异常！{}", userOpLog.getParams());
 				
-				for(Object o : userOpLog.getAllParams()){
+				for(Object o : userOpLog.getParams()){
 					if(o instanceof Map<?,?>){
 						@SuppressWarnings("unchecked")
 						
@@ -65,14 +65,14 @@ public class LogServiceImpl {
 		//记录log到文件中
 		//用tab分隔，以方便后期处理。
 		logger.info("请求已处理.	Method={},	Cost={}ms,	Ip={}, Controller={},	Params={},	Result={}",
-				userOpLog.getMethod(), userOpLog.getCostMs(), userOpLog.getIp(),userOpLog.getController(),
+				userOpLog.getMethod(), userOpLog.getMs(), userOpLog.getIp(),userOpLog.getController(),
 				allParamsString, resultString);
 		
 		//是否保存到mongo中
 		try {
 			if(saveToMongo(userOpLog.getMethod())){
 				if(rs!=null){
-					userOpLog.setResultMsg(rs);
+					userOpLog.setRMsg(rs);
 				}
 				mongoTemplate.save(userOpLog, collectionName);
 				logger.debug("Saved log to mongo.");
@@ -89,7 +89,9 @@ public class LogServiceImpl {
 	 * @return
 	 */
 	private boolean saveToMongo(String methodName) {
-
+		if("search".equalsIgnoreCase(methodName)){
+			return false;
+		}
 		return true;
 	}
 

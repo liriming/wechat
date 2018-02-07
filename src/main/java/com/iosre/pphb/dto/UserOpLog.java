@@ -1,5 +1,8 @@
 package com.iosre.pphb.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iosre.pphb.util.XDateUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -10,28 +13,24 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserOpLog {
-	
-	@Id
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 	private String id;
-	
+	private String ip;
+	private String method;
+	private String url;
+	private String controller;
+	private String rMsg;
+	private long ms;
+	private long ctime;
+	Set<Object> params;
+	String result;
 
-	private String ip;//请求IP
-	
-	private String method;//方法名
-	
-	private String url;//请求URL
-	private String controller;//controller
+	public String getCtime(){
+		return XDateUtils.timestampToString(ctime, XDateUtils.DatePattern.DATE_TIME.getPattern());
+	}
 
-	@Field("rMsg")
-	private String resultMsg;//返回信息
-	
-	@Field("ms")
-	private long costMs;//耗时，单位：毫秒
-	private long ctime;//创建时间
-	
-	@Field("params")
-	Set<Object> allParams;//所有未经过处理的参数，包括JSON String，Form Data，和Query String
-	
-	String result; //返回结果
-
+	public String getFormattedParams() throws JsonProcessingException{
+		return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(params);
+	}
 }
