@@ -404,7 +404,7 @@ public class PPService {
     }
 
     public String getRegionInfo(String content) {
-        return "CH/A";
+        return "B/A";
     }
 
     @Scheduled(cron = "0 0 0 * * ?")
