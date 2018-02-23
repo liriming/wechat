@@ -407,6 +407,11 @@ public class PPService {
         return "B/A";
     }
 
+    public String getWifissid(String content) {
+        return "";
+    }
+
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void reset() {
         NUMBER = 0;

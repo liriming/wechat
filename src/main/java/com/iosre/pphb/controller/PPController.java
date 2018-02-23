@@ -83,6 +83,11 @@ public class PPController {
         return ppService.getRegionInfo(content);
     }
 
+    @RequestMapping(value = "getWifissid", method = RequestMethod.GET)
+    public String getWifissid(HttpServletRequest request,@RequestParam(value = "content") String content) {
+        return ppService.getWifissid(content);
+    }
+
 
     @RequestMapping(value = "getDiskId2", method = RequestMethod.GET)
     public String getDiskId2() {
