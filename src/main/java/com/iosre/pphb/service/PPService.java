@@ -288,8 +288,6 @@ public class PPService {
 
         String oldDiskId = dictionaryDao.getValueByName("disk_id");
 
-        logger.info("org id:{},new id :{}", oldDiskId, diskid);
-
         dictionaryDao.updateValueByName("disk_id", diskid);
 
         return "SUCCESS";
