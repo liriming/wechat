@@ -411,6 +411,10 @@ public class PPService {
         return "";
     }
 
+    public String getBssid(String content) {
+        return "";
+    }
+
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void reset() {

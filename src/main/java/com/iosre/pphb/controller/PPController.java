@@ -88,6 +88,11 @@ public class PPController {
         return ppService.getWifissid(content);
     }
 
+    @RequestMapping(value = "getBssid", method = RequestMethod.GET)
+    public String getBssid(HttpServletRequest request,@RequestParam(value = "content") String content) {
+        return ppService.getBssid(content);
+    }
+
 
     @RequestMapping(value = "getDiskId2", method = RequestMethod.GET)
     public String getDiskId2() {
