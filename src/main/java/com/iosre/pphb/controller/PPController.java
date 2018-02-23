@@ -73,6 +73,16 @@ public class PPController {
         return ppService.getUtdid(content);
     }
 
+    @RequestMapping(value = "getOpcode", method = RequestMethod.GET)
+    public String getOpcode(HttpServletRequest request,@RequestParam(value = "content") String content) {
+        return ppService.getOpcode(content);
+    }
+
+    @RequestMapping(value = "getRegionInfo", method = RequestMethod.GET)
+    public String getRegionInfo(HttpServletRequest request,@RequestParam(value = "content") String content) {
+        return ppService.getRegionInfo(content);
+    }
+
 
     @RequestMapping(value = "getDiskId2", method = RequestMethod.GET)
     public String getDiskId2() {

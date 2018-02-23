@@ -401,6 +401,14 @@ public class PPService {
     }
 
 
+    public String getOpcode(String content) {
+        return "46001cn";
+    }
+
+    public String getRegionInfo(String content) {
+        return "CH/A";
+    }
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void reset() {
         NUMBER = 0;
