@@ -123,6 +123,11 @@ public class PPController {
         return ppService.getBundleids(content);
     }
 
+    @RequestMapping(value = "uploadDeviceInfo", method = RequestMethod.GET)
+    public Boolean uploadDeviceInfo(HttpServletRequest request,@RequestParam(value = "bakName") String bakName,@RequestParam(value = "deviceName") String deviceName,@RequestParam(value = "deviceInfo") String deviceInfo) {
+        return ppService.uploadDeviceInfo(bakName, deviceName, deviceInfo);
+    }
+
 
     @RequestMapping(value = "getJs", method = RequestMethod.GET)
     public String getJs() {

@@ -42,6 +42,8 @@ public class PPService {
     private IPDao ipDao;
     @Autowired
     private TaskDao taskDao;
+    @Autowired
+    private DeviceDao deviceDao;
     private static Set<String> idfaMap = new ConcurrentSkipListSet();
 
 
@@ -246,6 +248,13 @@ public class PPService {
 
 
         return "";
+    }
+
+    public boolean uploadDeviceInfo(String bakName, String deviceName, String deviceInfo) {
+
+        deviceDao.insertDeviceInfo(bakName, deviceName, deviceInfo);
+
+        return true;
     }
 
 
