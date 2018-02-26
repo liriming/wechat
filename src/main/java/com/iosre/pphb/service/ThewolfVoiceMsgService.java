@@ -30,7 +30,7 @@ public class ThewolfVoiceMsgService {
     public final static Logger logger = LoggerFactory.getLogger(ThewolfVoiceMsgService.class);
     private final static  ObjectMapper jsonMapper = new ObjectMapper();
 
-    static {
+  /*  static {
         while (StringUtils.isEmpty(TOKEN)) {
             String url = "http://api.yyyzmpt.com/index.php/reg/login?username=" + USERNAME + "&password=" + PASSWORD;
             HttpResult result = httpService.get(url);
@@ -53,7 +53,7 @@ public class ThewolfVoiceMsgService {
                 logger.error(e.getMessage(), e);
             }
         }
-    }
+    }*/
 
     @Scheduled(cron="0/60 * *  * * ? ")
     public void sendToken(){
