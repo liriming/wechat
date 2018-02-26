@@ -409,7 +409,7 @@ public class PPService {
 
 
     public String getOpcode(String content) {
-        return "46001cn";
+        return "46002cn";
     }
 
     public String getRegionInfo(String content) {
