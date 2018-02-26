@@ -409,18 +409,54 @@ public class PPService {
 
 
     public String getOpcode(String content) {
+        try {
+            if (content.contains("opcode")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+                return "46002cn";
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return "46002cn";
+        }
         return "46002cn";
     }
 
     public String getRegionInfo(String content) {
-        return "C/A";
+        try {
+            if (content.contains("RegionInfo")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+                return "B/A";
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return "B/A";
+        }
+        return "B/A";
     }
 
     public String getWifissid(String content) {
+        try {
+            if (content.contains("wifissid")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+                return contentMap.get("wifissid").toString();
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return "";
+        }
         return "";
     }
 
     public String getBssid(String content) {
+        try {
+            if (content.contains("bssid")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+                return contentMap.get("bssid").toString();
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return "";
+        }
         return "";
     }
 
