@@ -378,7 +378,7 @@ public class PPService {
                 }else if(bundleids.contains("net.var.lostFM")) {
                     return "com.tencent.xin,net.var.lostFM";
                 }else if(bundleids.contains("com.sport.sportier")) {
-                    return "com.tencent.xin,com.sport.sportier";
+                    return "com.sport.sportier";
                 }else {
                     return "com.tencent.xin";
                 }
