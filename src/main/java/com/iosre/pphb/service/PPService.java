@@ -409,11 +409,11 @@ public class PPService {
 
 
     public String getOpcode(String content) {
-        return "46000cn";
+        return "46001cn";
     }
 
     public String getRegionInfo(String content) {
-        return "B/A";
+        return "C/A";
     }
 
     public String getWifissid(String content) {
