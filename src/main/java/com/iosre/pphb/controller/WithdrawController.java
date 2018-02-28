@@ -3,10 +3,7 @@ package com.iosre.pphb.controller;
 import com.iosre.pphb.dto.Withdraw;
 import com.iosre.pphb.service.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -26,7 +23,7 @@ public class WithdrawController {
     }
 
     @RequestMapping(value = "sendBak/{bak}", method = RequestMethod.GET)
-    public String sendBak(HttpServletRequest request, @RequestParam(value = "bak") String bak) {
+    public String sendBak(HttpServletRequest request, @PathVariable(value = "bak") String bak) {
         String[] msg = bak.split("_");
         return withdrawService.sendBak(msg[0], msg[1].substring(0,msg[1].lastIndexOf(".")));
     }
