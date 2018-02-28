@@ -143,5 +143,6 @@ public class WebUtil {
         System.err.println("加密后： " + getMD5(pwd));
         System.err.println(getBssid());
         System.err.println(getRandomString(24));
+        System.err.println("12.bak".substring(0,"12.bak".lastIndexOf(".")));
     }
 }
