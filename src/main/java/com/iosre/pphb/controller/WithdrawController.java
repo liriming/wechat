@@ -2,6 +2,8 @@ package com.iosre.pphb.controller;
 
 import com.iosre.pphb.dto.Withdraw;
 import com.iosre.pphb.service.WithdrawService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ public class WithdrawController {
 
     @Autowired
     private WithdrawService withdrawService;
+    public final static Logger logger = LoggerFactory.getLogger(WithdrawController.class);
 
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.GET)
@@ -28,7 +31,8 @@ public class WithdrawController {
             String[] msg = bak.split("_");
             return withdrawService.sendBak(msg[0],msg[1]);
         }catch (Exception e){
-            return e.getMessage();
+            logger.error(e.getMessage(), e);
+            return "";
         }
 
     }
