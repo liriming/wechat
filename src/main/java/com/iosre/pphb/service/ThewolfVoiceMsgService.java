@@ -55,10 +55,29 @@ public class ThewolfVoiceMsgService {
         }
     }*/
 
-    @Scheduled(cron="0/60 * *  * * ? ")
+    @Scheduled(fixedDelay = 90000)
     public void sendToken(){
-        String url = "http://api.yyyzmpt.com/index.php/token?token" + TOKEN;
-        httpService.get(url);
+        try {
+            if (StringUtils.isEmpty(TOKEN)) {
+                String url = "http://api.yyyzmpt.com/index.php/reg/login?username=" + USERNAME + "&password=" + PASSWORD;
+                HttpResult result = httpService.get(url);
+                Map<String,Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+
+                if(0 == Integer.parseInt(retMsg.get("errno").toString())){
+                    Map<String,Object> retNo = (Map<String, Object>) retMsg.get("ret");
+                    TOKEN = retNo.get("token").toString();
+                    logger.info("thewolf token:{}", TOKEN);
+                }else{
+                    logger.info(result.getPayload());
+                }
+            }else {
+                logger.info("发送thewolf token心跳");
+                String url = "http://api.yyyzmpt.com/index.php/token?token" + TOKEN;
+                httpService.get(url);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     public String getHm(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {

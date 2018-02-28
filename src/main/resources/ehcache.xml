@@ -10,5 +10,6 @@
     <cache name="getModelNumber" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getOpenudid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getUtdid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getBssid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
 
 </ehcache>

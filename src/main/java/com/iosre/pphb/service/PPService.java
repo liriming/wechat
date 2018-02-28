@@ -449,10 +449,28 @@ public class PPService {
 
     public String getBssid(String content) {
         try {
-            if (content.contains("bssid")) {
+            /*if (content.contains("bssid")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
                 return contentMap.get("bssid").toString();
+            }*/
+            if (content.contains("idfv")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+                if(!StringUtils.isEmpty(contentMap.get("idfv").toString())){
+                    String idfv = contentMap.get("idfv").toString();
+
+                    String bssid = userDao.getBssid(idfv);
+
+                    if(StringUtils.isEmpty(bssid)){
+                        String newBssid = WebUtil.getBssid();
+                        userDao.insertBssid(idfv,newBssid);
+                        return newBssid;
+                    }else{
+                        return bssid;
+                    }
+                }
+                // return "0000000000";
             }
+
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "";

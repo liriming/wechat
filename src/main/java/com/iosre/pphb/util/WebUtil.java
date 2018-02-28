@@ -132,12 +132,16 @@ public class WebUtil {
         return sb.toString();
     }
 
+    public static String getBssid() {
+        return createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2);
+    }
+
         // 测试方法
     public static void main(String[] args) {
         String pwd = "pphongbao";
         System.out.println("加密前： " + pwd);
         System.err.println("加密后： " + getMD5(pwd));
-        System.err.println(createRandomHexString(40));
+        System.err.println(getBssid());
         System.err.println(getRandomString(24));
     }
 }

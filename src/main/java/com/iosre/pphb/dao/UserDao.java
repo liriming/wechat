@@ -37,6 +37,10 @@ public interface UserDao {
     @Insert("insert into user(idfv,old_utdid,new_utdid) values(#{idfv}, #{old_utdid}, #{new_utdid}) ON DUPLICATE KEY UPDATE old_utdid=values(old_utdid),new_utdid=values(new_utdid)")
     Integer insertUtdid(@Param("idfv")String idfv, @Param("old_utdid") String old_utdid, @Param("new_utdid") String new_utdid);
 
+    @CacheEvict(value = "getBssid", key = "#p0")
+    @Insert("insert into user(idfv,bssid) values(#{idfv}, #{bssid}) ON DUPLICATE KEY UPDATE bssid=values(bssid)")
+    Integer insertBssid(@Param("idfv")String idfv, @Param("bssid") String bssid);
+
     @CacheEvict(value = "getIp", key = "#p0")
     @Insert("insert into user(idfv,ip) values(#{idfv}, #{ip}) ON DUPLICATE KEY UPDATE ip=values(ip)")
     Integer insertIp(@Param("idfv")String idfv, @Param("ip") String ip);
@@ -68,6 +72,11 @@ public interface UserDao {
     @Cacheable(value = "getUtdid", key = "#p0")
     @Select("select ifnull(new_utdid,'') from user where idfv = #{0}")
     String getUtdid(String idf);
+
+    @Cacheable(value = "getBssid", key = "#p0")
+    @Select("select ifnull(bssid,'') from user where idfv = #{0}")
+    String getBssid(String idf);
+
 
     @Cacheable(value = "getIp", key = "#p0")
     @Select("select ifnull(ip,'') from user where idfv = #{0}")
