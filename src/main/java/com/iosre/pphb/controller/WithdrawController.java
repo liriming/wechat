@@ -25,7 +25,7 @@ public class WithdrawController {
     @RequestMapping(value = "sendBak/{bak}", method = RequestMethod.GET)
     public String sendBak(HttpServletRequest request, @PathVariable(value = "bak") String bak) {
         String[] msg = bak.split("_");
-        return withdrawService.sendBak(msg[0], msg[1].substring(0,msg[1].lastIndexOf(".")));
+        return withdrawService.sendBak(msg[0],msg[1]);
     }
 
     @RequestMapping(value = "getMsg", method = RequestMethod.GET)
