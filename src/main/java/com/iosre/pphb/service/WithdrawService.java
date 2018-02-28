@@ -54,7 +54,7 @@ public class WithdrawService {
 
         for (Withdraw wd : map.values()
                 ) {
-            if (!wd.isSend() && wd.getTime() < 10) {
+            if (!wd.isSend() && (System.currentTimeMillis() - wd.getTimestamp()) / 1000 < 10) {
                 list.add(wd);
             }
         }
@@ -65,6 +65,10 @@ public class WithdrawService {
                 return 1;
             }
         });
+
+        if(list.size() == 0){
+            return "";
+        }
 
         Withdraw wd = list.get(list.size() - 1);
         wd.setSend(true);
