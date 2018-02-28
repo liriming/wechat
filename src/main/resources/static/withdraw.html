@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>提现</title>
+
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/sys.js"></script>
+    <script src="js/date.tools.js"></script>
+    <script src="js/x-page-old.js"></script>
+
+    <style>
+        table{border: 1px solid #8968CD; border-collapse: collapse;}
+        th,td{border: 1px solid #8968CD; padding:5px;}
+        td{color: green;}
+        pre{padding:0px; border:0px}
+        .table-striped>tbody>tr:nth-of-type(odd) {background-color: #E0EEEE;}
+        .table-hover > tbody > tr:hover {background-color: #C1FFC1;}
+    </style>
+</head>
+<body>
+
+
+<div id="main" style="width:800px;  height:400px;">
+    <br id="left" style="float:left ;  width:50%;  height:100%; ">
+    验证码：<input type="number" id="code" style="width:200px;height:30px"/></br></br>
+    姓 名：<input type="text" id="name" style="width:200px;height:30px"/></br></br>
+    <button type="button"  onclick="sendMsg()" style="width:80px; height: 30px ">确认</button>
+</div>
+<div id="right" style="float:right ;  width:50%; height:100%;">
+    <button type="button" style="position: absolute;top:20px;right:20px;width:50px; height: 50px "
+            onclick="search()">刷新
+    </button>
+    <div style="float:left">
+        <pre id="result" ></pre>
+    </div>
+</div>
+</div>
+</body>
+<script id="wdTmp" type="text/html">
+    <table class="table table-striped table-condensed table-hover" style="position: absolute;top:50px;">
+        <tr><th>验证码</th><th>姓名</th> <th>剩余时间</th> <th>备份名</th> <th>手机号</th> <th>操作</th> </tr>
+        {{each list as item i}}
+        <tr><th>{{item.code}}</th>
+            <td>{{item.name}}</td>
+            <td>剩余{{item.time}}秒</td>
+            <td>{{item.bak}}</td>
+            <td>{{item.phoneno}}</td>
+            {{if item.done}}
+                <td>
+                    <button id="done{{item.code}}" disabled="true">已完成</button>
+                </td>
+            {{else}}
+                <td>
+                    <button id="done{{item.code}}" onclick="done({{item.code}})">完成？</button>
+                </td>
+            {{/if}}
+        </tr>
+        {{/each}}
+    </table>
+</script>
+
+
+<script>
+
+    $(function() {
+        template.config("compress", true);
+        search();
+    });
+
+    function sendMsg(){
+        if ($("#code").val() == ""){
+            alert("请输入验证码");
+            return;
+        }
+        if ($("#name").val() == ""){
+            alert("请输入姓名");
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/wd/sendMsg",
+            data: {code:$("#code").val(), name:$("#name").val()},
+            dataType: "json",
+        });
+
+        $("#code").val("");
+        $("#name").val("");
+        search();
+
+    }
+
+    function search() {
+        $.ajax({
+            type: "GET",
+            url: "/wd/getMsg",
+            data: null,
+            dataType: "json",
+            success: getMsg
+        });
+    }
+
+    function done(code) {
+        var buttonid = "done" + code;
+        $.ajax({
+            type: "GET",
+            url: "/wd/done",
+            data: {code:code},
+            dataType: "json"
+        });
+        $("#" + buttonid).text('已完成');
+        $("#" + buttonid).attr('disabled',"true");
+    }
+
+    function getMsg(result) {
+        resultList = result;
+        if(resultList.length==0){
+            alert("没有数据了。");
+            $("#result").html("");
+            return;
+        }
+        var list = {
+            "list" : result
+        };
+
+        var html = template('wdTmp', list);
+        $("#result").html(html);
+        $("[data-toggle='popover']").popover({html:true}).click(function(e) {
+            $('.close').click(function(e){
+                $("#"+$(this).attr("_parentid")).click();
+            });
+        });
+    }
+
+</script>
+
+</html>
