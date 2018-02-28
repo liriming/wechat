@@ -6,9 +6,9 @@ Configuration:
       #测试：-Dlog.level.console=warn -Dlog.level.ysb=trace
       #生产：-Dlog.level.console=warn -Dlog.level.ysb=info
       - name: log.level.console
-        value: info
+        value: debug
       - name: log.level.pphb
-        value: info
+        value: debug
       - name: log.path
         value: /opt/logs
       - name: project.name
@@ -40,7 +40,7 @@ Configuration:
 
   Loggers:
     Root:
-      level: info
+      level: debug
       AppenderRef:
         - ref: CONSOLE
         - ref: ROLLING_FILE
