@@ -10,6 +10,7 @@ public class WebUtil {
 
     /**
      * 从Request对象中获得客户端IP，处理了HTTP代理服务器和Nginx的反向代理截取了ip
+     *
      * @param request
      * @return ip
      */
@@ -29,7 +30,7 @@ public class WebUtil {
             if (realIp.equals(forwarded)) {
                 ip = realIp;
             } else {
-                if(forwarded != null){
+                if (forwarded != null) {
                     forwarded = forwarded.split(",")[0];
                 }
                 ip = realIp + "/" + forwarded;
@@ -90,7 +91,7 @@ public class WebUtil {
     }
 
 
-    private static char ch[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};//最后又重复两个0和1，因为需要凑足数组长度为64
+    private static char ch[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};//最后又重复两个0和1，因为需要凑足数组长度为64
 
     private static Random random = new Random();
 
@@ -113,11 +114,9 @@ public class WebUtil {
                 }
             }
             return new String(temp, 0, length);
-        }
-        else if (length == 0) {
+        } else if (length == 0) {
             return "";
-        }
-        else {
+        } else {
             throw new IllegalArgumentException();
         }
     }
@@ -137,26 +136,30 @@ public class WebUtil {
         return createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2) + ":" + createRandomHexString(2);
     }
 
-        // 测试方法
+    private static Pattern chinesePattern = Pattern.compile("[\u4e00-\u9fa5]");
+    public static boolean isChineseStr(String str) {
+        char c[] = str.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            Matcher matcher = chinesePattern.matcher(String.valueOf(c[i]));
+            if (!matcher.matches()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 测试方法
     public static void main(String[] args) {
         String pwd = "pphongbao";
         System.out.println("加密前： " + pwd);
         System.err.println("加密后： " + getMD5(pwd));
         System.err.println(getBssid());
         System.err.println(getRandomString(24));
-        System.err.println("1519805079_1.bak".split("_")[1].substring(0,"1519805079_1.bak".split("_")[1].lastIndexOf(".")));
+        System.err.println("1519805079_1.bak".split("_")[1].substring(0, "1519805079_1.bak".split("_")[1].lastIndexOf(".")));
         System.err.println("1519805079_1.bak".split("_")[0]);
 
         String s = "      123 456,         哈哈          ";
-        Pattern p = Pattern.compile("[\\u4e00-\\u9fa5]+|\\d+");
-        Matcher m = p.matcher(s.trim());
-        if ( m.find() ) {
-            String code = m.group();
-            System.out.println(code);
-        }
-        if ( m.find() ) {
-            String code = m.group();
-            System.out.println(code);
-        }
+        System.out.println(isChineseStr(s));
+        System.out.println(isChineseStr("生活时尚生活是1"));
     }
 }

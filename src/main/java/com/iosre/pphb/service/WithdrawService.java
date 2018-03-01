@@ -61,7 +61,7 @@ public class WithdrawService {
 
         for (Withdraw wd : map.values()
                 ) {
-            if (!wd.isSend() && (System.currentTimeMillis() - wd.getTimestamp()) / 1000 < 3.5 * 60) {
+            if (!wd.isSend() && (System.currentTimeMillis() - wd.getTimestamp()) / 1000 < 3.5 * 60 && WebUtil.isChineseStr(wd.getName())) {
                 list.add(wd);
             }
         }
@@ -100,10 +100,14 @@ public class WithdrawService {
              ) {
             Long s = System.currentTimeMillis() - wd.getTimestamp();
             int t = (4 * 60 * 1000 - s.intValue()) / 1000;
-            if(t < 0){
-                wd.setTime("已超时");
+            if(!WebUtil.isChineseStr(wd.getName())){
+                wd.setTime("姓名参数不对");
             }else {
-                wd.setTime("剩余" + t + "秒");
+                if (t < 0) {
+                    wd.setTime("已超时");
+                } else {
+                    wd.setTime("剩余" + t + "秒");
+                }
             }
             list.add(wd);
         }
