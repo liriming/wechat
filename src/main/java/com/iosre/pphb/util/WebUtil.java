@@ -3,7 +3,8 @@ package com.iosre.pphb.util;
 import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
 import java.util.Random;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebUtil {
 
@@ -145,5 +146,17 @@ public class WebUtil {
         System.err.println(getRandomString(24));
         System.err.println("1519805079_1.bak".split("_")[1].substring(0,"1519805079_1.bak".split("_")[1].lastIndexOf(".")));
         System.err.println("1519805079_1.bak".split("_")[0]);
+
+        String s = "      123 456,         哈哈          ";
+        Pattern p = Pattern.compile("[\\u4e00-\\u9fa5]+|\\d+");
+        Matcher m = p.matcher(s.trim());
+        if ( m.find() ) {
+            String code = m.group();
+            System.out.println(code);
+        }
+        if ( m.find() ) {
+            String code = m.group();
+            System.out.println(code);
+        }
     }
 }

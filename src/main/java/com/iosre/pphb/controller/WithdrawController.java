@@ -21,8 +21,8 @@ public class WithdrawController {
 
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.GET)
-    public void sendMsg(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name) {
-        withdrawService.sendMsg(code, name);
+    public void sendMsg(HttpServletRequest request, @RequestParam(value = "content") String content) {
+        withdrawService.sendMsg(content);
     }
 
     @RequestMapping(value = "sendBak/{bak}", method = RequestMethod.GET)

@@ -9,7 +9,7 @@ public class Withdraw {
 
 	private String code;
 	private String name;
-	private int time;
+	private String time;
 	private long timestamp;
 	private String phoneno;
 	private String bak;

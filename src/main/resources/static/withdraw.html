@@ -23,11 +23,13 @@
 <body>
 
 
-<div id="main" style="width:800px;  height:400px;">
+<br id="main" style="width:800px;  height:400px;">
     <br id="left" style="float:left ;  width:50%;  height:100%; ">
-    验证码：<input type="number" id="code" style="width:200px;height:30px"/></br></br>
-    姓 名：<input type="text" id="name" style="width:200px;height:30px"/></br></br>
-    <button type="button"  onclick="sendMsg()" style="width:80px; height: 30px ">确认</button>
+    验证码+姓名：<input type="text" id="content" style="width:200px;height:30px"/>&nbsp;&nbsp;&nbsp;
+    <button type="button"  onclick="sendMsg()" style="width:80px; height: 30px ">确认</button> <br/><br/>
+    <p>注意：格式为<span style="color:red;">验证码+任意字符+姓名</span></p>
+    <p>正确格式为：<span style="color:red;">  123456‘，|张三、123456李四  、 123456          黄五</span></p>
+    <p>错误格式为：<span style="color:red;">12345张三6、123 456李四  、黄五 123456、1234f59张三</span></p>
 </div>
 <div id="right" style="float:right ;  width:50%; height:100%;">
     <button type="button" style="position: absolute;top:20px;right:20px;width:50px; height: 50px "
@@ -45,7 +47,7 @@
         {{each list as item i}}
         <tr><th>{{item.code}}</th>
             <td>{{item.name}}</td>
-            <td>剩余{{item.time}}秒</td>
+            <td>{{item.time}}</td>
             <td>{{item.bak}}</td>
             <td>{{item.phoneno}}</td>
             {{if item.done}}
@@ -82,12 +84,11 @@
         $.ajax({
             type: "GET",
             url: "/wd/sendMsg",
-            data: {code:$("#code").val(), name:$("#name").val()},
+            data: {content:$("#content").val()},
             dataType: "json",
         });
 
-        $("#code").val("");
-        $("#name").val("");
+        $("#content").val("");
         search();
 
     }

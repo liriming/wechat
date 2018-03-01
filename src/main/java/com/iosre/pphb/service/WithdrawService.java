@@ -25,6 +25,8 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -34,14 +36,19 @@ public class WithdrawService {
     private static final ObjectMapper jsonMapper = new ObjectMapper();
 
     private static Map<String, Withdraw> map = new ConcurrentHashMap<>();
+    private static Pattern contentPattern = Pattern.compile("[\\u4e00-\\u9fa5]+|\\d+");
 
-    public void sendMsg(String code, String name){
-
+    public void sendMsg(String content){
+        Matcher m = contentPattern.matcher(content);
         Withdraw wd = new Withdraw();
-        wd.setCode(code);
-        wd.setName(name);
+        if ( m.find() ) {
+            wd.setCode(m.group());
+        }
+        if ( m.find() ) {
+            wd.setName(m.group());
+        }
         wd.setTimestamp(System.currentTimeMillis());
-        map.putIfAbsent(code, wd);
+        map.putIfAbsent(content, wd);
 
     }
 
@@ -93,7 +100,11 @@ public class WithdrawService {
              ) {
             Long s = System.currentTimeMillis() - wd.getTimestamp();
             int t = (4 * 60 * 1000 - s.intValue()) / 1000;
-            wd.setTime(t);
+            if(t < 0){
+                wd.setTime("已超时");
+            }else {
+                wd.setTime("剩余" + t + "秒");
+            }
             list.add(wd);
         }
 
@@ -106,6 +117,12 @@ public class WithdrawService {
         });
 
         return list;
+    }
+
+    //每天凌晨3点触发
+    @Scheduled(cron="0 0 3 * * ?")
+    public void cleanMap(){
+        map.clear();
     }
 
 }
