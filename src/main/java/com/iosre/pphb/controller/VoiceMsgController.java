@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/sms/")
 public class VoiceMsgController {
 
-    @Autowired
-    private VoiceMsgService voiceMsgService;
-
   /*  @Autowired
-    private ThewolfVoiceMsgService voiceMsgService;*/
+    private VoiceMsgService voiceMsgService;*/
+
+    @Autowired
+    private ThewolfVoiceMsgService voiceMsgService;
 
 
     @RequestMapping(value = "getHm", method = RequestMethod.GET)

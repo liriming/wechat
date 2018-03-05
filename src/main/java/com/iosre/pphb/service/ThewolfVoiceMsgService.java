@@ -82,14 +82,14 @@ public class ThewolfVoiceMsgService {
 
     public String getHm(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {
         try {
-            String url = "http://api.yyyzmpt.com/index.php/clients/online/setWork?token=" + TOKEN + "&pid=105&t=2&paichu=170&username=3320587356";
+            String url = "http://api.yyyzmpt.com/index.php/clients/online/setWork?token=" + TOKEN + "&pid=105&t=2&paichu=170&username=zhongguoyidong1688";
             logger.info(" 开始获取号码......");
             HttpResult result = httpService.get(url);
 
             Map<String,Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
             if (Integer.parseInt(retMsg.get("errno").toString()) > 0){
-                return retMsg.get("errmsg").toString();
+                return "400";
             }else{
                 Map<String,Object> retNo = (Map<String, Object>) retMsg.get("ret");
                 String phone = retNo.get("number").toString();
