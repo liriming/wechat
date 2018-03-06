@@ -105,7 +105,7 @@ public class PPService {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
 
                 if(contentMap.containsKey("luminance")){
-                    Double luminance = Double.parseDouble(contentMap.get("luminance").toString());
+                   /* Double luminance = Double.parseDouble(contentMap.get("luminance").toString());
 
                     Random r = new Random();
 
@@ -117,7 +117,8 @@ public class PPService {
                     //return retval;
                     BigDecimal b = new BigDecimal(retval);
 
-                    return b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
+                    return b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();*/
+                    return 987677.4;
 
                 }
 
