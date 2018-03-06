@@ -48,7 +48,7 @@ public class WithdrawService {
             wd.setName(m.group());
         }
         wd.setTimestamp(System.currentTimeMillis());
-        map.putIfAbsent(content, wd);
+        map.putIfAbsent(wd.getCode(), wd);
 
     }
 
@@ -96,8 +96,7 @@ public class WithdrawService {
     public List<Withdraw> getMsg(){
         List<Withdraw> list = new ArrayList<>();
 
-        for (Withdraw wd : map.values()
-             ) {
+        for (Withdraw wd : map.values()) {
             Long s = System.currentTimeMillis() - wd.getTimestamp();
             int t = (4 * 60 * 1000 - s.intValue()) / 1000;
             if(!WebUtil.isChineseStr(wd.getName())){
