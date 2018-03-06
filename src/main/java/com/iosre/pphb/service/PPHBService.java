@@ -118,6 +118,9 @@ public class PPHBService {
                     Random r = new Random();
 
                     Integer retval = battery.intValue() + (r.nextInt(2) - r.nextInt(2));
+                    if(retval > 100){
+                        retval = 100;
+                    }
                     return retval;
                 }
                 return 27;
