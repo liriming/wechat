@@ -18,9 +18,9 @@ public class VoiceMsgController {
     @Autowired
     private VoiceMsgService voiceMsgService;
 
-   /* @Autowired
-    private ThewolfVoiceMsgService voiceMsgService;*/
-
+  /*  @Autowired
+    private ThewolfVoiceMsgService voiceMsgService;
+*/
 
     @RequestMapping(value = "getHm", method = RequestMethod.GET)
     public String getHm(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {

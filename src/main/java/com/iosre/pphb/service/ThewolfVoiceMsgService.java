@@ -89,6 +89,7 @@ public class ThewolfVoiceMsgService {
             Map<String,Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
             if (Integer.parseInt(retMsg.get("errno").toString()) > 0){
+                logger.info(retMsg.toString());
                 return "400";
             }else{
                 Map<String,Object> retNo = (Map<String, Object>) retMsg.get("ret");

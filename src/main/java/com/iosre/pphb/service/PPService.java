@@ -142,9 +142,12 @@ public class PPService {
 
                     Random r = new Random();
 
-                    Integer retval = battery.intValue() + (r.nextInt(2) - r.nextInt(2));
+                    Integer retval = battery.intValue() + 2;
                     if(retval > 100){
                         retval = 100;
+                    }
+                    if(retval < 5){
+                        retval = 5;
                     }
                     return retval;
                 }
