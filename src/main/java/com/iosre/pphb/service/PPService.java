@@ -431,7 +431,7 @@ public class PPService {
         try {
             if (content.contains("RegionInfo")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
-                return "B/A";
+                return contentMap.get("RegionInfo").toString();
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
