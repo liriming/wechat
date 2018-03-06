@@ -419,7 +419,8 @@ public class PPService {
         try {
             if (content.contains("opcode")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
-                return "46002cn";
+                return contentMap.get("opcode").toString();
+                //return "46002cn";
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
