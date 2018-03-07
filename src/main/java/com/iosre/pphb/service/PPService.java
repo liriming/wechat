@@ -487,10 +487,30 @@ public class PPService {
     }
 
 
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void reset() {
-        NUMBER = 0;
+    public String getBid(String content) {
+        try {
+            if (content.contains("idfv")) {
+                Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
+
+                if (!StringUtils.isEmpty(contentMap.get("idfv").toString())) {
+                    String idfv = contentMap.get("idfv").toString();
+                    String newBid = userDao.getBid(idfv);
+                    if (StringUtils.isEmpty(newBid)) {
+                        String bid = WebUtil.createRandomHexString(40);
+                        userDao.insertBid(idfv, contentMap.get("bid").toString(), bid);
+                        return bid;
+                    } else {
+                        return newBid;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return "";
+        }
+        return "";
     }
+
 
     //    @Scheduled(cron = "0 0 0/6 * * ?")
     public void resetDiskId() {
@@ -503,26 +523,6 @@ public class PPService {
         dictionaryDao.updateValueByName("disk_id", diskid);
         //45C14C0512664E00B8B08767D07F5116
         //220D8192A92A6BB4D7F36CE782B69A08
-    }
-
-    public static void main(String[] arg) {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -31);
-
-        Long installTime = (c.getTimeInMillis() - 2 * 1000) / 1000;
-        System.out.println(installTime);
-
-        Double luminance = Double.parseDouble("55623562.265655152");
-
-        Random r = new Random();
-
-        Double retval = luminance + (r.nextInt(1000) - r.nextInt(1000));
-        DecimalFormat decimalFormat = new DecimalFormat();//格式化设置
-        decimalFormat.format(retval);
-        System.out.println(decimalFormat.format(retval));
-
-        String diskid = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-        System.out.println("1ad5e5dfaf39481c94a32d98facc90eb".toUpperCase());
     }
 
 }

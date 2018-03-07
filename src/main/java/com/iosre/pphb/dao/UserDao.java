@@ -41,6 +41,10 @@ public interface UserDao {
     @Insert("insert into user(idfv,bssid) values(#{idfv}, #{bssid}) ON DUPLICATE KEY UPDATE bssid=values(bssid)")
     Integer insertBssid(@Param("idfv")String idfv, @Param("bssid") String bssid);
 
+    @CacheEvict(value = "getBid", key = "#p0")
+    @Insert("insert into user(idfv,old_bid,new_bid) values(#{idfv}, #{old_bid}, #{new_bid}) ON DUPLICATE KEY UPDATE old_bid=values(old_bid),new_bid=values(new_bid)")
+    Integer insertBid(@Param("idfv")String idfv, @Param("old_bid") String old_bid, @Param("new_bid") String new_bid);
+
     @CacheEvict(value = "getIp", key = "#p0")
     @Insert("insert into user(idfv,ip) values(#{idfv}, #{ip}) ON DUPLICATE KEY UPDATE ip=values(ip)")
     Integer insertIp(@Param("idfv")String idfv, @Param("ip") String ip);
@@ -81,5 +85,9 @@ public interface UserDao {
     @Cacheable(value = "getIp", key = "#p0")
     @Select("select ifnull(ip,'') from user where idfv = #{0}")
     String getIp(String idf);
+
+    @Cacheable(value = "getBid", key = "#p0")
+    @Select("select ifnull(new_bid,'') from user where idfv = #{0}")
+    String getBid(String idf);
 
 }
