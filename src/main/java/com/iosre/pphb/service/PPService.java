@@ -494,8 +494,8 @@ public class PPService {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
 
                 if (!StringUtils.isEmpty(contentMap.get("idfv").toString())) {
-                    return contentMap.get("bid").toString();
-                    /*String idfv = contentMap.get("idfv").toString();
+                    //return contentMap.get("bid").toString();
+                    String idfv = contentMap.get("idfv").toString();
                     String newBid = userDao.getBid(idfv);
                     if (StringUtils.isEmpty(newBid)) {
                         String bid = WebUtil.createRandomHexString(40);
@@ -503,7 +503,7 @@ public class PPService {
                         return bid;
                     } else {
                         return newBid;
-                    }*/
+                    }
                 }
             }
         } catch (IOException e) {
