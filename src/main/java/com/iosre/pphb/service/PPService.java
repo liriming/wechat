@@ -420,7 +420,7 @@ public class PPService {
             if (content.contains("opcode")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
                 //return contentMap.get("opcode");
-                return "46001cn";
+                return "46002cn";
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -434,7 +434,7 @@ public class PPService {
             if (content.contains("RegionInfo")) {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
                 //return contentMap.get("RegionInfo").toString();
-                return "LL/A";
+                return "B/A";
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
