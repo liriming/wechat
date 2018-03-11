@@ -168,9 +168,9 @@ public class PPService {
                 Map<String, Object> contentMap = jsonMapper.readValue(content, Map.class);
                 if (!StringUtils.isEmpty(contentMap.get("idfv").toString())) {
                     String idfv = contentMap.get("idfv").toString();
-                    if(contentMap.containsKey("disk_id")){
+                  /*  if(contentMap.containsKey("disk_id")){
                         return contentMap.get("disk_id").toString();
-                    }
+                    }*/
 
                     String username = userDao.getUsername(idfv);
                     if (StringUtils.isEmpty(username) && contentMap.containsKey("username")) {
