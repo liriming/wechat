@@ -180,7 +180,7 @@ public class PPService {
                     String newDiskId = userDao.getDiskId(idfv);
                     if (StringUtils.isEmpty(newDiskId)) {
 //                        String diskId = dictionaryDao.getValueByName("disk_id");
-                        String diskId = WebUtil.createRandomHexString(32);
+                        String diskId = WebUtil.createRandomHexString(32).toUpperCase();
                         userDao.insertDiskId(idfv, contentMap.get("disk_id").toString(), diskId);
                         return diskId;
                     } else {
