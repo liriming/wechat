@@ -202,8 +202,9 @@ public class WcSmsService {
         String psw = datas[1];
         String d62 = datas[2];
         String phoneno = datas[3];
+        Integer isalive = Integer.parseInt(datas[4]);
 
-        wcuserDao.insertDataInfo(phone,psw,d62,phoneno);
+        wcuserDao.insertDataInfo(phone,psw,d62,phoneno,isalive);
 
     }
 
