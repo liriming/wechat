@@ -2,6 +2,7 @@ package com.iosre.pphb.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iosre.pphb.dao.WcphoneDao;
+import com.iosre.pphb.dao.WcuserDao;
 import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -38,6 +39,8 @@ public class WcSmsService {
 
     @Autowired
     private WcphoneDao wcphoneDao;
+    @Autowired
+    private WcuserDao wcuserDao;
 
     static {
         while (StringUtils.isEmpty(TOKEN)) {
@@ -190,6 +193,18 @@ public class WcSmsService {
             }
             return "400";
         }
+    }
+
+    public void uploadData(String data)  {
+
+        String[] datas = data.split(",");
+        String phone = datas[0];
+        String psw = datas[1];
+        String d62 = datas[2];
+        String phoneno = datas[3];
+
+        wcuserDao.insertDataInfo(phone,psw,d62,phoneno);
+
     }
 
 }

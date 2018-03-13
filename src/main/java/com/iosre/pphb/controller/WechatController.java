@@ -71,5 +71,10 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="uploadData", method = RequestMethod.GET)
+    public void uploadData(@RequestParam(value = "data") String data)  {
+        wcSmsService.uploadData(data);
+    }
+
 
 }
