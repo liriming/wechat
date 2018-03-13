@@ -71,7 +71,7 @@ public class ControllerMethodInterceptor {
         Object[] args = pjp.getArgs();
         for (Object arg : args) {
             if (arg instanceof String) {
-                if(((String) arg).length() >= 100) {
+                if(((String) arg).length() >= 100 && ((String) arg).contains("{")) {
                     try {
                         String deuri = URLDecoder.decode((String) arg, "UTF-8");
                         logger.info(deuri.length() + "");
