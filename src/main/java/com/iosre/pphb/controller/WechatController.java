@@ -61,7 +61,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
-    public String getUsCode(HttpServletRequest request,@RequestParam(value = "list") String list)  {
+    public String getUsCode(@RequestParam(value = "list") String list)  {
         try {
             return wcSmsService.getUsCode(list);
         } catch (IOException e) {
@@ -71,7 +71,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="uploadData", method = RequestMethod.GET)
-    public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data)  {
+    public void uploadData(@RequestParam(value = "data") String data)  {
         wcSmsService.uploadData(data);
     }
 
