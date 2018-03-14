@@ -27,11 +27,11 @@ public class WechatService {
     private User1Dao user1Dao;
 
 
-    public String getIdCard(){
+    public String getIdCard(int count){
 
-        Map<String,String> map = user1Dao.getIdCard();
+        Map<String,String> map = user1Dao.getIdCard(count);
 
-        return map.get("Name") + "," +  map.get("CtfId");
+        return map.get("reName1") + "," +  map.get("CtfId");
     }
 
 

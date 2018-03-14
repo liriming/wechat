@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 
 @RestController
@@ -26,8 +25,8 @@ public class WechatController {
 
 
     @RequestMapping(value = "idCard", method = RequestMethod.GET)
-    public String idCard(HttpServletRequest request) {
-        return wechatService.getIdCard();
+    public String idCard(@RequestParam(value = "count") Integer count) {
+        return wechatService.getIdCard(count);
     }
 
 
@@ -46,23 +45,23 @@ public class WechatController {
     }
 
     @RequestMapping(value ="getCode/{phone}", method = RequestMethod.GET)
-    public String getYzm(@PathVariable("phone") String phone)  {
+    public String getYzm(HttpServletRequest request,@PathVariable("phone") String phone)  {
         return wcSmsService.getCode(phone);
     }
 
 
     @RequestMapping(value ="exportPhone", method = RequestMethod.GET)
-    public Integer exportPhone(@RequestParam(value = "list") String list)  {
+    public Integer exportPhone(HttpServletRequest request,@RequestParam(value = "list") String list)  {
         return wcSmsService.exportPhone(list);
     }
 
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
-    public String usPhone()  {
+    public String usPhone(HttpServletRequest request)  {
         return wcSmsService.usPhone();
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
-    public String getUsCode(@RequestParam(value = "list") String list)  {
+    public String getUsCode(HttpServletRequest request,@RequestParam(value = "list") String list)  {
         try {
             return wcSmsService.getUsCode(list);
         } catch (IOException e) {
@@ -72,7 +71,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="uploadData", method = RequestMethod.GET)
-    public void uploadData(@RequestParam(value = "data") String data)  {
+    public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data)  {
         wcSmsService.uploadData(data);
     }
 
