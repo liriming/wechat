@@ -10,6 +10,6 @@ public interface IPDao {
     @Insert("insert into ip(ip,address) values(#{ip},#{address})")
     Integer insertIP(@Param("ip") String ip,@Param("address") String address);
 
-    @Select("select if(count(1) > 0 , false, true) from ip where ip=#{ip}")
+    @Select("select if(count(1) > 0 , false, true) from ip where like CONCAT(#{ip},'%')")
     boolean checkIP(@Param("ip") String ip);
 }
