@@ -24,7 +24,7 @@ public class PPController {
     }
 
     @RequestMapping(value = "checkIP", method = RequestMethod.GET)
-    public boolean checkIP(HttpServletRequest request) {
+    public String checkIP(HttpServletRequest request) {
         return ppService.checkIP(request);
     }
 

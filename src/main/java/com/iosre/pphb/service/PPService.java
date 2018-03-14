@@ -69,7 +69,7 @@ public class PPService {
         //logger.info(val);
     }
 
-    public boolean checkIP(HttpServletRequest request) {
+    public String checkIP(HttpServletRequest request) {
         String ip = WebUtil.getLocalIp(request);
         AddressUtils addressUtils = new AddressUtils();
         try {
@@ -77,13 +77,13 @@ public class PPService {
             String ip_p = ip.substring(0, ip.lastIndexOf("."));
             if(ipDao.checkIP(ip_p)){
                 ipDao.insertIP(ip, address);
-                return true;
+                return "1";
             }
 
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage(), e);
         }
-        return false;
+        return "0";
     }
 
     public Boolean sWitch(String content) {
