@@ -75,7 +75,8 @@ public class PPService {
         try {
             String address = addressUtils.getAddresses("ip="+ip, "utf-8");
             String ip_p = ip.substring(0, ip.lastIndexOf("."));
-            if(ipDao.checkIP(ip_p)){
+            String blackVpns = dictionaryDao.getValueByName("black_vpn");
+            if(ipDao.checkIP(ip_p) && blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))){
                 ipDao.insertIP(ip, address);
                 return "1";
             }

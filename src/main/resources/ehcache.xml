@@ -6,7 +6,6 @@
     <cache name="getInstalledTime" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getUsername" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getDiskId" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
-    <cache name="getValueByName" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getModelNumber" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getOpenudid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getUtdid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />

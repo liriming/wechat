@@ -2,6 +2,7 @@ package com.iosre.pphb.controller;
 
 import com.iosre.pphb.service.WcSmsService;
 import com.iosre.pphb.service.WechatService;
+import com.iosre.pphb.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class WechatController {
 
 
     @RequestMapping(value ="exportPhone", method = RequestMethod.GET)
-    public Integer exportPhone(HttpServletRequest request,@RequestParam(value = "list") String list)  {
+    public Integer exportPhone(@RequestParam(value = "list") String list)  {
         return wcSmsService.exportPhone(list);
     }
 
@@ -71,8 +72,9 @@ public class WechatController {
     }
 
     @RequestMapping(value ="uploadData", method = RequestMethod.GET)
-    public void uploadData(@RequestParam(value = "data") String data)  {
-        wcSmsService.uploadData(data);
+    public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data)  {
+        String ip = WebUtil.getLocalIp(request);
+        wcSmsService.uploadData(ip,data);
     }
 
 

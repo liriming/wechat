@@ -195,7 +195,7 @@ public class WcSmsService {
         }
     }
 
-    public void uploadData(String data)  {
+    public void uploadData(String ip,String data)  {
 
         String[] datas = data.split(",");
         String phone = datas[0];
@@ -204,7 +204,7 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
 
-        wcuserDao.insertDataInfo(phone,psw,d62,phoneno,isalive);
+        wcuserDao.insertDataInfo(phone,psw,d62,phoneno,isalive,ip);
 
     }
 

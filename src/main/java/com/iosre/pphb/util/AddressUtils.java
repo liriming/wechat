@@ -206,7 +206,7 @@ public class AddressUtils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println("222.216.200.179".substring(0,"222.216.200.179".lastIndexOf(".")));
+        System.out.println("222.216.200.179".substring(0,"222.216.200.179".indexOf(".")));
 
         // 输出结果为：广东省,广州市,越秀区
     }
