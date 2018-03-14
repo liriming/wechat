@@ -74,8 +74,8 @@ public class PPService {
         AddressUtils addressUtils = new AddressUtils();
         try {
             String address = addressUtils.getAddresses("ip="+ip, "utf-8");
-            ip = ip.substring(0, ip.lastIndexOf("."));
-            if(ipDao.checkIP(ip)){
+            String ip_p = ip.substring(0, ip.lastIndexOf("."));
+            if(ipDao.checkIP(ip_p)){
                 ipDao.insertIP(ip, address);
                 return true;
             }
