@@ -25,7 +25,7 @@ public class VoiceMsgService {
     private static Map<String, String> phoneCodeMap = new ConcurrentHashMap<>();
     public final static Logger logger = LoggerFactory.getLogger(VoiceMsgService.class);
 
-    static {
+    /*static {
         while (StringUtils.isEmpty(TOKEN)) {
             String url = HOST + "UserLoginStr?name=" + USERNAME + "&psw=" + PASSWORD;
             HttpResult result = httpService.get(url);
@@ -34,7 +34,7 @@ public class VoiceMsgService {
                 logger.info(" TOKEN:" + TOKEN);
             }
         }
-    }
+    }*/
 
 
     @RequestMapping(value = "getHm", method = RequestMethod.GET)

@@ -55,7 +55,7 @@ public class ThewolfVoiceMsgService {
         }
     }*/
 
-    @Scheduled(fixedDelay = 90000)
+    /*@Scheduled(fixedDelay = 90000)
     public void sendToken(){
         try {
             if (StringUtils.isEmpty(TOKEN)) {
@@ -78,7 +78,7 @@ public class ThewolfVoiceMsgService {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-    }
+    }*/
 
     public String getHm(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {
         try {

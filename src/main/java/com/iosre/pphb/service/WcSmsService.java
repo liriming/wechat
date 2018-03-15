@@ -42,7 +42,7 @@ public class WcSmsService {
     @Autowired
     private WcuserDao wcuserDao;
 
-    static {
+   /* static {
         while (StringUtils.isEmpty(TOKEN)) {
             String url = HOST + "Login?User=" + USERNAME + "&Password=" + PASSWORD + "&Logintype=0";
             HttpResult result = httpService.get(url);
@@ -59,7 +59,7 @@ public class WcSmsService {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
 
     public String phone(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {
