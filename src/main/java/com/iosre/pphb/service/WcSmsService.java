@@ -208,11 +208,15 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
-        if(datas.length == 6){
+        String rname = "";
+        String rcard = "";
+        if(datas.length == 7){
             real = 1;
+            rname = datas[5];
+            rcard = datas[6];
         }
 
-        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip,real);
+        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip,real,rname,rcard);
 
     }
 
