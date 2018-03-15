@@ -16,7 +16,7 @@ public interface WcuserDao {
 
 
 
-    @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 limit #{count}")
+    @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=0 limit #{count}")
     List<Map<String,Object>> getExportData(@Param("count")int count);
 
     @Update({
