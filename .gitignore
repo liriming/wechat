@@ -31,3 +31,12 @@ src/main/resources/templates/
 /replay_pid14220.log
 /replay_pid18136.log
 /logs/error.log
+/target/
+hs_err_pid11716.log
+hs_err_pid16168.log
+hs_err_pid20140.log
+hs_err_pid23712.log
+hs_err_pid24536.log
+replay_pid11716.log
+replay_pid16168.log
+replay_pid20140.log

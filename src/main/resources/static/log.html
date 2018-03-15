@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>User Op Log</title>
+	
+	<meta charset="UTF-8">
+	
+	<script src="js/jquery-2.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/sys.js"></script>
+	<script src="js/date.tools.js"></script>
+	<script src="js/x-page-old.js"></script>
+    
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	<link href="css/common.css" rel="stylesheet" />
+
+	<style>
+		table{border: 1px solid #8968CD; border-collapse: collapse;}
+		th,td{border: 1px solid #8968CD; padding:5px;}
+		td{color: green;}
+		pre{padding:0px; border:0px}
+		.table-striped>tbody>tr:nth-of-type(odd) {background-color: #E0EEEE;}
+		.table-hover > tbody > tr:hover {background-color: #C1FFC1;}
+	</style>
+	
+  </head>
+  
+  <body>
+  	<form name="searchForm">
+		<div>
+			<span style="padding:6px;border:1px solid blue; ">
+				控制器：<input type="text" name="controller" placeholder="控制器" autocomplete="on"/>&nbsp;
+				方法名：<input type="text" name="method" placeholder="方法名" autocomplete="on"/>&nbsp;
+				开始时间：<input type="datetime-local" id="bTime" name="bTime" value="2016-02-26T08:37:43" step="1"/>
+				结束时间：<input type="datetime-local" id="eTime" name="eTime" step="1"/>
+				<button type="button" onclick="setCurrentTime()">当前时间</button>
+			</span>&nbsp;
+			<button type="button" id="advancedSearchBtn">高级搜索</button>&nbsp;
+			<button type="button" onclick="reset();setCurrentTime();">重置</button>&nbsp;&nbsp;
+			<button type="button" onclick="goSearch()" style="font-weight:bold;color:blue;">开始查找（回车）</button>
+		</div>
+		<div>
+			<div id="advancedSearchDiv" hidden="hidden" style="float:left;">
+				自定义条件：<input type="text" name="advancedKey" placeholder="字段.属性.子属性" autocomplete="on"/>：<input type="text" name="advancedValue" placeholder="条件（支持正则表达式）" autocomplete="on"/>
+				&nbsp;
+				耗时：&gt;<input type="number" name="ms" value="0" style="width:70px;"/>ms
+			</div>
+			<div style='float:right;display:block; text-align:right;'>
+				<button type="button" onclick="resetDetails()">收起详情</button>&nbsp;
+				<span class="page" ></span>
+			</div>		
+		</div>
+	</form>
+	
+	
+  	<div style="float:left">
+		<pre id="result" ></pre>
+	</div>
+
+  </body>
+
+<script id="opLogListTpl" type="text/html">
+	<table class="table table-striped table-condensed table-hover">
+		<tr><th>序号</th><th>id</th> <th>time</th> <th>controller</th> <th>method</th> <th>ms</th> <th>params</th> <th>result</th> <th>ip</th> <th>url</th> </tr>
+	{{each results as item i}}
+		<tr><th>{{i+1}}</th>
+		<td>{{item.id}}</td>
+		<td>{{item.ctime}}</td>
+		<td>{{item.controller}}</td>
+		<td>{{item.method}}</td>
+		<td>{{item.ms}}</td>
+		<td>
+			<a id="params{{i}}" href="javascript:;" title="<b>{{item.method}}</b> <button type='button' class='close' _parentid='params{{i}}'>&times;×</button>"
+				data-container="body" data-toggle="popover" data-placement="bottom" 
+				data-content="<pre>{{item.formattedParams}}</pre>">
+				显示
+			</a>
+		</td>		
+		<td>{{item.result}}</td>
+		<td>{{item.ip}}</td>
+		<td>{{item.url}}</td>
+		</tr>
+	{{/each}}
+	</table>
+</script>
+
+<script>
+	//暂存结果列表
+	var resultList=null;
+
+	$(function() {
+		template.config("compress", true);
+		page.createPage({pageSize: 28, searchFunction: search});
+		setCurrentTime();
+		
+		//绑定body控件的回车事件
+		$("body").on("keyup", function(event){
+			if (event.which == 13) {
+				goSearch();
+			}
+		});
+		
+		$("#advancedSearchBtn").on("click", function(){
+			if($("#advancedSearchDiv").is(":hidden")){
+				$("#advancedSearchDiv").show();
+				$("#advancedSearchBtn").html("收起高级搜索");
+			}else{
+				$("#advancedSearchDiv").hide();
+				$("#advancedSearchBtn").html("高级搜索");
+			}
+		});
+		
+		goSearch();
+	});
+	
+	function setCurrentTime(){
+		var localNow = new Date();// sys.getLocalDate();
+		var localISOTime = localNow.toIsoDateTimeString();//toISOString().slice(0,-5);//"2016-03-02T08:37:43.438Z" --> "2016-03-02T08:37:43
+		$("#eTime").val(localISOTime);
+		
+		//减去48分之1天，提高查询速度
+		var bTime = new Date(localNow.getTime()-86400000/48);
+		$("#bTime").val(bTime.toIsoDateTimeString());		
+	}
+
+	function resetDetails(){
+		$("[data-toggle='popover']").popover('hide');
+		/* if(sys.isNotBlank(resultList)){
+			$("#result").html(template('opLogListTpl', {results: resultList}));
+		} */
+	}
+
+	function search() {
+		var pageParam = page.buildParams($("form").serializeObject());
+		$("[data-toggle='popover']").popover('destroy');
+		$("#result").html(JSON.stringify(pageParam, null, "\t") + "\n查找中，请耐心等候……");
+		sys.ajax("/mdb/search", {
+			params : pageParam,
+			callback : pageQueryCallback
+		});
+	}
+	
+	//开始查找
+	function goSearch() {
+		page.resetPageNo();
+		search();
+	}
+
+	function pageQueryCallback(result) {
+		resultList = result.results;
+		$("[data-toggle='popover']").popover('destroy');
+		if(resultList.length==0){
+			alert("没有数据了。");
+			$("#result").html("");
+			return;
+		}
+		
+		page.updatePage(result);
+
+		var html = template('opLogListTpl', result);
+		$("#result").html(html);
+		//$("[data-toggle='popover']").popover({html:true});
+		$("[data-toggle='popover']").popover({html:true}).click(function(e) {
+			//$(this).popover('show');
+			//$('.popover-title').append('<button type="button" class="close">&times;</button>');
+			$('.close').click(function(e){
+				//alert($(this).attr("_parentid"));
+				
+				//模仿点击“显示”按钮，需要找到<a>标签的元素
+				// <a>标签中放置id=params+i，title中的button放置_parentid=params+i，这样两个因素就可以关联起来了
+				$("#"+$(this).attr("_parentid")).click();
+				
+				//$(this).parent().parent().popover('hide');
+			});
+			//e.preventDefault();
+        });
+		
+
+	}
+
+</script>
+
+</html>

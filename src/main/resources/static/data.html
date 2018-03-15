@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>User Op Log</title>
+	
+	<meta charset="UTF-8">
+	
+	<script src="js/jquery-2.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/template.js"></script>
+	<script src="js/sys.js"></script>
+	<script src="js/date.tools.js"></script>
+	<script src="js/x-page-old.js"></script>
+    
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	<link href="css/common.css" rel="stylesheet" />
+
+	<style>
+		table{border: 1px solid #8968CD; border-collapse: collapse;}
+		th,td{border: 1px solid #8968CD; padding:15px;}
+		td{color: green;}
+		pre{padding:0px; border:0px}
+		.table-striped>tbody>tr:nth-of-type(odd) {background-color: #E0EEEE;}
+		.table-hover > tbody > tr:hover {background-color: #C1FFC1;}
+		.gw_num{border: 1px solid #dbdbdb;width: 110px;line-height: 26px;overflow: hidden;}
+		.gw_num em{display: block;height: 26px;width: 26px;float: left;color: #7A7979;border-right: 1px solid #dbdbdb;text-align: center;cursor: pointer;}
+		.gw_num .num{display: block;float: left;text-align: center;width: 52px;font-style: normal;font-size: 14px;line-height: 24px;border: 0;}
+		.gw_num em.add{float: right;border-right: 0;border-left: 1px solid #dbdbdb;}
+		.export { height: 40px; width: 60px; }
+	</style>
+	
+  </head>
+  
+  <body>
+	<div align="center">
+		<table>
+			<tbody>
+				<tr>
+					<td colspan="2"><font size="5" color="black"><b>历史数据</b></font></td>
+					<td colspan="2"><font size="5" color="black"><b>今天数据</b></font></td>
+					<td colspan="2"><font size="5" color="black"><b>昨天数据</b></font></td>
+				</tr>
+				<tr>
+					<td>总数</td>
+					<td id="hisTotal">0</td>
+					<td>总数</td>
+					<td id="todayTotal">0</td>
+					<td>总数</td>
+					<td id="yesTotal">0</td>
+				</tr>
+				<tr>
+					<td><font color="red"/>库存</td>
+					<td id="hisStock">0</td>
+					<td><font color="red"/>库存</td>
+					<td id="todayStock">0</td>
+					<td><font color="red"/>库存</td>
+					<td id="yesStock">0</td>
+				</tr>
+				<tr>
+					<td>生存数</td>
+					<td id="hisAlive">0</td>
+					<td>生存数</td>
+					<td id="todayAlive">0</td>
+					<td>生存数</td>
+					<td id="yesAlive">0</td>
+				</tr>
+				<tr>
+					<td>实名数</td>
+					<td id="hisReal">0</td>
+					<td>实名数</td>
+					<td id="todayReal">0</td>
+					<td>实名数</td>
+					<td id="yesReal">0</td>
+				</tr>
+				<tr>
+					<td>纯白数</td>
+					<td id="hisNReal">0</td>
+					<td>纯白数</td>
+					<td id="todayNReal">0</td>
+					<td>纯白数</td>
+					<td id="yesNReal">0</td>
+				</tr>
+				<tr>
+					<td>封号数</td>
+					<td id="hisDead">0</td>
+					<td>封号数</td>
+					<td id="todayDead">0</td>
+					<td>封号数</td>
+					<td id="yesDead">0</td>
+				</tr>
+				<tr>
+					<td>需扫码辅助数</td>
+					<td id="hisSup">0</td>
+					<td>需扫码辅助数</td>
+					<td id="todaySup">0</td>
+					<td>需扫码辅助数</td>
+					<td id="yesSup">0</td>
+				</tr>
+				<tr>
+					<td>公众号</td>
+					<td id="hisG">pphongbao:0<br>hbhb:0<br></td>
+					<td>公众号</td>
+					<td id="todayG"></td>
+					<td>公众号</td>
+					<td id="yesG"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<br><br><br>
+	<div align="center">
+		<h3><font size="5" color="red">选择导出数量</font></h3>
+	 	 <div class="gw_num">
+		 	 <em class="sub">-</em>
+		  	<input type="text" value="1" class="num" id="num"/>
+			 <em class="add">+</em>
+	  	</div>
+		<h3><font size="5" color="red">请输入密码</font></h3>
+		<input type="password" id="psw" value = ""><br><br>
+		<button type="button" class="export" onclick="exportData()">导出</button><br>
+	</div>
+  </body>
+
+<script>
+    $(function() {
+        //加的效果
+        $(".add").click(function(){
+            var n=$(this).prev().val();
+            var num=parseInt(n)+1;
+            if(num==0){ return;}
+            $(this).prev().val(num);
+        });
+		//减的效果
+        $(".sub").click(function(){
+            var n=$(this).next().val();
+            var num=parseInt(n)-1;
+            if(num==0){ return}
+            $(this).next().val(num);
+        });
+        getMsg();
+    });
+
+    function getMsg() {
+        $.ajax({
+            type: "GET",
+            url: "/wc/statistics",
+            data: null,
+            dataType: "json",
+            success: function (result) {
+                $("#hisTotal").html(result.hisTotal);
+                $("#todayTotal").html(result.todayTotal);
+                $("#yesTotal").html(result.yesTotal);
+                $("#hisAlive").html(result.hisAlive);
+                $("#todayAlive").html(result.todayAlive);
+                $("#yesAlive").html(result.yesAlive);
+                $("#hisDead").html(result.hisDead);
+                $("#todayDead").html(result.todayDead);
+                $("#yesDead").html(result.yesDead);
+                $("#hisReal").html(result.hisReal);
+                $("#todayReal").html(result.todayReal);
+                $("#yesReal").html(result.yesReal);
+                $("#hisNReal").html(result.hisNReal);
+                $("#todayNReal").html(result.todayNReal);
+                $("#yesNReal").html(result.yesNReal);
+                $("#hisStock").html(result.hisStock);
+                $("#todayStock").html(result.todayStock);
+                $("#yesStock").html(result.yesStock);
+                $("#hisSup").html(result.hisSup);
+                $("#todaySup").html(result.todaySup);
+                $("#yesSup").html(result.yesSup);
+                $("#hisG").html(result.hisG);
+                $("#todayG").html(result.todayG);
+                $("#yesG").html(result.yesG);
+            }
+        });
+    }
+
+    function exportData() {
+        var num = $("#num").val();
+        var psw = $("#psw").val();
+        if(psw === ""){
+            alert("请输入密码");
+		}
+        var url = "/wc/exportData?psw=" + psw + "&count=" + num;
+        window.open(url);
+    }
+
+</script>
+
+</html>

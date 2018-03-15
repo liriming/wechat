@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * 日期处理相关工具类
@@ -324,7 +322,55 @@ public class XDateUtils {
 		DayOfWeek dayOfWeek = d.getDayOfWeek();
 		return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.SIMPLIFIED_CHINESE);
 	}
-	
+
+	//获取当天的开始时间
+	public static java.util.Date getDayBegin() {
+		Calendar cal = new GregorianCalendar();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+	//获取当天的结束时间
+	public static java.util.Date getDayEnd() {
+		Calendar cal = new GregorianCalendar();
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		return cal.getTime();
+	}
+
+	//获取昨天的开始时间
+	public static Date getBeginDayOfYesterday() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayBegin());
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
+	//获取昨天的结束时间
+	public static Date getEndDayOfYesterDay() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayEnd());
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
+	//获取明天的开始时间
+	public static Date getBeginDayOfTomorrow() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayBegin());
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+
+		return cal.getTime();
+	}
+	//获取明天的结束时间
+	public static Date getEndDayOfTomorrow() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayEnd());
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		return cal.getTime();
+	}
+
 	public static void main(String[] args) {
 		System.out.println(stringToTimestamp("2016-05-05T15:22:09"));
 		System.out.println(stringToTimestamp("2016-05-05 15:22:09"));
