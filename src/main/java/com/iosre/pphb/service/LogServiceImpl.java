@@ -89,7 +89,7 @@ public class LogServiceImpl {
 	 * @return
 	 */
 	private boolean saveToMongo(String methodName) {
-		if("search".equalsIgnoreCase(methodName)|| "exportPhone".equalsIgnoreCase(methodName)){
+		if("search".equalsIgnoreCase(methodName)|| "exportPhone".equalsIgnoreCase(methodName)|| "statistics".equalsIgnoreCase(methodName)){
 			return false;
 		}
 		return true;
