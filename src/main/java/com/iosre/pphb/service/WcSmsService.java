@@ -207,8 +207,12 @@ public class WcSmsService {
         String d62 = datas[2];
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
+        Integer real = 0;
+        if(datas.length == 6){
+            real = 1;
+        }
 
-        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip);
+        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip,real);
 
     }
 

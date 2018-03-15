@@ -10,8 +10,8 @@ import java.util.Map;
 
 public interface WcuserDao {
 
-    @Insert("insert into wcuser(name,psw,_62,phoneno,isalive,ip) values (#{name},#{psw},#{_62},#{phoneno},#{isalive},#{ip})")
-    int insertDataInfo(@Param("name")String name,@Param("psw")String psw,@Param("_62")String _62,@Param("phoneno")String phoneno,@Param("isalive")Integer isalive,@Param("ip")String ip);
+    @Insert("insert into wcuser(name,psw,_62,phoneno,isalive,ip,realname) values (#{name},#{psw},#{_62},#{phoneno},#{isalive},#{ip},#{realname})")
+    int insertDataInfo(@Param("name")String name,@Param("psw")String psw,@Param("_62")String _62,@Param("phoneno")String phoneno,@Param("isalive")Integer isalive,@Param("ip")String ip,@Param("realname")Integer realname);
 
 
 
