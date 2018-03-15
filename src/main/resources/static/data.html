@@ -32,6 +32,31 @@
   </head>
   
   <body>
+  	<div align="center">
+		<table>
+			<tbody>
+			<tr>
+				<td colspan="6" style="text-align: center"><font size="5" color="red"><b>近20分钟数据</b></font></td>
+			</tr>
+			<tr>
+				<td><font color="red"/>总数</td>
+				<td><font color="red"/>生存数</td>
+				<td><font color="red"/>实名数</td>
+				<td><font color="red"/>纯白数</td>
+				<td><font color="red"/>封号数</td>
+				<td><font color="red"/>需扫码辅助数</td>
+			</tr>
+			<tr>
+				<td id="minTotal" style="text-align: center"><font color="black"/>0</td>
+				<td id="minAlive" style="text-align: center"><font color="black"/>0</td>
+				<td id="minReal" style="text-align: center"><font color="black"/>0</td>
+				<td id="minNReal" style="text-align: center"><font color="black"/>0</td>
+				<td id="minDead" style="text-align: center"><font color="black"/>0</td>
+				<td id="minSup" style="text-align: center"><font color="black"/>0</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 	<div align="center">
 		<table>
 			<tbody>
@@ -171,6 +196,13 @@
                 $("#hisG").html(result.hisG);
                 $("#todayG").html(result.todayG);
                 $("#yesG").html(result.yesG);
+
+                $("#minAlive").html(result.minAlive);
+                $("#minDead").html(result.minDead);
+                $("#minNReal").html(result.minNReal);
+                $("#minReal").html(result.minReal);
+                $("#minSup").html(result.minSup);
+                $("#minTotal").html(result.minTotal);
             }
         });
     }

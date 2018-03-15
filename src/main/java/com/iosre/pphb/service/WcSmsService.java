@@ -246,7 +246,7 @@ public class WcSmsService {
 
             String yesterday = XDateUtils.dateToString(XDateUtils.getBeginDayOfYesterday(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
 
-            logger.info(today + "," + tomorrow + "," + yesterday);
+
 
             //历史数据
             String hisSdate = "0";
@@ -333,6 +333,17 @@ public class WcSmsService {
                 yesStr = yesStr + key + ":" + yesNum.get(key) + "<br>";
             }
             map.putIfAbsent("yesG", yesStr);
+
+
+            String min = XDateUtils.timestampToString((System.currentTimeMillis() - 20 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            //昨天数据
+            Map<String, Object> minMap = wcuserDao.getMsg(min, tomorrow);
+            map.putIfAbsent("minTotal", minMap.get("total"));
+            map.putIfAbsent("minAlive", minMap.get("alive"));
+            map.putIfAbsent("minReal", minMap.get("realn"));
+            map.putIfAbsent("minNReal", minMap.get("nrealn"));
+            map.putIfAbsent("minDead", minMap.get("nalive"));
+            map.putIfAbsent("minSup", minMap.get("sup"));
 
             return map;
         } catch (Exception e) {
