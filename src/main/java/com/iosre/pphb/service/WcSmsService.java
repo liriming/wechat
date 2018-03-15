@@ -5,7 +5,10 @@ import com.iosre.pphb.dao.WcphoneDao;
 import com.iosre.pphb.dao.WcuserDao;
 import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
+import com.iosre.pphb.util.FileUtils;
+import com.iosre.pphb.util.XDateUtils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -102,7 +106,7 @@ public class WcSmsService {
 
     }
 
-    public String getCode( String phone) {
+    public String getCode(String phone) {
         try {
 
             if (!phoneMsgIdMap.containsKey(phone)) {
@@ -115,7 +119,7 @@ public class WcSmsService {
 
             if (0 == (Integer) retMsg.get("code")) {
                 String data = retMsg.get("data").toString();
-                String regEx="[^0-9]";
+                String regEx = "[^0-9]";
                 Pattern p = Pattern.compile(regEx);
                 Matcher m = p.matcher(data);
                 phoneMsgIdMap.remove(phone);
@@ -129,18 +133,18 @@ public class WcSmsService {
         }
     }
 
-    public Integer exportPhone(String list){
+    public Integer exportPhone(String list) {
         try {
             logger.info(list.toString());
 
             List<String> phoneStr = Arrays.asList(list.split(","));
-            List<Map<String,String>> phoneList = new ArrayList<>();
+            List<Map<String, String>> phoneList = new ArrayList<>();
 
-            phoneStr.forEach( e ->{
+            phoneStr.forEach(e -> {
                 String[] p = e.split("|");
-                Map<String,String> m = new HashMap<>(2);
-                m.putIfAbsent("phone", e.trim().substring(0,10));
-                m.putIfAbsent("token", e.trim().substring(11,e.trim().length()));
+                Map<String, String> m = new HashMap<>(2);
+                m.putIfAbsent("phone", e.trim().substring(0, 10));
+                m.putIfAbsent("token", e.trim().substring(11, e.trim().length()));
 
                 phoneList.add(m);
             });
@@ -154,13 +158,13 @@ public class WcSmsService {
         }
     }
 
-    public String usPhone(){
+    public String usPhone() {
 
-        Map<String,Object> phoneMsg = wcphoneDao.getPhoneMsg();
+        Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
 
         String phone = phoneMsg.get("phone").toString();
-        int id = (Integer)phoneMsg.get("id");
-        wcphoneDao.setStatus(id,1);
+        int id = (Integer) phoneMsg.get("id");
+        wcphoneDao.setStatus(id, 1);
         return phone;
 
     }
@@ -171,31 +175,31 @@ public class WcSmsService {
 
         HttpResult result = httpService.get(US_HOST + map.get("token"));
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
-        int id = (Integer)map.get("id");
+        int id = (Integer) map.get("id");
 
-        if((Boolean) retMsg.get("flag")) {
+        if ((Boolean) retMsg.get("flag")) {
 
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(result.getPayload());
-            wcphoneDao.setStatus(id,2);
+            wcphoneDao.setStatus(id, 2);
             return m.replaceAll("").trim();
-        }else{
-            if(usPhoneMap.containsKey(phone)){
+        } else {
+            if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
-                if(reqCount > 10){
-                    wcphoneDao.setStatus(id,0);
-                }else{
-                    usPhoneMap.putIfAbsent(phone,reqCount++);
+                if (reqCount > 10) {
+                    wcphoneDao.setStatus(id, 0);
+                } else {
+                    usPhoneMap.putIfAbsent(phone, reqCount++);
                 }
-            }else{
+            } else {
                 usPhoneMap.putIfAbsent(phone, 1);
             }
             return "400";
         }
     }
 
-    public void uploadData(String ip,String data)  {
+    public void uploadData(String ip, String data) {
 
         String[] datas = data.split(",");
         String phone = datas[0];
@@ -204,8 +208,138 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
 
-        wcuserDao.insertDataInfo(phone,psw,d62,phoneno,isalive,ip);
+        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip);
 
     }
+
+    public String exportData(HttpServletResponse response, int count, String psw) {
+        try {
+            if (!psw.equals("ra6ra6ra6")) {
+                return "密码错误";
+            }
+            List<Map<String, Object>> exportData = wcuserDao.getExportData(count);
+
+            List<String> data = new ArrayList<>(exportData.size());
+            List<Integer> exportId = new ArrayList<>(exportData.size());
+
+            exportData.forEach(e -> {
+                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62");
+                data.add(msg);
+                exportId.add((Integer) e.get("id"));
+            });
+            wcuserDao.updateExportStatus(exportId);
+            FileUtils.writeToTxt(response, data);
+            return "";
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
+    public Map<String, Object> statistics() {
+        Map<String, Object> map = new HashedMap();
+        try {
+
+            String today = XDateUtils.dateToString(XDateUtils.getDayBegin(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
+
+            String tomorrow = XDateUtils.dateToString(XDateUtils.getBeginDayOfTomorrow(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
+
+            String yesterday = XDateUtils.dateToString(XDateUtils.getBeginDayOfYesterday(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
+
+            logger.info(today + "," + tomorrow + "," + yesterday);
+
+            //历史数据
+            String hisSdate = "0";
+            Map<String, Object> hisMap = wcuserDao.getMsg(hisSdate, tomorrow);
+            map.putIfAbsent("hisTotal", hisMap.get("total"));
+            map.putIfAbsent("hisAlive", hisMap.get("alive"));
+            map.putIfAbsent("hisStock", hisMap.get("stock"));
+            map.putIfAbsent("hisReal", hisMap.get("realn"));
+            map.putIfAbsent("hisNReal", hisMap.get("nrealn"));
+            map.putIfAbsent("hisDead", hisMap.get("nalive"));
+            map.putIfAbsent("hisSup", hisMap.get("sup"));
+            List<String> hisGzhh = wcuserDao.gzhh(hisSdate, tomorrow);
+            Map<String, Integer> gzhhNum = new HashedMap();
+            hisGzhh.forEach((String e) -> {
+                List gs = Arrays.asList(e.split(","));
+                gs.forEach((Object a) -> {
+                    if (gzhhNum.containsKey(a)) {
+                        int num = gzhhNum.get(a) + 1;
+                        gzhhNum.putIfAbsent(a.toString(), num);
+                    } else if (!StringUtils.isEmpty(a)) {
+                        gzhhNum.putIfAbsent(a.toString(), 1);
+                    }
+                });
+            });
+            String gzhhStr = "";
+            for (String key : gzhhNum.keySet()) {
+                gzhhStr = gzhhStr + key + ":" + gzhhNum.get(key) + "<br>";
+            }
+            map.putIfAbsent("hisG", gzhhStr);
+
+
+            //今天数据
+            Map<String, Object> todayMap = wcuserDao.getMsg(today, tomorrow);
+            map.putIfAbsent("todayTotal", todayMap.get("total"));
+            map.putIfAbsent("todayAlive", todayMap.get("alive"));
+            map.putIfAbsent("todayStock", todayMap.get("stock"));
+            map.putIfAbsent("todayReal", todayMap.get("realn"));
+            map.putIfAbsent("todayNReal", todayMap.get("nrealn"));
+            map.putIfAbsent("todayDead", todayMap.get("nalive"));
+            map.putIfAbsent("todaySup", todayMap.get("sup"));
+            List<String> todayGzhh = wcuserDao.gzhh(today, tomorrow);
+            Map<String, Integer> todayNum = new HashedMap();
+            todayGzhh.forEach(e -> {
+                List gs = Arrays.asList(e.split(","));
+                gs.forEach(a -> {
+                    if (todayNum.containsKey(a)) {
+                        int num = todayNum.get(a) + 1;
+                        todayNum.putIfAbsent(a.toString(), num);
+                    } else if (!StringUtils.isEmpty(a)) {
+                        todayNum.putIfAbsent(a.toString(), 1);
+                    }
+                });
+            });
+            String todayStr = "";
+            for (String key : todayNum.keySet()) {
+                todayStr = todayStr + key + ":" + todayNum.get(key) + "<br>";
+            }
+            map.putIfAbsent("todayG", todayStr);
+
+            //昨天数据
+            Map<String, Object> yesMap = wcuserDao.getMsg(yesterday, today);
+            map.putIfAbsent("yesTotal", yesMap.get("total"));
+            map.putIfAbsent("yesAlive", yesMap.get("alive"));
+            map.putIfAbsent("yesStock", yesMap.get("stock"));
+            map.putIfAbsent("yesReal", yesMap.get("realn"));
+            map.putIfAbsent("yesNReal", yesMap.get("nrealn"));
+            map.putIfAbsent("yesDead", yesMap.get("nalive"));
+            map.putIfAbsent("yesSup", yesMap.get("sup"));
+            List<String> yesGzhh = wcuserDao.gzhh(yesterday, today);
+            Map<String, Integer> yesNum = new HashedMap();
+            yesGzhh.forEach(e -> {
+                List gs = Arrays.asList(e.split(","));
+                gs.forEach(a -> {
+                    if (yesNum.containsKey(a)) {
+                        int num = yesNum.get(a) + 1;
+                        yesNum.putIfAbsent(a.toString(), num);
+                    } else if (!StringUtils.isEmpty(a)) {
+                        yesNum.putIfAbsent(a.toString(), 1);
+                    }
+                });
+            });
+            String yesStr = "";
+            for (String key : yesNum.keySet()) {
+                yesStr = yesStr + key + ":" + yesNum.get(key) + "<br>";
+            }
+            map.putIfAbsent("yesG", yesStr);
+
+            return map;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return map;
+        }
+    }
+
 
 }

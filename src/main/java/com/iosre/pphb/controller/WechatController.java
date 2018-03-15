@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 
 @RestController
@@ -77,5 +78,14 @@ public class WechatController {
         wcSmsService.uploadData(ip,data);
     }
 
+    @RequestMapping(value ="exportData", method = RequestMethod.GET)
+    public String exportData(HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw)  {
+        return wcSmsService.exportData(response, count,psw);
+    }
+
+    @RequestMapping(value ="statistics", method = RequestMethod.GET)
+    public Map<String,Object> statistics()  {
+        return wcSmsService.statistics();
+    }
 
 }
