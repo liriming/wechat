@@ -29,9 +29,13 @@ public class WechatService {
 
     public String getIdCard(int count){
 
-        Map<String,String> map = user1Dao.getIdCard(count);
+        List<Map<String,String>> list = user1Dao.getIdCard(count);
+        String msg = "";
+        for(Map map : list){
+            msg += map.get("reName1") + "," +  map.get("CtfId") + ",";
+        }
 
-        return map.get("reName1") + "," +  map.get("CtfId");
+        return msg.substring(0,msg.length() - 1);
     }
 
 
