@@ -88,4 +88,8 @@ public class WechatController {
         return wcSmsService.statistics();
     }
 
+    @RequestMapping(value ="realName", method = RequestMethod.GET)
+    public void realName(HttpServletRequest request,@RequestParam(value = "data") String data)  {
+        wcSmsService.realName(data);
+    }
 }

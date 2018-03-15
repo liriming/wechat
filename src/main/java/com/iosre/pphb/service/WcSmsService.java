@@ -199,6 +199,17 @@ public class WcSmsService {
         }
     }
 
+    public void realName(String data) {
+
+        String[] datas = data.split(",");
+        String phone = datas[0];
+        String nema = datas[1];
+        String id = datas[2];
+
+        wcuserDao.updateRealName(phone, nema,id);
+
+    }
+
     public void uploadData(String ip, String data) {
 
         String[] datas = data.split(",");

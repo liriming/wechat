@@ -19,6 +19,9 @@ public interface WcuserDao {
     @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=0 limit #{count}")
     List<Map<String,Object>> getExportData(@Param("count")int count);
 
+    @Update("update wcuser set rname=#{rname},rcard=#{rcard},realname=1 where phone=#{phone}")
+    Integer updateRealName(@Param("phone")String phone,@Param("rname")String rname,@Param("rcard")String rcard);
+
     @Update({
             " <script> ",
             " update wcuser set export=1 where id in  ",
