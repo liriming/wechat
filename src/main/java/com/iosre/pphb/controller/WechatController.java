@@ -89,7 +89,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="realName", method = RequestMethod.POST)
-    public void realName(HttpServletRequest request, @RequestBody Object map)  {
-        wcSmsService.realName(map);
+    public @ResponseBody String realName(HttpServletRequest request, @RequestBody Object map)  {
+        return wcSmsService.realName(map);
     }
 }
