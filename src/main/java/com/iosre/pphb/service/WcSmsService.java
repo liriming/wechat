@@ -221,13 +221,11 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
-        String rname = "";
-        if (datas.length == 7) {
-            real = Integer.parseInt(datas[5]);
-            rname = datas[6];
+        if(!psw.equalsIgnoreCase("ra123456")){
+            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, real, psw,"");
+        }else {
+            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
-
-        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, rname,"");
 
     }
 
