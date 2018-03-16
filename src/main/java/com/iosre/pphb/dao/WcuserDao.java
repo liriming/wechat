@@ -29,7 +29,7 @@ public interface WcuserDao {
 
     @Update({
             " <script> ",
-            " update wcuser set export=1 and exporttime=CURRENT_TIMESTAMP() where id in  ",
+            " update wcuser set export=1 , exporttime=CURRENT_TIMESTAMP() where id in  ",
             " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
             " #{item} ",
             " </foreach> ",

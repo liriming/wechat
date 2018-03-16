@@ -1,172 +1,243 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<title>数据</title>
+<head>
+    <title>数据</title>
 
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-	<script src="js/jquery-2.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/template.js"></script>
-	<script src="js/sys.js"></script>
-	<script src="js/date.tools.js"></script>
-	<script src="js/x-page-old.js"></script>
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/sys.js"></script>
+    <script src="js/date.tools.js"></script>
+    <script src="js/x-page-old.js"></script>
 
-	<link href="css/bootstrap.min.css" rel="stylesheet" />
-	<link href="css/common.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
 
-	<style>
-		table{border: 1px solid #8968CD; border-collapse: collapse;}
-		th,td{border: 1px solid #8968CD; padding:15px;}
-		td{color: green;}
-		pre{padding:0px; border:0px}
-		.table-striped>tbody>tr:nth-of-type(odd) {background-color: #E0EEEE;}
-		.table-hover > tbody > tr:hover {background-color: #C1FFC1;}
-		.gw_num{border: 1px solid #dbdbdb;width: 110px;line-height: 26px;overflow: hidden;}
-		.gw_num em{display: block;height: 26px;width: 26px;float: left;color: #7A7979;border-right: 1px solid #dbdbdb;text-align: center;cursor: pointer;}
-		.gw_num .num{display: block;float: left;text-align: center;width: 52px;font-style: normal;font-size: 14px;line-height: 24px;border: 0;}
-		.gw_num em.add{float: right;border-right: 0;border-left: 1px solid #dbdbdb;}
-		.export { height: 40px; width: 60px; }
-		.export { height: 40px; width: 60px; }
-		.r1 {width:20px;height:20px}
-	</style>
+    <style>
+        table {
+            border: 1px solid #8968CD;
+            border-collapse: collapse;
+        }
 
-  </head>
+        th, td {
+            border: 1px solid #8968CD;
+            padding: 15px;
+        }
 
-  <body>
-  	<div align="center">
-		<h2 style="color:blue" id="h2"></h2>
-		<table>
-			<tbody>
-			<tr>
-				<td colspan="6" style="text-align: center"><font size="5" color="red"><b>近20分钟数据</b></font></td>
-			</tr>
-			<tr>
-				<td><font color="red"/>总数</td>
-				<td><font color="red"/>生存数</td>
-				<td><font color="red"/>实名数</td>
-				<td><font color="red"/>纯白数</td>
-				<td><font color="red"/>封号数</td>
-				<td><font color="red"/>需扫码辅助数</td>
-			</tr>
-			<tr>
-				<td id="minTotal" style="text-align: center"><font color="black"/>0</td>
-				<td id="minAlive" style="text-align: center"><font color="black"/>0</td>
-				<td id="minReal" style="text-align: center"><font color="black"/>0</td>
-				<td id="minNReal" style="text-align: center"><font color="black"/>0</td>
-				<td id="minDead" style="text-align: center"><font color="black"/>0</td>
-				<td id="minSup" style="text-align: center"><font color="black"/>0</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
-	<div align="center">
-		<table>
-			<tbody>
-				<tr>
-					<td colspan="2" style="text-align: center"><font size="5" color="black"><b>历史数据</b></font></td>
-					<td colspan="2" style="text-align: center"><font size="5" color="black"><b>今天数据</b></font></td>
-					<td colspan="2" style="text-align: center"><font size="5" color="black"><b>昨天数据</b></font></td>
-				</tr>
-				<tr>
-					<td>总数</td>
-					<td id="hisTotal">0</td>
-					<td>总数</td>
-					<td id="todayTotal">0</td>
-					<td>总数</td>
-					<td id="yesTotal">0</td>
-				</tr>
-				<tr>
-					<td><font color="red"/>库存</td>
-					<td id="hisStock">0</td>
-					<td><font color="red"/>库存</td>
-					<td id="todayStock">0</td>
-					<td><font color="red"/>库存</td>
-					<td id="yesStock">0</td>
-				</tr>
-				<tr>
-					<td>生存数</td>
-					<td id="hisAlive">0</td>
-					<td>生存数</td>
-					<td id="todayAlive">0</td>
-					<td>生存数</td>
-					<td id="yesAlive">0</td>
-				</tr>
-				<tr>
-					<td>实名数</td>
-					<td id="hisReal">0</td>
-					<td>实名数</td>
-					<td id="todayReal">0</td>
-					<td>实名数</td>
-					<td id="yesReal">0</td>
-				</tr>
-				<tr>
-					<td>纯白数</td>
-					<td id="hisNReal">0</td>
-					<td>纯白数</td>
-					<td id="todayNReal">0</td>
-					<td>纯白数</td>
-					<td id="yesNReal">0</td>
-				</tr>
-				<tr>
-					<td>封号数</td>
-					<td id="hisDead">0</td>
-					<td>封号数</td>
-					<td id="todayDead">0</td>
-					<td>封号数</td>
-					<td id="yesDead">0</td>
-				</tr>
-				<tr>
-					<td>需扫码辅助数</td>
-					<td id="hisSup">0</td>
-					<td>需扫码辅助数</td>
-					<td id="todaySup">0</td>
-					<td>需扫码辅助数</td>
-					<td id="yesSup">0</td>
-				</tr>
-				<tr>
-					<td>公众号</td>
-					<td id="hisG">pphongbao:0<br>hbhb:0<br></td>
-					<td>公众号</td>
-					<td id="todayG"></td>
-					<td>公众号</td>
-					<td id="yesG"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div align="center">
-		<h3><font size="5" color="red">选择导出类型</font></h3>
-		<input id="r1" type="radio" class="r1" value="1" name="r" checked="checked"><span><font size="5px" color="#00008b">当天纯白</font></span></input>
-		<input id="r3" type="radio" class="r1" value="3" name="r"><span><font size="5px" color="#00008b">当天实名</font></span></input>
-		<input id="r2" type="radio" class="r1" value="2" name="r"><span><font size="5px" color="#00008b">隔天纯白</font></span></input>
-		<input id="r4" type="radio" class="r1" value="4" name="r"><span><font size="5px" color="#00008b">隔天实名</font></span></input>
-		<h3><font size="5" color="red">选择导出数量</font></h3>
-	 	 <div class="gw_num">
-		 	 <em class="sub">-</em>
-		  	<input type="text" value="1" class="num" id="num"/>
-			 <em class="add">+</em>
-	  	</div>
-		<h3><font size="5" color="red">请输入密码</font></h3>
-		<input type="password" id="psw" value = ""><br><br>
-		<button type="button" class="export" onclick="exportData()">导出</button><br>
-	</div>
-  </body>
+        td {
+            color: green;
+        }
+
+        pre {
+            padding: 0px;
+            border: 0px
+        }
+
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #E0EEEE;
+        }
+
+        .table-hover > tbody > tr:hover {
+            background-color: #C1FFC1;
+        }
+
+        .gw_num {
+            border: 1px solid #dbdbdb;
+            width: 110px;
+            line-height: 26px;
+            overflow: hidden;
+        }
+
+        .gw_num em {
+            display: block;
+            height: 26px;
+            width: 26px;
+            float: left;
+            color: #7A7979;
+            border-right: 1px solid #dbdbdb;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .gw_num .num {
+            display: block;
+            float: left;
+            text-align: center;
+            width: 52px;
+            font-style: normal;
+            font-size: 14px;
+            line-height: 24px;
+            border: 0;
+        }
+
+        .gw_num em.add {
+            float: right;
+            border-right: 0;
+            border-left: 1px solid #dbdbdb;
+        }
+
+        .export {
+            height: 40px;
+            width: 60px;
+        }
+
+        .export {
+            height: 40px;
+            width: 60px;
+        }
+
+        .r1 {
+            width: 20px;
+            height: 20px
+        }
+    </style>
+
+</head>
+
+<body>
+<div align="center">
+    <h2 style="color:blue" id="h2"></h2>
+    <table>
+        <tbody>
+        <tr>
+            <td colspan="6" style="text-align: center"><font size="5" color="red"><b>近20分钟数据</b></font></td>
+        </tr>
+        <tr>
+            <td><font color="red"/>总数</td>
+            <td><font color="red"/>生存数</td>
+            <td><font color="red"/>实名数</td>
+            <td><font color="red"/>纯白数</td>
+            <td><font color="red"/>封号数</td>
+            <td><font color="red"/>需扫码辅助数</td>
+        </tr>
+        <tr>
+            <td id="minTotal" style="text-align: center"><font color="black"/>0</td>
+            <td id="minAlive" style="text-align: center"><font color="black"/>0</td>
+            <td id="minReal" style="text-align: center"><font color="black"/>0</td>
+            <td id="minNReal" style="text-align: center"><font color="black"/>0</td>
+            <td id="minDead" style="text-align: center"><font color="black"/>0</td>
+            <td id="minSup" style="text-align: center"><font color="black"/>0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div align="center">
+    <table>
+        <tbody>
+        <tr>
+            <td colspan="2" style="text-align: center"><font size="5" color="black"><b>历史数据</b></font></td>
+            <td colspan="2" style="text-align: center"><font size="5" color="black"><b>今天数据</b></font></td>
+            <td colspan="2" style="text-align: center"><font size="5" color="black"><b>昨天数据</b></font></td>
+        </tr>
+        <tr>
+            <td>总数</td>
+            <td id="hisTotal">0</td>
+            <td>总数</td>
+            <td id="todayTotal">0</td>
+            <td>总数</td>
+            <td id="yesTotal">0</td>
+        </tr>
+        <tr>
+            <td><font color="red"/>库存</td>
+            <td id="hisStock">0</td>
+            <td><font color="red"/>库存</td>
+            <td id="todayStock">0</td>
+            <td><font color="red"/>库存</td>
+            <td id="yesStock">0</td>
+        </tr>
+        <tr>
+            <td>生存数</td>
+            <td id="hisAlive">0</td>
+            <td>生存数</td>
+            <td id="todayAlive">0</td>
+            <td>生存数</td>
+            <td id="yesAlive">0</td>
+        </tr>
+        <tr>
+            <td>实名数</td>
+            <td id="hisReal">0</td>
+            <td>实名数</td>
+            <td id="todayReal">0</td>
+            <td>实名数</td>
+            <td id="yesReal">0</td>
+        </tr>
+        <tr>
+            <td>纯白数</td>
+            <td id="hisNReal">0</td>
+            <td>纯白数</td>
+            <td id="todayNReal">0</td>
+            <td>纯白数</td>
+            <td id="yesNReal">0</td>
+        </tr>
+        <tr>
+            <td>封号数</td>
+            <td id="hisDead">0</td>
+            <td>封号数</td>
+            <td id="todayDead">0</td>
+            <td>封号数</td>
+            <td id="yesDead">0</td>
+        </tr>
+        <tr>
+            <td>需扫码辅助数</td>
+            <td id="hisSup">0</td>
+            <td>需扫码辅助数</td>
+            <td id="todaySup">0</td>
+            <td>需扫码辅助数</td>
+            <td id="yesSup">0</td>
+        </tr>
+        <tr>
+            <td>公众号</td>
+            <td id="hisG">pphongbao:0<br>hbhb:0<br></td>
+            <td>公众号</td>
+            <td id="todayG"></td>
+            <td>公众号</td>
+            <td id="yesG"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div align="center">
+    <h3><font size="5" color="red">选择导出类型</font></h3>
+    <input id="r1" type="radio" class="r1" value="1" name="r" checked="checked"><span><font size="5px" color="#00008b">当天纯白</font></span></input>
+    <input id="r3" type="radio" class="r1" value="3" name="r"><span><font size="5px"
+                                                                          color="#00008b">当天实名</font></span></input>
+    <input id="r2" type="radio" class="r1" value="2" name="r"><span><font size="5px"
+                                                                          color="#00008b">隔天纯白</font></span></input>
+    <input id="r4" type="radio" class="r1" value="4" name="r"><span><font size="5px"
+                                                                          color="#00008b">隔天实名</font></span></input>
+    <h3><font size="5" color="red">选择导出数量</font></h3>
+    <div class="gw_num">
+        <em class="sub">-</em>
+        <input type="text" value="1" class="num" id="num"/>
+        <em class="add">+</em>
+    </div>
+    <h3><font size="5" color="red">请输入密码</font></h3>
+    <input type="password" id="psw" value=""><br><br>
+    <button type="button" class="export" onclick="exportData()">导出</button>
+    <br>
+</div>
+</body>
 
 <script>
-    $(function() {
+    $(function () {
         //加的效果
-        $(".add").click(function(){
-            var n=$(this).prev().val();
-            var num=parseInt(n)+1;
-            if(num==0){ return;}
+        $(".add").click(function () {
+            var n = $(this).prev().val();
+            var num = parseInt(n) + 1;
+            if (num == 0) {
+                return;
+            }
             $(this).prev().val(num);
         });
-		//减的效果
-        $(".sub").click(function(){
-            var n=$(this).next().val();
-            var num=parseInt(n)-1;
-            if(num==0){ return}
+        //减的效果
+        $(".sub").click(function () {
+            var n = $(this).next().val();
+            var num = parseInt(n) - 1;
+            if (num == 0) {
+                return
+            }
             $(this).next().val(num);
         });
         getMsg();
@@ -224,14 +295,58 @@
     }
 
     function exportData() {
+        var url = 'wc/exportData';
         var num = $("#num").val();
         var psw = $("#psw").val();
-        if(psw === ""){
+        if (psw === "") {
             alert("请输入密码");
-		}
+        }
         var type = $("input[name='r']:checked").val();
-        var url = "/wc/exportData?psw=" + psw + "&count=" + num + "&type=" + type;
-        window.open(url);
+
+        /**
+         * 使用form表单来发送请求
+         * 1.method属性用来设置请求的类型——post还是get
+         * 2.action属性用来设置请求路径。
+         *
+         */
+        var form = $("<form>");//定义一个form表单
+        form.attr("style", "display:none");
+        form.attr("target", "");
+        form.attr("method", "get");  //请求类型
+        form.attr("action", url);   //请求地址
+        $("body").append(form);//将表单放置在web中
+
+        /**
+         * input标签主要用来传递请求所需的参数：
+         *
+         * 1.name属性是传递请求所需的参数名.
+         * 2.value属性是传递请求所需的参数值.
+         *
+         * 3.当为get类型时，请求所需的参数用input标签来传递，直接写在URL后面是无效的。
+         * 4.当为post类型时，queryString参数直接写在URL后面，formData参数则用input标签传递
+         *       有多少数据则使用多少input标签
+         *
+         　　　*/
+        var input1 = $("<input>");
+        input1.attr("type", "hidden");
+        input1.attr("name", "psw");
+        input1.attr("value", psw);
+        form.append(input1);
+
+        var input2 = $("<input>");
+        input2.attr("type", "hidden");
+        input2.attr("name", "count");
+        input2.attr("value", num);
+        form.append(input2);
+
+        var input3 = $("<input>");
+        input3.attr("type", "hidden");
+        input3.attr("name", "type");
+        input3.attr("value", type);
+        form.append(input3);
+
+        form.submit();//表单提交
+
     }
 
 </script>
