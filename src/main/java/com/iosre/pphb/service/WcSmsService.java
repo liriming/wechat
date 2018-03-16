@@ -392,6 +392,22 @@ public class WcSmsService {
 
             map.putIfAbsent("resPhoneNum", wcphoneDao.resPhoneNum());
 
+            String sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            String eDate = XDateUtils.nowToString();
+            int todayWhiteNum = wcuserDao.getExportDataNum( sDate, eDate, 0);
+            int todayRealNum = wcuserDao.getExportDataNum( sDate, eDate, 1);
+
+            map.putIfAbsent("todayWhiteNum", todayWhiteNum);
+            map.putIfAbsent("todayRealNum", todayRealNum);
+
+            sDate = "0";
+            eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            int yesWhiteNum = wcuserDao.getExportDataNum( sDate, eDate, 0);
+            int yesRealNum = wcuserDao.getExportDataNum( sDate, eDate, 1);
+
+            map.putIfAbsent("yesWhiteNum", yesWhiteNum);
+            map.putIfAbsent("yesRealNum", yesRealNum);
+
             return map;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

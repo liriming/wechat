@@ -19,6 +19,11 @@ public interface WcuserDao {
             "and ctime BETWEEN #{sDate} AND  #{eDate} order by ctime ${listorder} limit #{count} ")
     List<Map<String, Object>> getExportData(@Param("count") int count, @Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
 
+
+    @Select("select count(id) from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
+            "and ctime BETWEEN #{sDate} AND  #{eDate} ")
+    Integer getExportDataNum(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("realname") int realname);
+
     @Update("update wcuser set rname=#{rname},rcard=#{rcard},realname=1 where phone=#{phone}")
     Integer updateRealName(@Param("phone") String phone, @Param("rname") String rname, @Param("rcard") String rcard);
 

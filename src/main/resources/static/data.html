@@ -2,16 +2,16 @@
 <html>
   <head>
 	<title>数据</title>
-	
+
 	<meta charset="UTF-8">
-	
+
 	<script src="js/jquery-2.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/template.js"></script>
 	<script src="js/sys.js"></script>
 	<script src="js/date.tools.js"></script>
 	<script src="js/x-page-old.js"></script>
-    
+
 	<link href="css/bootstrap.min.css" rel="stylesheet" />
 	<link href="css/common.css" rel="stylesheet" />
 
@@ -27,10 +27,12 @@
 		.gw_num .num{display: block;float: left;text-align: center;width: 52px;font-style: normal;font-size: 14px;line-height: 24px;border: 0;}
 		.gw_num em.add{float: right;border-right: 0;border-left: 1px solid #dbdbdb;}
 		.export { height: 40px; width: 60px; }
+		.export { height: 40px; width: 60px; }
+		.r1 {width:20px;height:20px}
 	</style>
-	
+
   </head>
-  
+
   <body>
   	<div align="center">
 		<h2 style="color:blue" id="h2"></h2>
@@ -135,10 +137,10 @@
 	</div>
 	<div align="center">
 		<h3><font size="5" color="red">选择导出类型</font></h3>
-		<input id="r1" type="radio" style="width:20px;height:20px" value="1" name="r" checked="checked"><font size="5px" color="#00008b">当天纯白</font></input>
-		<input id="r3" type="radio" style="width:20px;height:20px" value="3" name="r"><font size="5px" color="#00008b">当天实名</font></input>
-		<input id="r2" type="radio" style="width:20px;height:20px" value="2" name="r"><font size="5px" color="#00008b">隔天纯白</font></input>
-		<input id="r4" type="radio" style="width:20px;height:20px" value="4" name="r"><font size="5px" color="#00008b">隔天实名</font></input>
+		<input id="r1" type="radio" class="r1" value="1" name="r" checked="checked"><span><font size="5px" color="#00008b">当天纯白</font></span></input>
+		<input id="r3" type="radio" class="r1" value="3" name="r"><span><font size="5px" color="#00008b">当天实名</font></span></input>
+		<input id="r2" type="radio" class="r1" value="2" name="r"><span><font size="5px" color="#00008b">隔天纯白</font></span></input>
+		<input id="r4" type="radio" class="r1" value="4" name="r"><span><font size="5px" color="#00008b">隔天实名</font></span></input>
 		<h3><font size="5" color="red">选择导出数量</font></h3>
 	 	 <div class="gw_num">
 		 	 <em class="sub">-</em>
@@ -210,6 +212,13 @@
                 $("#minTotal").html(result.minTotal);
 
                 $("#h2").html("剩余可用号码数量：" + result.resPhoneNum);
+
+
+                $("#r1").next("span").html("<font size='5px' color='#00008b'>当天纯白(" + result.todayWhiteNum + ")</font>")
+                $("#r3").next("span").html("<font size='5px' color='#00008b'>当天实名(" + result.todayRealNum + ")</font>")
+                $("#r2").next("span").html("<font size='5px' color='#00008b'>隔天纯白(" + result.yesWhiteNum + ")</font>")
+                $("#r4").next("span").html("<font size='5px' color='#00008b'>隔天实名(" + result.yesRealNum + ")</font>")
+
             }
         });
     }
