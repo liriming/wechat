@@ -33,8 +33,8 @@ public class WcSmsService {
     private final static String PASSWORD = "ra6ra6ra6";
     private static String TOKEN = "";
     private final static String HOST = "http://kuailezhuan.6yev.com/";
-    //    private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
-    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
+    private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
+//    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(30000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
@@ -259,7 +259,7 @@ public class WcSmsService {
                 realname = 1;
             }
             List<Map<String, Object>> exportData = wcuserDao.getExportData(count, sDate, eDate, listorder, realname);
-            if(exportData.size() == 0){
+            if (exportData.size() == 0) {
                 return "没有数据了!";
             }
 
@@ -394,16 +394,16 @@ public class WcSmsService {
 
             String sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
             String eDate = XDateUtils.nowToString();
-            int todayWhiteNum = wcuserDao.getExportDataNum( sDate, eDate, 0);
-            int todayRealNum = wcuserDao.getExportDataNum( sDate, eDate, 1);
+            int todayWhiteNum = wcuserDao.getExportDataNum(sDate, eDate, 0);
+            int todayRealNum = wcuserDao.getExportDataNum(sDate, eDate, 1);
 
             map.putIfAbsent("todayWhiteNum", todayWhiteNum);
             map.putIfAbsent("todayRealNum", todayRealNum);
 
             sDate = "0";
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
-            int yesWhiteNum = wcuserDao.getExportDataNum( sDate, eDate, 0);
-            int yesRealNum = wcuserDao.getExportDataNum( sDate, eDate, 1);
+            int yesWhiteNum = wcuserDao.getExportDataNum(sDate, eDate, 0);
+            int yesRealNum = wcuserDao.getExportDataNum(sDate, eDate, 1);
 
             map.putIfAbsent("yesWhiteNum", yesWhiteNum);
             map.putIfAbsent("yesRealNum", yesRealNum);
