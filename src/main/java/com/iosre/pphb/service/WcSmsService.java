@@ -200,14 +200,9 @@ public class WcSmsService {
         }
     }
 
-    public void realName(String data) {
+    public void realName(Map<String, Object> map) {
 
-        String[] datas = data.split(",");
-        String phone = datas[0];
-        String nema = datas[1];
-        String id = datas[2];
-
-        wcuserDao.updateRealName(phone, nema, id);
+        logger.info(map.toString());
 
     }
 
