@@ -200,7 +200,7 @@ public class WcSmsService {
         }
     }
 
-    public void realName(Map<String, Object> map) {
+    public void realName(Object map) {
 
         logger.info(map.toString());
 
