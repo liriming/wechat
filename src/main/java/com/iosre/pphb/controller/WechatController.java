@@ -88,8 +88,9 @@ public class WechatController {
         return wcSmsService.statistics();
     }
 
-    @RequestMapping(value ="realName", method = RequestMethod.POST)
-    public @ResponseBody String realName(HttpServletRequest request, @RequestBody Object map)  {
-        return wcSmsService.realName(map);
+    @RequestMapping(value ="uploadRealName", method = RequestMethod.GET)
+    public void uploadRealName(HttpServletRequest request,@RequestParam(value = "data") String data)  {
+        String ip = WebUtil.getLocalIp(request);
+        wcSmsService.uploadRealName(ip,data);
     }
 }

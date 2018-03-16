@@ -200,10 +200,15 @@ public class WcSmsService {
         }
     }
 
-    public String realName(Object map) {
+    public void uploadRealName(String ip, String data) {
+        String[] datas = data.split(",");
+        String phone = datas[0];
+        String rname = datas[1];
+        String d62 = datas[2];
+        String phoneno = datas[3];
+        Integer isalive = Integer.parseInt(datas[4]);
 
-        logger.info(map.toString());
-        return map.toString();
+        wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, rname,"");
 
     }
 
