@@ -394,5 +394,6 @@ public class XDateUtils {
 		System.out.println("now timestamp: " + localDateTimeToTimestamp(LocalDateTime.now()));
 		System.out.println("10 mins ago timestamp: " + localDateTimeToTimestamp(LocalDateTime.now().minusMinutes(10)));
 		System.out.println("end of today timestamp: " + endOfDayToTimestamp(LocalDate.now()));
+		System.out.println(XDateUtils.timestampToString((System.currentTimeMillis() - 48 * 60 * 60 * 1000)/1000, XDateUtils.DatePattern.DATE_TIME.getPattern()));
 	}
 }

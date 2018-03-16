@@ -29,4 +29,8 @@ public interface WcphoneDao {
     })
     int insertDataInfo(@Param("dataList") List<Map<String, String>> dataList);
 
+
+    @Select("SELECT count(*) FROM wcphone where status = 0")
+    Integer resPhoneNum();
+
 }

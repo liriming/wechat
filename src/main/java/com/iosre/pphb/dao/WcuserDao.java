@@ -11,16 +11,16 @@ import java.util.Map;
 public interface WcuserDao {
 
     @Insert("insert into wcuser(name,psw,_62,phoneno,isalive,ip,realname,rname,rcard) values (#{name},#{psw},#{_62},#{phoneno},#{isalive},#{ip},#{realname},#{rname},#{rcard})")
-    int insertDataInfo(@Param("name")String name,@Param("psw")String psw,@Param("_62")String _62,@Param("phoneno")String phoneno,@Param("isalive")Integer isalive,
-                       @Param("ip")String ip,@Param("realname")Integer realname,@Param("rname")String rname,@Param("rcard")String rcard);
+    int insertDataInfo(@Param("name") String name, @Param("psw") String psw, @Param("_62") String _62, @Param("phoneno") String phoneno, @Param("isalive") Integer isalive,
+                       @Param("ip") String ip, @Param("realname") Integer realname, @Param("rname") String rname, @Param("rcard") String rcard);
 
 
-
-    @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=0 limit #{count}")
-    List<Map<String,Object>> getExportData(@Param("count")int count);
+    @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
+            "and ctime BETWEEN #{sDate} AND  #{eDate} order by ctime ${listorder} limit #{count} ")
+    List<Map<String, Object>> getExportData(@Param("count") int count, @Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
 
     @Update("update wcuser set rname=#{rname},rcard=#{rcard},realname=1 where phone=#{phone}")
-    Integer updateRealName(@Param("phone")String phone,@Param("rname")String rname,@Param("rcard")String rcard);
+    Integer updateRealName(@Param("phone") String phone, @Param("rname") String rname, @Param("rcard") String rcard);
 
     @Update({
             " <script> ",
@@ -30,7 +30,7 @@ public interface WcuserDao {
             " </foreach> ",
             " </script> "
     })
-    Integer updateExportStatus(@Param("list")List list);
+    Integer updateExportStatus(@Param("list") List list);
 
     @Select("SELECT * FROM( " +
             " SELECT  " +
@@ -42,9 +42,9 @@ public interface WcuserDao {
             " (SELECT COUNT(*) FROM wcuser WHERE ctime  BETWEEN  #{sDate} AND  #{eDate} AND _62 != '' AND isalive=0) as nalive, " +
             " (SELECT COUNT(*) FROM wcuser WHERE ctime  BETWEEN  #{sDate} AND  #{eDate} AND _62 = '') as sup " +
             ") t")
-    Map<String,Object> getMsg(@Param("sDate")String sDate, @Param("eDate")String eDate);
+    Map<String, Object> getMsg(@Param("sDate") String sDate, @Param("eDate") String eDate);
 
     @Select("SELECT gzhh FROM wcuser WHERE ctime  BETWEEN  #{sDate} AND  #{eDate} AND _62 != '' AND isalive=1")
-    List<String> gzhh(@Param("sDate")String sDate, @Param("eDate")String eDate);
+    List<String> gzhh(@Param("sDate") String sDate, @Param("eDate") String eDate);
 
 }

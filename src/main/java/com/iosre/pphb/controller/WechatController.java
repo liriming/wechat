@@ -79,8 +79,8 @@ public class WechatController {
     }
 
     @RequestMapping(value ="exportData", method = RequestMethod.GET)
-    public String exportData(HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw)  {
-        return wcSmsService.exportData(response, count,psw);
+    public String exportData(HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw,@RequestParam(value = "type") int type)  {
+        return wcSmsService.exportData(response, count, psw, type);
     }
 
     @RequestMapping(value ="statistics", method = RequestMethod.GET)

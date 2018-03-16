@@ -33,7 +33,7 @@ public class WcSmsService {
     private final static String PASSWORD = "ra6ra6ra6";
     private static String TOKEN = "";
     private final static String HOST = "http://kuailezhuan.6yev.com/";
-//    private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
+    //    private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(30000);
@@ -207,7 +207,7 @@ public class WcSmsService {
         String nema = datas[1];
         String id = datas[2];
 
-        wcuserDao.updateRealName(phone, nema,id);
+        wcuserDao.updateRealName(phone, nema, id);
 
     }
 
@@ -222,22 +222,46 @@ public class WcSmsService {
         Integer real = 0;
         String rname = "";
         String rcard = "";
-        if(datas.length == 7){
+        if (datas.length == 7) {
             real = 1;
             rname = datas[5];
             rcard = datas[6];
         }
 
-        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip,real,rname,rcard);
+        wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, rname, rcard);
 
     }
 
-    public String exportData(HttpServletResponse response, int count, String psw) {
+    public String exportData(HttpServletResponse response, int count, String psw, int type) {
         try {
             if (!psw.equals("ra6ra6ra6")) {
                 return "密码错误";
             }
-            List<Map<String, Object>> exportData = wcuserDao.getExportData(count);
+            String listorder;
+            String sDate;
+            String eDate;
+            int realname = 0;
+            //当天号
+            if (type % 2 != 0) {
+                listorder = "DESC";
+                //开始时间：当前时间-1天 结束时间：当前时间
+                sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+                eDate = XDateUtils.nowToString();
+            }
+            //隔天号
+            else {
+                listorder = "ASC";
+                //开始时间：历史时间 结束时间：当前时间 -1天
+                sDate = "0";
+                eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            }
+            if (type > 2) {
+                realname = 1;
+            }
+            List<Map<String, Object>> exportData = wcuserDao.getExportData(count, sDate, eDate, listorder, realname);
+            if(exportData.size() == 0){
+                return "没有数据了!";
+            }
 
             List<String> data = new ArrayList<>(exportData.size());
             List<Integer> exportId = new ArrayList<>(exportData.size());
@@ -245,7 +269,9 @@ public class WcSmsService {
             exportData.forEach(e -> {
                 String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62");
                 data.add(msg);
-                exportId.add((Integer) e.get("id"));
+                if (!StringUtils.isEmpty(e.get("id"))) {
+                    exportId.add((Integer) e.get("id"));
+                }
             });
             wcuserDao.updateExportStatus(exportId);
             FileUtils.writeToTxt(response, data);
@@ -265,7 +291,6 @@ public class WcSmsService {
             String tomorrow = XDateUtils.dateToString(XDateUtils.getBeginDayOfTomorrow(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
 
             String yesterday = XDateUtils.dateToString(XDateUtils.getBeginDayOfYesterday(), XDateUtils.DatePattern.DATE_ONLY.getPattern());
-
 
 
             //历史数据
@@ -364,6 +389,8 @@ public class WcSmsService {
             map.putIfAbsent("minNReal", minMap.get("nrealn"));
             map.putIfAbsent("minDead", minMap.get("nalive"));
             map.putIfAbsent("minSup", minMap.get("sup"));
+
+            map.putIfAbsent("resPhoneNum", wcphoneDao.resPhoneNum());
 
             return map;
         } catch (Exception e) {
