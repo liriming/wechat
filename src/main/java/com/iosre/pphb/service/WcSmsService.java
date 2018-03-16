@@ -232,7 +232,7 @@ public class WcSmsService {
 
     public String exportData(HttpServletResponse response, int count, String psw, int type) {
         try {
-            if (!psw.equals("ra6ra6ra6")) {
+            if (!psw.equals("liriming221")) {
                 return "密码错误";
             }
             String listorder;

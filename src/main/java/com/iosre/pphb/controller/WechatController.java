@@ -79,7 +79,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="exportData", method = RequestMethod.GET)
-    public String exportData(HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw,@RequestParam(value = "type") int type)  {
+    public String exportData(HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw,@RequestParam(value = "type") int type)  {
         return wcSmsService.exportData(response, count, psw, type);
     }
 
@@ -88,7 +88,7 @@ public class WechatController {
         return wcSmsService.statistics();
     }
 
-    @RequestMapping(value ="realName", method = RequestMethod.GET)
+    @RequestMapping(value ="realName", method = RequestMethod.POST)
     public void realName(HttpServletRequest request,@RequestParam(value = "data") String data)  {
         wcSmsService.realName(data);
     }
