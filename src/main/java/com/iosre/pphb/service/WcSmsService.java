@@ -222,7 +222,7 @@ public class WcSmsService {
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
         if(!psw.equalsIgnoreCase("ra123456")){
-            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, real, psw,"");
+            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw,"");
         }else {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
