@@ -88,7 +88,7 @@ public class WechatController {
         return wcSmsService.statistics();
     }
 
-    @RequestMapping(value ="uploadRealName", method = RequestMethod.GET)
+    @RequestMapping(value ="realName", method = RequestMethod.GET)
     public void uploadRealName(HttpServletRequest request,@RequestParam(value = "data") String data)  {
         String ip = WebUtil.getLocalIp(request);
         wcSmsService.uploadRealName(ip,data);

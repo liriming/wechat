@@ -1,6 +1,7 @@
 package com.iosre.pphb.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iosre.pphb.dao.RealnameDao;
 import com.iosre.pphb.dao.WcphoneDao;
 import com.iosre.pphb.dao.WcuserDao;
 import com.iosre.pphb.http.HttpResult;
@@ -46,6 +47,8 @@ public class WcSmsService {
     private WcphoneDao wcphoneDao;
     @Autowired
     private WcuserDao wcuserDao;
+    @Autowired
+    private RealnameDao realnameDao;
 
    /* static {
         while (StringUtils.isEmpty(TOKEN)) {
@@ -204,11 +207,8 @@ public class WcSmsService {
         String[] datas = data.split(",");
         String phone = datas[0];
         String rname = datas[1];
-        String d62 = datas[2];
-        String phoneno = datas[3];
-        Integer isalive = Integer.parseInt(datas[4]);
-
-        wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, rname,"");
+        String rcard = datas[2];
+        realnameDao.insertDataInfo(phone,  rname,rcard);
 
     }
 
