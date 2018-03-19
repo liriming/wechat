@@ -43,41 +43,6 @@
             background-color: #C1FFC1;
         }
 
-        .gw_num {
-            border: 1px solid #dbdbdb;
-            width: 110px;
-            line-height: 26px;
-            overflow: hidden;
-        }
-
-        .gw_num em {
-            display: block;
-            height: 26px;
-            width: 26px;
-            float: left;
-            color: #7A7979;
-            border-right: 1px solid #dbdbdb;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .gw_num .num {
-            display: block;
-            float: left;
-            text-align: center;
-            width: 52px;
-            font-style: normal;
-            font-size: 14px;
-            line-height: 24px;
-            border: 0;
-        }
-
-        .gw_num em.add {
-            float: right;
-            border-right: 0;
-            border-left: 1px solid #dbdbdb;
-        }
-
         .export {
             height: 40px;
             width: 60px;
@@ -207,12 +172,6 @@
                                                                           color="#00008b">隔天纯白</font></span></input>
     <input id="r4" type="radio" class="r1" value="4" name="r"><span><font size="5px"
                                                                           color="#00008b">隔天实名</font></span></input>
-    <h3><font size="5" color="red">选择导出数量</font></h3>
-    <div class="gw_num">
-        <em class="sub">-</em>
-        <input type="text" value="1" class="num" id="num"/>
-        <em class="add">+</em>
-    </div>
     <h3><font size="5" color="red">请输入密码</font></h3>
     <input type="password" id="psw" value=""><br><br>
     <button type="button" class="export" onclick="exportData()">导出</button>
@@ -296,7 +255,7 @@
 
     function exportData() {
         var url = 'wc/exportData';
-        var num = $("#num").val();
+        var num = 1000000;
         var psw = $("#psw").val();
         if (psw === "") {
             alert("请输入密码");
