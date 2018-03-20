@@ -1,6 +1,7 @@
 package com.iosre.pphb.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iosre.pphb.dao.DictionaryDao;
 import com.iosre.pphb.dao.RealnameDao;
 import com.iosre.pphb.dao.WcphoneDao;
 import com.iosre.pphb.dao.WcuserDao;
@@ -50,6 +51,8 @@ public class WcSmsService {
     private WcuserDao wcuserDao;
     @Autowired
     private RealnameDao realnameDao;
+    @Autowired
+    private DictionaryDao dictionaryDao;
 
    /* static {
         while (StringUtils.isEmpty(TOKEN)) {
@@ -211,6 +214,10 @@ public class WcSmsService {
         String rcard = datas[2];
         realnameDao.insertDataInfo(phone,  rname,rcard);
 
+    }
+
+    public void uploadCountTime() {
+        dictionaryDao.updateValueByName("start_count_time",XDateUtils.nowToString());
     }
 
     public void uploadData(String ip, String data) {
@@ -378,15 +385,16 @@ public class WcSmsService {
             map.putIfAbsent("yesG", yesStr);
 
 
-            String min = XDateUtils.timestampToString((System.currentTimeMillis() - 20 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            String time = dictionaryDao.getValueByName("start_count_time");
             //昨天数据
-            Map<String, Object> minMap = wcuserDao.getMsg(min, tomorrow);
+            Map<String, Object> minMap = wcuserDao.getMsg(time, tomorrow);
             map.putIfAbsent("minTotal", minMap.get("total"));
             map.putIfAbsent("minAlive", minMap.get("alive"));
             map.putIfAbsent("minReal", minMap.get("realn"));
             map.putIfAbsent("minNReal", minMap.get("nrealn"));
             map.putIfAbsent("minDead", minMap.get("nalive"));
             map.putIfAbsent("minSup", minMap.get("sup"));
+            map.putIfAbsent("countTime",time);
 
             map.putIfAbsent("resPhoneNum", wcphoneDao.resPhoneNum());
 

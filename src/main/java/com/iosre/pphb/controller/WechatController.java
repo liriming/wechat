@@ -93,4 +93,9 @@ public class WechatController {
         String ip = WebUtil.getLocalIp(request);
         wcSmsService.uploadRealName(ip,data);
     }
+
+    @RequestMapping(value ="uploadCountTime", method = RequestMethod.GET)
+    public void uploadCountTime()  {
+        wcSmsService.uploadCountTime();
+    }
 }

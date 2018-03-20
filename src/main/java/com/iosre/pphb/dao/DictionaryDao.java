@@ -14,5 +14,5 @@ public interface DictionaryDao {
 
 
     @Select("select clo_value from pphb.dictionary where clo_name=#{0}")
-    String getValueByName( String clo_name);
+    String getValueByName(String clo_name);
 }
