@@ -36,8 +36,8 @@ public class WcSmsService {
     private static String TOKEN = "";
     private final static String HOST = "http://kuailezhuan.6yev.com/";
    // private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
-   // private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";/**/
-    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
+    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";/**/
+//    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
