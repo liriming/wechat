@@ -35,11 +35,11 @@ public class WcSmsService {
     private final static String PASSWORD = "ra6ra6ra6";
     private static String TOKEN = "";
     private final static String HOST = "http://kuailezhuan.6yev.com/";
-   // private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
+    // private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://49.51.35.65/he/uj/get.php?key=";
-//    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
+    //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
@@ -187,7 +187,7 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
         int id = (Integer) map.get("id");
 
-        if ((Boolean) retMsg.get("flag")) {
+        if ((retMsg.containsKey("flag") && (Boolean) retMsg.get("flag")) || (retMsg.containsKey("msg") && !retMsg.get("msg").toString().contains("提醒"))) {
 
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
@@ -214,12 +214,12 @@ public class WcSmsService {
         String phone = datas[0];
         String rname = datas[1];
         String rcard = datas[2];
-        realnameDao.insertDataInfo(phone,  rname,rcard);
+        realnameDao.insertDataInfo(phone, rname, rcard);
 
     }
 
     public void uploadCountTime() {
-        dictionaryDao.updateValueByName("start_count_time",XDateUtils.nowToString());
+        dictionaryDao.updateValueByName("start_count_time", XDateUtils.nowToString());
     }
 
     public void uploadData(String ip, String data) {
@@ -231,9 +231,9 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
-        if(!psw.equalsIgnoreCase("ra123456")){
-            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw,"");
-        }else {
+        if (!psw.equalsIgnoreCase("ra123456")) {
+            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "");
+        } else {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
 
@@ -396,7 +396,7 @@ public class WcSmsService {
             map.putIfAbsent("minNReal", minMap.get("nrealn"));
             map.putIfAbsent("minDead", minMap.get("nalive"));
             map.putIfAbsent("minSup", minMap.get("sup"));
-            map.putIfAbsent("countTime",time);
+            map.putIfAbsent("countTime", time);
 
             map.putIfAbsent("resPhoneNum", wcphoneDao.resPhoneNum());
 
