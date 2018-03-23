@@ -52,7 +52,7 @@ public class WechatController {
     }
 
 
-    @RequestMapping(value ="exportPhone", method = RequestMethod.POST)
+    @RequestMapping(value ="exportPhone", method = RequestMethod.GET)
     public Integer exportPhone(@RequestParam(value = "list") String list)  {
         return wcSmsService.exportPhone(list);
     }
