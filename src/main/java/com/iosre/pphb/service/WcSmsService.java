@@ -225,6 +225,9 @@ public class WcSmsService {
 
         HttpResult result = httpService.get(US_HOST1 + token);
         logger.info(result.getPayload());
+        if(result.getPayload().contains("invalid parameter!")){
+            return "400";
+        }
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
         int id = (Integer) map.get("id");
 
