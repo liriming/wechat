@@ -220,7 +220,7 @@ public class WcSmsService {
 
         Map<String, Object> map = wcphoneDao.getToken("1" + phone);
 
-        String token = URLEncoder.encode(map.get("token").toString() + "1" + phone, "UTF-8");
+        String token = URLEncoder.encode(map.get("token").toString() + "|1" + phone, "UTF-8");
         logger.info(US_HOST1 + token);
 
         HttpResult result = httpService.get(US_HOST1 + token);
