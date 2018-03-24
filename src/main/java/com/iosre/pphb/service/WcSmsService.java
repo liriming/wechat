@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -218,7 +219,7 @@ public class WcSmsService {
 
         Map<String, Object> map = wcphoneDao.getToken("1" + phone);
 
-        String url = map.get("token").toString();
+        String url = URLEncoder.encode(map.get("token").toString(), "UTF-8");
 
         HttpResult result = httpService.get(url + "1" + phone);
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
