@@ -228,7 +228,7 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
         int id = (Integer) map.get("id");
 
-        if ((retMsg.containsKey("flag") && (Boolean) retMsg.get("flag")) || (retMsg.containsKey("msg") && !retMsg.get("msg").toString().contains("提醒"))) {
+        if (retMsg.containsKey("Message") && !retMsg.get("Message").toString().contains("提醒")) {
 
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
