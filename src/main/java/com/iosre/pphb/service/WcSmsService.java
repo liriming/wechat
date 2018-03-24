@@ -216,7 +216,7 @@ public class WcSmsService {
 
     public String getUsCode1(String phone) throws IOException {
 
-        Map<String, Object> map = wcphoneDao.getToken(phone);
+        Map<String, Object> map = wcphoneDao.getToken("1" + phone);
 
         String url = map.get("token").toString();
 
