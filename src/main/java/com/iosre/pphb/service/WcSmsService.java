@@ -40,6 +40,7 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://49.51.35.65/he/uj/get.php?key=";
+    private final static String US_HOST1 = "http://39.106.168.53/Index/Test/index.html?key=";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
@@ -219,10 +220,11 @@ public class WcSmsService {
 
         Map<String, Object> map = wcphoneDao.getToken("1" + phone);
 
-        String url = URLEncoder.encode(map.get("token").toString(), "UTF-8");
-        logger.info(url);
+        String token = URLEncoder.encode(map.get("token").toString() + "1" + phone, "UTF-8");
+        logger.info(token);
 
-        HttpResult result = httpService.get(url + "1" + phone);
+        HttpResult result = httpService.get(US_HOST1 + token);
+        logger.info(result.getPayload());
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
         int id = (Integer) map.get("id");
 
