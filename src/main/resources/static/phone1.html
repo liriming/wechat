@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>号码</title>
+
+    <script src="js/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/sys.js"></script>
+    <script src="js/date.tools.js"></script>
+    <script src="js/x-page-old.js"></script>
+
+    <style>
+        .phone {
+            height: 40px;
+            width: 60px;
+        }
+
+        .server {
+            height: 20px;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div>
+    <textarea rows="40" cols="80" id="phone"> </textarea><br><br>
+    服务器:<input type="text" id="server" class="server" value="">
+    <button type="button" class="phone" onclick="exportPhone()">导入</button>
+    <br>
+    <p id="msg"></p>
+</div>
+</body>
+
+
+<script>
+
+    function exportPhone() {
+        var text = $("#phone").val();
+        var sp = $("#server").val();
+        if (sp === "") {
+            alert("请输入服务器地址");
+        }
+        var list = text.split("\n");
+        $.ajax({
+            type: "GET",
+            url: "/wc/exportPhone1",
+            data: {list: list.toString(), server: sp},
+            dataType: "json",
+            success: function (data) {
+                var html = "成功导入" + data + "个号码";
+                $("#msg").text(html);
+                $("#phone").val("")
+            }
+        });
+    }
+
+
+</script>
+
+</html>

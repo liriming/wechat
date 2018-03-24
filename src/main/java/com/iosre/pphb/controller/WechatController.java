@@ -57,15 +57,21 @@ public class WechatController {
         return wcSmsService.exportPhone(list);
     }
 
+
+    @RequestMapping(value ="exportPhone1", method = RequestMethod.GET)
+    public Integer exportPhone1(@RequestParam(value = "list") String list,@RequestParam(value = "server") String server)  {
+        return wcSmsService.exportPhone1(list,server);
+    }
+
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
     public String usPhone(HttpServletRequest request)  {
-        return wcSmsService.usPhone();
+        return wcSmsService.usPhone1();
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
     public String getUsCode(@RequestParam(value = "list") String list)  {
         try {
-            return wcSmsService.getUsCode(list);
+            return wcSmsService.getUsCode1(list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "error";

@@ -168,6 +168,29 @@ public class WcSmsService {
         }
     }
 
+    public Integer exportPhone1(String list, String server) {
+        try {
+
+            List<String> phoneStr = Arrays.asList(list.split(","));
+            List<Map<String, String>> phoneList = new ArrayList<>();
+
+            phoneStr.forEach(e -> {
+                Map<String, String> m = new HashMap<>(2);
+                m.putIfAbsent("phone", e.trim());
+                m.putIfAbsent("token", server);
+
+                phoneList.add(m);
+            });
+
+            wcphoneDao.insertDataInfo(phoneList);
+
+            return phoneList.size();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return 0;
+        }
+    }
+
     public String usPhone() {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
@@ -177,6 +200,50 @@ public class WcSmsService {
         wcphoneDao.setStatus(id, 1);
         return phone;
 
+    }
+
+    public String usPhone1() {
+
+        Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
+
+        String phone = phoneMsg.get("phone").toString();
+        int id = (Integer) phoneMsg.get("id");
+        wcphoneDao.setStatus(id, 1);
+        return phone.substring(1,phone.length());
+
+    }
+
+
+    public String getUsCode1(String phone) throws IOException {
+
+        Map<String, Object> map = wcphoneDao.getToken(phone);
+
+        String url = map.get("token").toString();
+
+        HttpResult result = httpService.get(url + "1" + phone);
+        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+        int id = (Integer) map.get("id");
+
+        if ((retMsg.containsKey("flag") && (Boolean) retMsg.get("flag")) || (retMsg.containsKey("msg") && !retMsg.get("msg").toString().contains("提醒"))) {
+
+            String regEx = "[^0-9]";
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(result.getPayload());
+            wcphoneDao.setStatus(id, 2);
+            return m.replaceAll("").trim();
+        } else {
+            if (usPhoneMap.containsKey(phone)) {
+                int reqCount = usPhoneMap.get(phone);
+                if (reqCount > 10) {
+                    wcphoneDao.setStatus(id, 0);
+                } else {
+                    usPhoneMap.putIfAbsent(phone, reqCount++);
+                }
+            } else {
+                usPhoneMap.putIfAbsent(phone, 1);
+            }
+            return "400";
+        }
     }
 
     public String getUsCode(String phone) throws IOException {
