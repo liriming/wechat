@@ -39,7 +39,7 @@ public class WcSmsService {
     // private final static String US_HOST = "http://47.52.25.159/sms2/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
-    private final static String US_HOST = "http://49.51.35.65/he/uj/get.php?key=";
+    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://39.106.168.53/Index/Test/index.html?key=";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
