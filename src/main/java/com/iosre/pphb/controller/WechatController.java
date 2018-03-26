@@ -65,13 +65,13 @@ public class WechatController {
 
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
     public String usPhone(HttpServletRequest request)  {
-        return wcSmsService.usPhone();
+        return wcSmsService.usPhone1();
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
     public String getUsCode(@RequestParam(value = "list") String list)  {
         try {
-            return wcSmsService.getUsCode(list);
+            return wcSmsService.getUsCode1(list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "error";
