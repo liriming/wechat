@@ -499,7 +499,7 @@ public class WcSmsService {
 
     public void noRevcMsg(String phone) {
 
-        wcphoneDao.setStatusByPhone(phone, -1);
+        wcphoneDao.setStatusByPhone("1" + phone, -1);
     }
 
 
