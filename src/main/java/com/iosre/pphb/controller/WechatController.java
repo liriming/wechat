@@ -104,4 +104,13 @@ public class WechatController {
     public void uploadCountTime()  {
         wcSmsService.uploadCountTime();
     }
+
+    @RequestMapping(value ="noRevcMsg", method = RequestMethod.GET)
+    public void noRevcMsg(@RequestParam(value = "phone") String phone)  {
+        try {
+             wcSmsService.noRevcMsg(phone);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 }

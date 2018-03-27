@@ -33,4 +33,7 @@ public interface WcphoneDao {
     @Select("SELECT count(*) FROM wcphone where status = 0")
     Integer resPhoneNum();
 
+    @Update("Update wcphone set status=#{status} where phone=#{phone}")
+    Integer setStatusByPhone(@Param("phone")String phone,@Param("status")int status);
+
 }
