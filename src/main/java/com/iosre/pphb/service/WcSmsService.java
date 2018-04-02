@@ -40,7 +40,7 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
-    private final static String US_HOST1 = "http://39.106.168.53/Index/Test/index.html?key=";
+    private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
