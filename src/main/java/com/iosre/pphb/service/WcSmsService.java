@@ -260,10 +260,10 @@ public class WcSmsService {
                 int reqCount = usPhoneMap.get(phone);
                 logger.info(phone + ":" + reqCount);
                 if (reqCount > 30) {
-                    result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+                  /*  result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
                     result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-                    logger.info(result.getPayload());
+                    logger.info(result.getPayload());*/
                 } else {
                     usPhoneMap.putIfAbsent(phone, reqCount++);
                 }
@@ -371,10 +371,10 @@ public class WcSmsService {
         }
 
 
-        HttpResult result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+      /*  HttpResult result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
         logger.info(result.getPayload());
         result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-        logger.info(result.getPayload());
+        logger.info(result.getPayload());*/
 
     }
 
