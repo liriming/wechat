@@ -369,6 +369,11 @@ public class WcSmsService {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
 
+        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
+        logger.info(result.getPayload());
+        result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+        logger.info(result.getPayload());
+
     }
 
     public String exportData(HttpServletResponse response, int count, String psw, int type) {
