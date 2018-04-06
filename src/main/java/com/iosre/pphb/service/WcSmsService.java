@@ -227,7 +227,8 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if(retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                httpService.get(US_HOST_GSIM + "sendSms/"  + KEY + "/" + phone);
+                result =  httpService.get(US_HOST_GSIM + "sendSms/"  + KEY + "/" + phone);
+                logger.info(result.getPayload());
                 return phone.substring(2);
             }
             return "400";
