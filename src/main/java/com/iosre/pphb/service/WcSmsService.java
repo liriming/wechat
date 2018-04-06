@@ -41,10 +41,10 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
-    private final static String US_HOST_GSIM = "https://gsim.online/api/sendSms/";
+    private final static String US_HOST_GSIM = "https://gsim.online/api/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
-    private final static String KEY = "0";
+    private final static String KEY = "ftjyeepoHa96dW8LctlX";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
@@ -225,6 +225,11 @@ public class WcSmsService {
                 return "400";
             }
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+            if(retMsg.containsKey("number")) {
+                String phone = retMsg.get("number").toString();
+                httpService.get(US_HOST_GSIM + "sendSms/"  + KEY + "/" + phone);
+                return phone;
+            }
             return "400";
         } catch (Exception e) {
             return "400";
@@ -252,7 +257,7 @@ public class WcSmsService {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
                 if (reqCount > 30) {
-                    httpService.get("https://gsim.online/api/refund/" + KEY + "/" + phone);
+                    httpService.get(US_HOST_GSIM + "refund/" + KEY + "/" + phone);
                 } else {
                     usPhoneMap.putIfAbsent(phone, reqCount++);
                 }
