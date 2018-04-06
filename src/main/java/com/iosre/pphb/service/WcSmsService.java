@@ -258,6 +258,7 @@ public class WcSmsService {
         } else {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
+                logger.info(phone + ":" + reqCount);
                 if (reqCount > 30) {
                     result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
