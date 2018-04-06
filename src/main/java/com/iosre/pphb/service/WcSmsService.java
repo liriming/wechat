@@ -241,7 +241,7 @@ public class WcSmsService {
 
     public String getGsimCode(String phone) throws IOException {
 
-        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + KEY + "/" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + KEY + "/44" + phone);
         logger.info(result.getPayload());
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
