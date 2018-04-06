@@ -249,11 +249,11 @@ public class WcSmsService {
         }
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
-        if (retMsg.containsKey("Message") && !retMsg.get("Message").toString().contains("提醒")) {
+        if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
 
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
-            Matcher m = p.matcher(result.getPayload());
+            Matcher m = p.matcher(retMsg.get("message").toString());
             return m.replaceAll("").trim();
         } else {
             if (usPhoneMap.containsKey(phone)) {
