@@ -219,7 +219,7 @@ public class WcSmsService {
 
     public String gSimPhone() {
         try {
-            HttpResult result = httpService.get(US_HOST_GSIM + "getNumber");
+            HttpResult result = httpService.get(US_HOST_GSIM + "getNumber/" + KEY);
             logger.info(result.getPayload());
             if (result.getPayload().contains("invalid parameter!")) {
                 return "400";
