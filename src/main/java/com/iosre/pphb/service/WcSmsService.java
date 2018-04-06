@@ -228,10 +228,11 @@ public class WcSmsService {
             if(retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
                 httpService.get(US_HOST_GSIM + "sendSms/"  + KEY + "/" + phone);
-                return phone;
+                return phone.substring(2);
             }
             return "400";
         } catch (Exception e) {
+            logger.info(e.getMessage(),e);
             return "400";
         }
 

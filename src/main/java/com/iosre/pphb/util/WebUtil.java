@@ -161,5 +161,6 @@ public class WebUtil {
         String s = "      123 456,         哈哈          ";
         System.out.println(isChineseStr(s));
         System.out.println(isChineseStr("生活时尚生活是1"));
+        System.out.println("1234567878997".substring(2));
     }
 }
