@@ -259,9 +259,9 @@ public class WcSmsService {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
                 if (reqCount > 30) {
-                    result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-                    logger.info(result.getPayload());
                     result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+                    logger.info(result.getPayload());
+                    result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
                 } else {
                     usPhoneMap.putIfAbsent(phone, reqCount++);
@@ -369,9 +369,10 @@ public class WcSmsService {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
 
-        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
+
+        HttpResult result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
         logger.info(result.getPayload());
-        result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+        result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
         logger.info(result.getPayload());
 
     }
