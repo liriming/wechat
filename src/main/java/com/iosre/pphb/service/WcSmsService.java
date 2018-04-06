@@ -41,8 +41,10 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
+    private final static String US_HOST_GSIM = "https://gsim.online/api/sendSms/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
+    private final static String KEY = "0";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
@@ -211,8 +213,54 @@ public class WcSmsService {
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatus(id, 1);
-        return phone.substring(1,phone.length());
+        return phone.substring(1, phone.length());
 
+    }
+
+    public String gSimPhone() {
+        try {
+            HttpResult result = httpService.get(US_HOST_GSIM + "getNumber");
+            logger.info(result.getPayload());
+            if (result.getPayload().contains("invalid parameter!")) {
+                return "400";
+            }
+            Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+            return "400";
+        } catch (Exception e) {
+            return "400";
+        }
+
+
+    }
+
+    public String getGsimCode(String phone) throws IOException {
+
+        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + KEY + "/" + phone);
+        logger.info(result.getPayload());
+        if (result.getPayload().contains("invalid parameter!")) {
+            return "400";
+        }
+        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+
+        if (retMsg.containsKey("Message") && !retMsg.get("Message").toString().contains("提醒")) {
+
+            String regEx = "[^0-9]";
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(result.getPayload());
+            return m.replaceAll("").trim();
+        } else {
+            if (usPhoneMap.containsKey(phone)) {
+                int reqCount = usPhoneMap.get(phone);
+                if (reqCount > 30) {
+                    httpService.get("https://gsim.online/api/refund/" + KEY + "/" + phone);
+                } else {
+                    usPhoneMap.putIfAbsent(phone, reqCount++);
+                }
+            } else {
+                usPhoneMap.putIfAbsent(phone, 1);
+            }
+            return "400";
+        }
     }
 
 
@@ -225,7 +273,7 @@ public class WcSmsService {
 
         HttpResult result = httpService.get(US_HOST1 + token);
         logger.info(result.getPayload());
-        if(result.getPayload().contains("invalid parameter!")){
+        if (result.getPayload().contains("invalid parameter!")) {
             return "400";
         }
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
@@ -500,6 +548,43 @@ public class WcSmsService {
     public void noRevcMsg(String phone) {
 
         wcphoneDao.setStatusByPhone("1" + phone, -1);
+    }
+
+    public void isalive(Integer type, String phone) {
+        wcuserDao.updatePhoIsalive(phone,type);
+    }
+
+    public String getNoCheckPho(int type) {
+
+        if (type > 4) {
+            return "类型错误";
+        }
+        String phone = "";
+
+        String sDate;
+        String eDate;
+        String listorder;
+        int realname = 0;
+        //当天号
+        if (type % 2 != 0) {
+            listorder = "DESC";
+            //开始时间：当前时间-1天 结束时间：当前时间
+            sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+            eDate = XDateUtils.nowToString();
+        }
+        //隔天号
+        else {
+            listorder = "ASC";
+            //开始时间：历史时间 结束时间：当前时间 -1天
+            sDate = "0";
+            eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
+        }
+        if (type > 2) {
+            realname = 1;
+        }
+        phone = wcuserDao.getNoCheckPho(sDate, eDate, listorder, realname);
+        wcuserDao.updateNoCheckPho(phone);
+        return phone;
     }
 
 

@@ -113,4 +113,24 @@ public class WechatController {
             logger.error(e.getMessage(), e);
         }
     }
+
+    @RequestMapping(value ="getNoCheckPho", method = RequestMethod.GET)
+    public String getNoCheckPho(@RequestParam(value = "type") int type)  {
+        try {
+            return wcSmsService.getNoCheckPho(type);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value ="isalive", method = RequestMethod.GET)
+    public void isalive(@RequestParam(value = "type") int type,@RequestParam(value = "phone") String phone)  {
+        try {
+            wcSmsService.isalive(type,phone);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
 }

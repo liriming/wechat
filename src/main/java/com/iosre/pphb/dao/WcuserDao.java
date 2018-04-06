@@ -52,4 +52,15 @@ public interface WcuserDao {
     @Select("SELECT gzhh FROM wcuser WHERE ctime  BETWEEN  #{sDate} AND  #{eDate} AND _62 != '' AND isalive=1")
     List<String> gzhh(@Param("sDate") String sDate, @Param("eDate") String eDate);
 
+
+    @Select("select phone from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
+            "and ctime BETWEEN #{sDate} AND  #{eDate} and check=0 order by ctime ${listorder} limit 1 ")
+    String getNoCheckPho(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
+
+    @Update("update wcuser set check=1 where phone=#{phone} ")
+    Integer updateNoCheckPho(@Param("phone")String phone);
+
+    @Update("update wcuser set isalive=#{isalive} where phone=#{phone} ")
+    Integer updatePhoIsalive(@Param("phone")String phone,@Param("isalive")Integer isalive);
+
 }
