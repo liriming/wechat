@@ -53,8 +53,8 @@ public interface WcuserDao {
     List<String> gzhh(@Param("sDate") String sDate, @Param("eDate") String eDate);
 
 
-    @Select("select phone from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
-            "and ctime BETWEEN #{sDate} AND  #{eDate} and check=0 order by ctime ${listorder} limit 1 ")
+    @Select("select phone from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and check=0 and realname=#{realname} " +
+            "and ctime BETWEEN #{sDate} AND  #{eDate}  order by ctime ${listorder} limit 1 ")
     String getNoCheckPho(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
 
     @Update("update wcuser set check=1 where phone=#{phone} ")
