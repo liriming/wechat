@@ -265,12 +265,12 @@ public class WcSmsService {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
                 logger.info(phone + ":" + reqCount);
-                if (reqCount > 30) {
+                if (reqCount > 35) {
                     result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
                 } else {
                     reqCount = reqCount + 1;
-                    usPhoneMap.putIfAbsent(phone, reqCount);
+                    usPhoneMap.put(phone, reqCount);
                 }
             } else {
                 usPhoneMap.putIfAbsent(phone, 1);
