@@ -269,7 +269,8 @@ public class WcSmsService {
                     result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
                 } else {
-                    usPhoneMap.putIfAbsent(phone, reqCount++);
+                    reqCount = reqCount + 1;
+                    usPhoneMap.putIfAbsent(phone, reqCount);
                 }
             } else {
                 usPhoneMap.putIfAbsent(phone, 1);
