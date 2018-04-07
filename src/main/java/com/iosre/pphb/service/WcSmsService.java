@@ -225,20 +225,26 @@ public class WcSmsService {
                 return "400";
             }
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
-            if(retMsg.containsKey("number")) {
+            if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                result =  httpService.get(US_HOST_GSIM + "sendSms/"  + KEY + "/" + phone);
-                logger.info(result.getPayload());
                 return phone.substring(2);
             }
             return "400";
         } catch (Exception e) {
-            logger.info(e.getMessage(),e);
+            logger.info(e.getMessage(), e);
             return "400";
         }
-
-
     }
+
+    public void sendGsimCode(String phone) {
+        try {
+            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + KEY + "/44" + phone);
+            logger.info(result.getPayload());
+        } catch (Exception e) {
+            logger.info(e.getMessage(), e);
+        }
+    }
+
 
     public String getGsimCode(String phone) throws IOException {
 
@@ -260,10 +266,8 @@ public class WcSmsService {
                 int reqCount = usPhoneMap.get(phone);
                 logger.info(phone + ":" + reqCount);
                 if (reqCount > 30) {
-                  /*  result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
-                    logger.info(result.getPayload());
                     result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-                    logger.info(result.getPayload());*/
+                    logger.info(result.getPayload());
                 } else {
                     usPhoneMap.putIfAbsent(phone, reqCount++);
                 }
@@ -371,10 +375,8 @@ public class WcSmsService {
         }
 
 
-      /*  HttpResult result = httpService.get(US_HOST_GSIM + "block/" + KEY + "/44" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
         logger.info(result.getPayload());
-        result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-        logger.info(result.getPayload());*/
 
     }
 
@@ -568,7 +570,7 @@ public class WcSmsService {
     }
 
     public void isalive(Integer type, String phone) {
-        wcuserDao.updatePhoIsalive(phone,type);
+        wcuserDao.updatePhoIsalive(phone, type);
     }
 
     public String getNoCheckPho(int type) {

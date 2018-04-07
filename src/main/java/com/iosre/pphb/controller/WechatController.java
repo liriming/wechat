@@ -78,6 +78,15 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="sendGsimCode", method = RequestMethod.GET)
+    public void sendGsimCode(@RequestParam(value = "phone") String phone)  {
+        try {
+            wcSmsService.sendGsimCode(phone);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
     @RequestMapping(value ="uploadData", method = RequestMethod.GET)
     public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data)  {
         String ip = WebUtil.getLocalIp(request);
