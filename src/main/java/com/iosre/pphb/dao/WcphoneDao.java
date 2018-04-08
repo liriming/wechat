@@ -36,4 +36,7 @@ public interface WcphoneDao {
     @Update("Update wcphone set status=#{status} where phone=#{phone}")
     Integer setStatusByPhone(@Param("phone")String phone,@Param("status")int status);
 
+    @Insert("insert into wcphone(phone,token,status) VALUES(#{phone},#{token},#{status})")
+    Integer insertGsimPhone(@Param("phone")String phone,@Param("token")String token,@Param("status")int status);
+
 }
