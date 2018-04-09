@@ -265,7 +265,7 @@ public class WcSmsService {
         } else {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
-                if (reqCount > 25) {
+                if (reqCount > 60) {
                     result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
                     logger.info(result.getPayload());
                 } else {
