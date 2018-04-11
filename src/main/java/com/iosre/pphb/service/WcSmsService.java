@@ -44,7 +44,6 @@ public class WcSmsService {
     private final static String US_HOST_GSIM = "https://gsim.online/api/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
-    private final static String KEY = "LDD7TlUt1gzUe9AT4Jdy";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
@@ -219,7 +218,15 @@ public class WcSmsService {
 
     public String gSimPhone() {
         try {
-            HttpResult result = httpService.get(US_HOST_GSIM + "getNumber/" + KEY);
+            String key = dictionaryDao.getValueByName("gsim_key");
+
+            if(key.contains(",")){
+                String[] keyAry = key.split(",");
+                int index = (int) (Math.random() * keyAry.length);
+                key = keyAry[index];
+            }
+
+            HttpResult result = httpService.get(US_HOST_GSIM + "getNumber/" + key);
             logger.info(result.getPayload());
             if (result.getPayload().contains("invalid parameter!")) {
                 return "400";
@@ -227,6 +234,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
+                wcphoneDao.insertGsimPhone(phone,key,0);
                 return phone.substring(2);
             }
             return "400";
@@ -238,8 +246,9 @@ public class WcSmsService {
 
     public void sendGsimCode(String phone) {
         try {
-            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + KEY + "/44" + phone);
-            wcphoneDao.insertGsimPhone("44" + phone,KEY,6);
+            String token = wcphoneDao.getTokenByPhone("44" + phone);
+            wcphoneDao.setStatusByPhone("44" + phone,6);
+            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/44" + phone);
             logger.info(result.getPayload());
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
@@ -249,7 +258,8 @@ public class WcSmsService {
 
     public String getGsimCode(String phone) throws IOException {
 
-        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + KEY + "/44" + phone);
+        String token = wcphoneDao.getTokenByPhone("44" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/44" + phone);
         logger.info(result.getPayload());
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
@@ -376,7 +386,8 @@ public class WcSmsService {
         }
 
         if(StringUtils.isEmpty(d62)) {
-            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
+            String key = wcphoneDao.getTokenByPhone(phone);
+            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + key + "/" + phone);
             logger.info(result.getPayload());
         }
 

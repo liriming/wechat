@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 import java.util.Map;
@@ -38,5 +39,10 @@ public interface WcphoneDao {
 
     @Insert("insert into wcphone(phone,token,status) VALUES(#{phone},#{token},#{status})")
     Integer insertGsimPhone(@Param("phone")String phone,@Param("token")String token,@Param("status")int status);
+
+
+    @CacheEvict(value = "getTokenByPhone", key = "#p0")
+    @Select("SELECT token FROM wcphone where phone = #{phone}")
+    String getTokenByPhone(@Param("phone")String phone);
 
 }

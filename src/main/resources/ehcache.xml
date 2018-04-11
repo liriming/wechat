@@ -11,5 +11,6 @@
     <cache name="getUtdid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getBssid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
     <cache name="getBid" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
+    <cache name="getTokenByPhone" maxEntriesLocalHeap="200" timeToLiveSeconds="3600" />
 
 </ehcache>
