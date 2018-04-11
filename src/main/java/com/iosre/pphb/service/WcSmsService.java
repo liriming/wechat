@@ -273,7 +273,7 @@ public class WcSmsService {
             Matcher m = p.matcher(retMsg.get("message").toString());
             return m.replaceAll("").trim();
         } else {
-            if (usPhoneMap.containsKey(phone)) {
+            /*if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
                 if (reqCount > 60) {
                     result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
@@ -284,7 +284,7 @@ public class WcSmsService {
                 }
             } else {
                 usPhoneMap.putIfAbsent(phone, 1);
-            }
+            }*/
             return "400";
         }
     }
@@ -578,8 +578,10 @@ public class WcSmsService {
     }
 
     public void noRevcMsg(String phone) {
-
-        wcphoneDao.setStatusByPhone("1" + phone, -1);
+        String token = wcphoneDao.getTokenByPhone("44" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
+        logger.info(result.getPayload());
+        wcphoneDao.setStatusByPhone("44" + phone, -1);
     }
 
     public void isalive(Integer type, String phone) {
