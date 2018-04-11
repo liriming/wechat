@@ -386,8 +386,8 @@ public class WcSmsService {
         }
 
         if(StringUtils.isEmpty(d62)) {
-            String key = wcphoneDao.getTokenByPhone(phone);
-            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + key + "/" + phone);
+            String key = wcphoneDao.getTokenByPhone("44" + phone);
+            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + key + "/44" + phone);
             logger.info(result.getPayload());
         }
 
