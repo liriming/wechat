@@ -24,7 +24,7 @@ public class GsimController {
 
 
     @RequestMapping(value = "getNumber", method = RequestMethod.GET)
-    public String getNumber(HttpServletRequest request, @PathVariable("key") String key) {
+    public String getNumber(HttpServletRequest request, @RequestParam("key") String key) {
         try{
             return httpService.get(US_HOST_GSIM + "getNumber/" + key).getPayload();
         }catch (Exception e){
@@ -33,7 +33,7 @@ public class GsimController {
     }
 
     @RequestMapping(value = "refund", method = RequestMethod.GET)
-    public String refund(HttpServletRequest request, @PathVariable("key") String key, @PathVariable("phone") String phone) {
+    public String refund(HttpServletRequest request, @RequestParam("key") String key, @RequestParam("phone") String phone) {
         try{
             return httpService.get(US_HOST_GSIM + "refund/" + key + "/" + phone).getPayload();
         }catch (Exception e){
@@ -42,7 +42,7 @@ public class GsimController {
     }
 
     @RequestMapping(value = "sendSms", method = RequestMethod.GET)
-    public String sendSms(HttpServletRequest request, @PathVariable("key") String key, @PathVariable("phone") String phone) {
+    public String sendSms(HttpServletRequest request, @RequestParam("key") String key, @RequestParam("phone") String phone) {
         try{
             wcphoneDao.insertGsimPhone(phone,key,6);
             return httpService.get(US_HOST_GSIM + "sendSms/" + key + "/" + phone).getPayload();
@@ -52,7 +52,7 @@ public class GsimController {
     }
 
     @RequestMapping(value = "getMessage", method = RequestMethod.GET)
-    public String getMessage(HttpServletRequest request, @PathVariable("key") String key, @PathVariable("phone") String phone) {
+    public String getMessage(HttpServletRequest request, @RequestParam("key") String key, @RequestParam("phone") String phone) {
         try{
             return httpService.get(US_HOST_GSIM + "getMessage/" + key + "/" + phone).getPayload();
         }catch (Exception e){
@@ -61,7 +61,7 @@ public class GsimController {
     }
 
     @RequestMapping(value = "credits", method = RequestMethod.GET)
-    public String credits(HttpServletRequest request, @PathVariable("key") String key) {
+    public String credits(HttpServletRequest request, @RequestParam("key") String key) {
         try{
             return httpService.get(US_HOST_GSIM + "credits/" + key).getPayload();
         }catch (Exception e){
