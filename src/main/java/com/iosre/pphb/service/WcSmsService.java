@@ -227,7 +227,6 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone,KEY,0);
                 return phone.substring(2);
             }
             return "400";
@@ -240,6 +239,7 @@ public class WcSmsService {
     public void sendGsimCode(String phone) {
         try {
             HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + KEY + "/44" + phone);
+            wcphoneDao.insertGsimPhone("44" + phone,KEY,5);
             logger.info(result.getPayload());
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
@@ -375,9 +375,10 @@ public class WcSmsService {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
         }
 
-
-        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
-        logger.info(result.getPayload());
+        if(StringUtils.isEmpty(d62)) {
+            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + KEY + "/44" + phone);
+            logger.info(result.getPayload());
+        }
 
     }
 
