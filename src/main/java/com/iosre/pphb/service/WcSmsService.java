@@ -44,7 +44,7 @@ public class WcSmsService {
     private final static String US_HOST_GSIM = "https://gsim.online/api/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
-    private final static String KEY = "vmgJ9K5IhrLwqLpRgVL3";
+    private final static String KEY = "LDD7TlUt1gzUe9AT4Jdy";
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
