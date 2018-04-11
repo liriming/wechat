@@ -239,7 +239,7 @@ public class WcSmsService {
     public void sendGsimCode(String phone) {
         try {
             HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + KEY + "/44" + phone);
-            wcphoneDao.insertGsimPhone("44" + phone,KEY,5);
+            wcphoneDao.insertGsimPhone("44" + phone,KEY,6);
             logger.info(result.getPayload());
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
