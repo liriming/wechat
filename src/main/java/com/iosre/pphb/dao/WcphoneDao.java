@@ -42,7 +42,7 @@ public interface WcphoneDao {
 
 
     @CacheEvict(value = "getTokenByPhone", key = "#p0")
-    @Select("SELECT token FROM wcphone where phone = #{phone}")
+    @Select("SELECT token FROM wcphone where phone = #{phone} order by id desc limit 1")
     String getTokenByPhone(@Param("phone")String phone);
 
 }
