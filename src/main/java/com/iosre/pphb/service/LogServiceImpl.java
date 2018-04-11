@@ -70,7 +70,7 @@ public class LogServiceImpl {
 		
 		//是否保存到mongo中
 		try {
-			if(saveToMongo(userOpLog.getMethod())){
+			if(saveToMongo(userOpLog.getMethod()) || saveToMongo(userOpLog.getController())){
 				if(rs!=null){
 					userOpLog.setRMsg(rs);
 				}
@@ -89,7 +89,7 @@ public class LogServiceImpl {
 	 * @return
 	 */
 	private boolean saveToMongo(String methodName) {
-		if("search".equalsIgnoreCase(methodName)|| "exportPhone".equalsIgnoreCase(methodName)|| "statistics".equalsIgnoreCase(methodName)){
+		if("search".equalsIgnoreCase(methodName)|| "exportPhone".equalsIgnoreCase(methodName)|| "statistics".equalsIgnoreCase(methodName)|| "GsimController".equalsIgnoreCase(methodName)){
 			return false;
 		}
 		return true;

@@ -44,7 +44,7 @@ public class GsimController {
     @RequestMapping(value = "sendSms", method = RequestMethod.GET)
     public String sendSms(HttpServletRequest request, @RequestParam("key") String key, @RequestParam("phone") String phone) {
         try{
-            wcphoneDao.insertGsimPhone(phone,key,6);
+            wcphoneDao.insertGsimPhone(phone,key,7);
             return httpService.get(US_HOST_GSIM + "sendSms/" + key + "/" + phone).getPayload();
         }catch (Exception e){
             return e.getMessage();
