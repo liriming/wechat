@@ -267,7 +267,7 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
-
+            wcphoneDao.setStatusByPhone("44" + phone,7);
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(retMsg.get("message").toString());
