@@ -387,7 +387,9 @@ public class WcSmsService {
 
         if(StringUtils.isEmpty(d62)) {
             String key = wcphoneDao.getTokenByPhone("44" + phone);
-            HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + key + "/44" + phone);
+            HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/44" + phone);
+            logger.info(result.getPayload());
+            result = httpService.get(US_HOST_GSIM + "refund/" + key + "/44" + phone);
             logger.info(result.getPayload());
         }
 
@@ -579,7 +581,9 @@ public class WcSmsService {
 
     public void noRevcMsg(String phone) {
         String token = wcphoneDao.getTokenByPhone("44" + phone);
-        HttpResult result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "block/" + token + "/44" + phone);
+        logger.info(result.getPayload());
+        result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
         logger.info(result.getPayload());
         wcphoneDao.setStatusByPhone("44" + phone, -1);
     }
