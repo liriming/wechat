@@ -142,4 +142,14 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="getGZHH", method = RequestMethod.GET)
+    public String getGZHH()  {
+        try {
+            return wcSmsService.getGZHH();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
 }

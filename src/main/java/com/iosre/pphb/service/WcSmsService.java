@@ -626,4 +626,14 @@ public class WcSmsService {
     }
 
 
+    public String getGZHH() {
+       String gzhh =  dictionaryDao.getValueByName("gzhh");
+
+       if(StringUtils.isEmpty(gzhh)){
+           return "400";
+       }
+       return gzhh;
+    }
+
+
 }
