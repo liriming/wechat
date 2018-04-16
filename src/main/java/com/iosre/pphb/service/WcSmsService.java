@@ -381,7 +381,7 @@ public class WcSmsService {
         Integer real = 0;
         String country = "";
         if(datas.length == 5){
-            country = datas[5];
+            country = datas[4];
         }
 
         if (!psw.equalsIgnoreCase("ra123456")) {
