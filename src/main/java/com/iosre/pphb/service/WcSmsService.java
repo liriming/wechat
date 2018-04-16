@@ -212,7 +212,7 @@ public class WcSmsService {
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatus(id, 1);
-        return phone.substring(1, phone.length());
+        return "0" + phone.substring(1, phone.length());
 
     }
 
@@ -234,7 +234,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone,key,0);
+                wcphoneDao.insertGsimPhone(phone,key,440);
                 return phone.substring(2);
             }
             return "400";
@@ -247,7 +247,7 @@ public class WcSmsService {
     public void sendGsimCode(String phone) {
         try {
             String token = wcphoneDao.getTokenByPhone("44" + phone);
-            wcphoneDao.setStatusByPhone("44" + phone,6);
+            wcphoneDao.setStatusByPhone("44" + phone,446);
             HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/44" + phone);
             logger.info(result.getPayload());
         } catch (Exception e) {
@@ -267,7 +267,7 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
-            wcphoneDao.setStatusByPhone("44" + phone,7);
+            wcphoneDao.setStatusByPhone("44" + phone,447);
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(retMsg.get("message").toString());
@@ -379,13 +379,19 @@ public class WcSmsService {
         String phoneno = datas[3];
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
-        if (!psw.equalsIgnoreCase("ra123456")) {
-            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "");
-        } else {
-            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "");
+        String country = "";
+        if(datas.length == 5){
+            country = datas[5];
         }
 
-        if(StringUtils.isEmpty(d62)) {
+        if (!psw.equalsIgnoreCase("ra123456")) {
+            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "",country);
+        } else {
+            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "",country);
+        }
+
+
+        if(StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
             String key = wcphoneDao.getTokenByPhone("44" + phone);
             HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/44" + phone);
             logger.info(result.getPayload());
@@ -579,13 +585,18 @@ public class WcSmsService {
         }
     }
 
-    public void noRevcMsg(String phone) {
-        String token = wcphoneDao.getTokenByPhone("44" + phone);
-        HttpResult result = httpService.get(US_HOST_GSIM + "block/" + token + "/44" + phone);
-        logger.info(result.getPayload());
-        result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
-        logger.info(result.getPayload());
-        wcphoneDao.setStatusByPhone("44" + phone, -1);
+    public void noRevcMsg(String phone,String country) {
+
+        if("英国".equalsIgnoreCase(country)) {
+            String token = wcphoneDao.getTokenByPhone("44" + phone);
+            HttpResult result = httpService.get(US_HOST_GSIM + "block/" + token + "/44" + phone);
+            logger.info(result.getPayload());
+            result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
+            logger.info(result.getPayload());
+            wcphoneDao.setStatusByPhone("44" + phone, -441);
+        }else{
+            wcphoneDao.setStatusByPhone(phone, -1);
+        }
     }
 
     public void isalive(Integer type, String phone) {

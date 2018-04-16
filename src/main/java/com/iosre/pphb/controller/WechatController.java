@@ -125,9 +125,9 @@ public class WechatController {
     }
 
     @RequestMapping(value ="noRevcMsg", method = RequestMethod.GET)
-    public void noRevcMsg(@RequestParam(value = "phone") String phone)  {
+    public void noRevcMsg(@RequestParam(value = "phone") String phone,@RequestParam(value = "country") String country)  {
         try {
-             wcSmsService.noRevcMsg(phone);
+             wcSmsService.noRevcMsg(phone,country);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

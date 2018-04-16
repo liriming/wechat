@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface WcuserDao {
 
-    @Insert("insert into wcuser(name,psw,_62,phoneno,isalive,ip,realname,rname,rcard) values (#{name},#{psw},#{_62},#{phoneno},#{isalive},#{ip},#{realname},#{rname},#{rcard})")
+    @Insert("insert into wcuser(name,psw,_62,phoneno,isalive,ip,realname,rname,rcard,country) values (#{name},#{psw},#{_62},#{phoneno},#{isalive},#{ip},#{realname},#{rname},#{rcard},#{country})")
     int insertDataInfo(@Param("name") String name, @Param("psw") String psw, @Param("_62") String _62, @Param("phoneno") String phoneno, @Param("isalive") Integer isalive,
-                       @Param("ip") String ip, @Param("realname") Integer realname, @Param("rname") String rname, @Param("rcard") String rcard);
+                       @Param("ip") String ip, @Param("realname") Integer realname, @Param("rname") String rname, @Param("rcard") String rcard, @Param("country") String country);
 
 
     @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
