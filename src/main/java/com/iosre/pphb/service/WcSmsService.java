@@ -197,7 +197,9 @@ public class WcSmsService {
     public String usPhone() {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
-
+        if (phoneMsg  == null){
+            return "400";
+        }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatus(id, 1);
@@ -208,7 +210,9 @@ public class WcSmsService {
     public String usPhone1() {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
-
+        if (phoneMsg  == null){
+            return "400";
+        }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatus(id, 1);
