@@ -635,5 +635,14 @@ public class WcSmsService {
        return gzhh;
     }
 
+    public String getCountry() {
+        String country =  dictionaryDao.getValueByName("country");
+
+        if(StringUtils.isEmpty(country)){
+            return "400";
+        }
+        return country;
+    }
+
 
 }

@@ -64,14 +64,24 @@ public class WechatController {
     }
 
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
-    public String usPhone(HttpServletRequest request)  {
-        return wcSmsService.gSimPhone();
+    public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country)  {
+        if ("美国".equalsIgnoreCase(country)){
+            return wcSmsService.usPhone1();
+        }else if("英国".equalsIgnoreCase(country)) {
+            return wcSmsService.gSimPhone();
+        }
+        return wcSmsService.usPhone1();
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
-    public String getUsCode(@RequestParam(value = "list") String list)  {
+    public String getUsCode(@RequestParam(value = "list") String list,@RequestParam(value = "country") String country)  {
         try {
-            return wcSmsService.getGsimCode(list);
+            if ("美国".equalsIgnoreCase(country)){
+                return wcSmsService.getUsCode1(list);
+            }else if("英国".equalsIgnoreCase(country)) {
+                return wcSmsService.getGsimCode(list);
+            }
+            return wcSmsService.getUsCode1(list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "error";
@@ -146,6 +156,16 @@ public class WechatController {
     public String getGZHH()  {
         try {
             return wcSmsService.getGZHH();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value ="getCountry", method = RequestMethod.GET)
+    public String getCountry()  {
+        try {
+            return wcSmsService.getCountry();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return e.getMessage();
