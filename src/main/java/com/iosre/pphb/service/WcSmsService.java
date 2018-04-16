@@ -212,7 +212,7 @@ public class WcSmsService {
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatus(id, 1);
-        return "0" + phone.substring(1, phone.length());
+        return phone.substring(1, phone.length());
 
     }
 
