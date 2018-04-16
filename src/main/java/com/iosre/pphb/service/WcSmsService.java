@@ -220,7 +220,7 @@ public class WcSmsService {
         try {
             String key = dictionaryDao.getValueByName("gsim_key");
 
-            if(key.contains(",")){
+            if (key.contains(",")) {
                 String[] keyAry = key.split(",");
                 int index = (int) (Math.random() * keyAry.length);
                 key = keyAry[index];
@@ -234,7 +234,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone,key,440);
+                wcphoneDao.insertGsimPhone(phone, key, 440);
                 return phone.substring(2);
             }
             return "400";
@@ -247,7 +247,7 @@ public class WcSmsService {
     public void sendGsimCode(String phone) {
         try {
             String token = wcphoneDao.getTokenByPhone("44" + phone);
-            wcphoneDao.setStatusByPhone("44" + phone,446);
+            wcphoneDao.setStatusByPhone("44" + phone, 446);
             HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/44" + phone);
             logger.info(result.getPayload());
         } catch (Exception e) {
@@ -267,7 +267,7 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
-            wcphoneDao.setStatusByPhone("44" + phone,447);
+            wcphoneDao.setStatusByPhone("44" + phone, 447);
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(retMsg.get("message").toString());
@@ -290,39 +290,46 @@ public class WcSmsService {
     }
 
 
-    public String getUsCode1(String phone) throws IOException {
+    public String getUsCode1(String phone) {
 
-        Map<String, Object> map = wcphoneDao.getToken("1" + phone);
+        try {
 
-        String token = URLEncoder.encode(map.get("token").toString() + "|1" + phone, "UTF-8");
-        logger.info(US_HOST1 + token);
+            Map<String, Object> map = wcphoneDao.getToken("1" + phone);
 
-        HttpResult result = httpService.get(US_HOST1 + token);
-        logger.info(result.getPayload());
-        if (result.getPayload().contains("invalid parameter!")) {
-            return "400";
-        }
-        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
-        int id = (Integer) map.get("id");
+            String token = URLEncoder.encode(map.get("token").toString() + "|1" + phone, "UTF-8");
+            logger.info(US_HOST1 + token);
 
-        if (retMsg.containsKey("Message") && !retMsg.get("Message").toString().contains("提醒")) {
-
-            String regEx = "[^0-9]";
-            Pattern p = Pattern.compile(regEx);
-            Matcher m = p.matcher(result.getPayload());
-            wcphoneDao.setStatus(id, 2);
-            return m.replaceAll("").trim();
-        } else {
-            if (usPhoneMap.containsKey(phone)) {
-                int reqCount = usPhoneMap.get(phone);
-                if (reqCount > 10) {
-                    wcphoneDao.setStatus(id, 0);
-                } else {
-                    usPhoneMap.putIfAbsent(phone, reqCount++);
-                }
-            } else {
-                usPhoneMap.putIfAbsent(phone, 1);
+            HttpResult result = httpService.get(US_HOST1 + token);
+            logger.info(result.getPayload());
+            if (result.getPayload().contains("invalid parameter!")) {
+                return "400";
             }
+            Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+            int id = (Integer) map.get("id");
+
+            if (retMsg.containsKey("Message") && !retMsg.get("Message").toString().contains("提醒")) {
+
+                String regEx = "[^0-9]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(result.getPayload());
+                wcphoneDao.setStatus(id, 2);
+                return m.replaceAll("").trim();
+            } else {
+                if (usPhoneMap.containsKey(phone)) {
+                    int reqCount = usPhoneMap.get(phone);
+                    if (reqCount > 10) {
+                        wcphoneDao.setStatus(id, 0);
+                    } else {
+                        usPhoneMap.putIfAbsent(phone, reqCount++);
+                    }
+                } else {
+                    usPhoneMap.putIfAbsent(phone, 1);
+                }
+                return "400";
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return "400";
         }
     }
@@ -380,18 +387,18 @@ public class WcSmsService {
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
         String country = "";
-        if(datas.length == 5){
+        if (datas.length == 5) {
             country = datas[4];
         }
 
         if (!psw.equalsIgnoreCase("ra123456")) {
-            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "",country);
+            wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "", country);
         } else {
-            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "",country);
+            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "", country);
         }
 
 
-        if(StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
+        if (StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
             String key = wcphoneDao.getTokenByPhone("44" + phone);
             HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/44" + phone);
             logger.info(result.getPayload());
@@ -585,16 +592,16 @@ public class WcSmsService {
         }
     }
 
-    public void noRevcMsg(String phone,String country) {
+    public void noRevcMsg(String phone, String country) {
 
-        if("英国".equalsIgnoreCase(country)) {
+        if ("英国".equalsIgnoreCase(country)) {
             String token = wcphoneDao.getTokenByPhone("44" + phone);
             HttpResult result = httpService.get(US_HOST_GSIM + "block/" + token + "/44" + phone);
             logger.info(result.getPayload());
             result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
             logger.info(result.getPayload());
             wcphoneDao.setStatusByPhone("44" + phone, -441);
-        }else{
+        } else {
             wcphoneDao.setStatusByPhone(phone, -1);
         }
     }
@@ -638,18 +645,18 @@ public class WcSmsService {
 
 
     public String getGZHH() {
-       String gzhh =  dictionaryDao.getValueByName("gzhh");
+        String gzhh = dictionaryDao.getValueByName("gzhh");
 
-       if(StringUtils.isEmpty(gzhh)){
-           return "400";
-       }
-       return gzhh;
+        if (StringUtils.isEmpty(gzhh)) {
+            return "400";
+        }
+        return gzhh;
     }
 
     public String getCountry() {
-        String country =  dictionaryDao.getValueByName("country");
+        String country = dictionaryDao.getValueByName("country");
 
-        if(StringUtils.isEmpty(country)){
+        if (StringUtils.isEmpty(country)) {
             return "400";
         }
         return country;
