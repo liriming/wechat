@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface WcphoneDao {
 
-    @Select("SELECT * FROM wcphone where phone = #{phone}")
+    @Select("SELECT * FROM wcphone where phone = #{phone} order by id desc limit 1")
     Map<String, Object> getToken(@Param("phone")String phone);
 
     @Select("SELECT * FROM wcphone where status = 0 limit 1")
