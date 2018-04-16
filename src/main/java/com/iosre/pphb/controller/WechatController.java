@@ -66,7 +66,7 @@ public class WechatController {
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
     public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country)  {
         if ("美国".equalsIgnoreCase(country)){
-            return wcSmsService.usPhone();
+            return wcSmsService.usPhone1();
         }else if("英国".equalsIgnoreCase(country)) {
             return wcSmsService.gSimPhone();
         }
@@ -77,7 +77,7 @@ public class WechatController {
     public String getUsCode(@RequestParam(value = "list") String list,@RequestParam(value = "country") String country)  {
         try {
             if ("美国".equalsIgnoreCase(country)){
-                return wcSmsService.getUsCode(list);
+                return wcSmsService.getUsCode1(list);
             }else if("英国".equalsIgnoreCase(country)) {
                 return wcSmsService.getGsimCode(list);
             }
