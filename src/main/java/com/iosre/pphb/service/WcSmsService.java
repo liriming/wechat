@@ -391,8 +391,8 @@ public class WcSmsService {
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
         String country = "";
-        if (datas.length == 5) {
-            country = datas[4];
+        if (datas.length == 6) {
+            country = datas[5];
         }
 
         if (!psw.equalsIgnoreCase("ra123456")) {
