@@ -63,4 +63,7 @@ public interface WcuserDao {
     @Update("update wcuser set isalive=#{isalive} where name=#{phone} ")
     Integer updatePhoIsalive(@Param("phone")String phone,@Param("isalive")Integer isalive);
 
+    @Select("select if(count(*) > 0,'1','0') from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and right(name,10)=#{phone}  ")
+    String checkPhone(@Param("phone") String phone);
+
 }

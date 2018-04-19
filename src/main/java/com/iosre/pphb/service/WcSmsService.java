@@ -666,5 +666,14 @@ public class WcSmsService {
         return country;
     }
 
+    public String checkPhone(String phone) {
+        String result = wcuserDao.checkPhone(phone);
+
+        if (StringUtils.isEmpty(result)) {
+            return "400";
+        }
+        return result;
+    }
+
 
 }

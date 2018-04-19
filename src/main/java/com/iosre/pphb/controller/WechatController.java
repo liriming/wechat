@@ -172,4 +172,14 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="checkPhone", method = RequestMethod.GET)
+    public String checkPhone(@RequestParam(value = "phone") String phone)  {
+        try {
+            return wcSmsService.checkPhone(phone);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
 }
