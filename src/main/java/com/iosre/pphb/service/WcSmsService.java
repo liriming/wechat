@@ -575,19 +575,23 @@ public class WcSmsService {
 
             String sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
             String eDate = XDateUtils.nowToString();
-            int todayWhiteNum = wcuserDao.getExportDataNum(sDate, eDate, 0);
-            int todayRealNum = wcuserDao.getExportDataNum(sDate, eDate, 1);
+            int todayWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
+            int todayRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
+            int todayWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"4%");
+            int todayRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"4%");
 
-            map.putIfAbsent("todayWhiteNum", todayWhiteNum);
-            map.putIfAbsent("todayRealNum", todayRealNum);
+            map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + " 英国:" + todayWhiteNum_UK);
+            map.putIfAbsent("todayRealNum", "美国:" +todayRealNum_US + " 英国:" + todayRealNum_UK);
 
             sDate = "0";
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
-            int yesWhiteNum = wcuserDao.getExportDataNum(sDate, eDate, 0);
-            int yesRealNum = wcuserDao.getExportDataNum(sDate, eDate, 1);
+            int yesWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
+            int yesRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
+            int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
+            int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
 
-            map.putIfAbsent("yesWhiteNum", yesWhiteNum);
-            map.putIfAbsent("yesRealNum", yesRealNum);
+            map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US+ " 英国:" + yesWhiteNum_UK);
+            map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US+ " 英国:" + yesRealNum_UK);
 
             return map;
         } catch (Exception e) {
