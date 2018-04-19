@@ -589,8 +589,8 @@ public class WcSmsService {
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
             int yesWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
             int yesRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
-            int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
-            int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
+            int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"4%");
+            int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"4%");
             int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0,"%");
             int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1,"%");
 
