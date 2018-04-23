@@ -677,14 +677,14 @@ public class WcSmsService {
     public String checkPhone(String phone) {
         String result = wcuserDao.checkPhone(phone);
 
-        if (StringUtils.isEmpty(result)) {
-            return "400";
-        }
-        else if (!"0".equalsIgnoreCase(result) && result.startsWith("1")){
+
+        if (!phone.startsWith("7")) {
             return "1";
-        }else {
-            return result;
         }
+        if (StringUtils.isEmpty(result)) {
+            return "0";
+        }
+        return result;
     }
 
 
