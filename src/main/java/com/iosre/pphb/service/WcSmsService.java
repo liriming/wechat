@@ -680,7 +680,11 @@ public class WcSmsService {
         if (StringUtils.isEmpty(result)) {
             return "400";
         }
-        return result;
+        else if (!"0".equalsIgnoreCase(result) && result.startsWith("1")){
+            return "1";
+        }else {
+            return "0";
+        }
     }
 
 
