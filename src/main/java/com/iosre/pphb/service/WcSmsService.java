@@ -683,7 +683,7 @@ public class WcSmsService {
         else if (!"0".equalsIgnoreCase(result) && result.startsWith("1")){
             return "1";
         }else {
-            return "0";
+            return result;
         }
     }
 
