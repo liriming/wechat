@@ -75,7 +75,8 @@ public class LogServiceImpl {
 					userOpLog.setRMsg(rs);
 				}
 				mongoTemplate.save(userOpLog, collectionName);
-				logger.info("Saved log to mongo.");
+				logger.debug("Saved log to mongo.");
+				logger.info("resultString.trim:{}",resultString.trim());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
