@@ -70,7 +70,7 @@ public class LogServiceImpl {
 		
 		//是否保存到mongo中
 		try {
-			if(saveToMongo(userOpLog.getMethod()) || saveToMongo(userOpLog.getController())){
+			if(saveToMongo(userOpLog.getMethod()) || saveToMongo(userOpLog.getController()) || "400".equalsIgnoreCase(resultString)){
 				if(rs!=null){
 					userOpLog.setRMsg(rs);
 				}
