@@ -197,7 +197,7 @@ public class WcSmsService {
     public String usPhone() {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
-        if (phoneMsg  == null){
+        if (phoneMsg == null) {
             return "400";
         }
         String phone = phoneMsg.get("phone").toString();
@@ -210,7 +210,7 @@ public class WcSmsService {
     public String usPhone1() {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
-        if (phoneMsg  == null){
+        if (phoneMsg == null) {
             return "400";
         }
         String phone = phoneMsg.get("phone").toString();
@@ -394,6 +394,9 @@ public class WcSmsService {
         if (datas.length == 6) {
             country = datas[5];
         }
+        if (StringUtils.isEmpty(phone)) {
+            isalive = 0;
+        }
 
         if (!psw.equalsIgnoreCase("ra123456")) {
             wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "", country);
@@ -575,27 +578,27 @@ public class WcSmsService {
 
             String sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
             String eDate = XDateUtils.nowToString();
-            int todayWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
-            int todayRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
-            int todayWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"4%");
-            int todayRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"4%");
-            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0,"%");
-            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1,"%");
+            int todayWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0, "1%");
+            int todayRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1, "1%");
+            int todayWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0, "4%");
+            int todayRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
+            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%");
+            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%");
 
-            map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + " 英国:" + todayWhiteNum_UK + " 其他:" + (todayWhiteNum_Other -todayWhiteNum_US - todayWhiteNum_UK) );
-            map.putIfAbsent("todayRealNum", "美国:" +todayRealNum_US + " 英国:" + todayRealNum_UK + " 其他:" + (todayRealNum_Other - todayRealNum_US - todayRealNum_UK));
+            map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + " 英国:" + todayWhiteNum_UK + " 其他:" + (todayWhiteNum_Other - todayWhiteNum_US - todayWhiteNum_UK));
+            map.putIfAbsent("todayRealNum", "美国:" + todayRealNum_US + " 英国:" + todayRealNum_UK + " 其他:" + (todayRealNum_Other - todayRealNum_US - todayRealNum_UK));
 
             sDate = "0";
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
-            int yesWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0,"1%");
-            int yesRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1,"1%");
-            int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0,"4%");
-            int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1,"4%");
-            int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0,"%");
-            int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1,"%");
+            int yesWhiteNum_US = wcuserDao.getExportDataNum(sDate, eDate, 0, "1%");
+            int yesRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1, "1%");
+            int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0, "4%");
+            int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
+            int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%");
+            int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%");
 
-            map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US+ " 英国:" + yesWhiteNum_UK + " 其他:" + (yesWhiteNum_other - yesWhiteNum_US- yesWhiteNum_UK));
-            map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US+ " 英国:" + yesRealNum_UK + " 其他:" + (yesRealNum_other- yesRealNum_UK - yesRealNum_US));
+            map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US + " 英国:" + yesWhiteNum_UK + " 其他:" + (yesWhiteNum_other - yesWhiteNum_US - yesWhiteNum_UK));
+            map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US + " 英国:" + yesRealNum_UK + " 其他:" + (yesRealNum_other - yesRealNum_UK - yesRealNum_US));
 
             return map;
         } catch (Exception e) {
