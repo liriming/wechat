@@ -78,7 +78,9 @@ public class WechatController {
         try {
             if ("美国".equalsIgnoreCase(country)){
                 return wcSmsService.getUsCode1(list);
-            }else if("英国".equalsIgnoreCase(country) || "菲律宾".equalsIgnoreCase(country)) {
+            }else if("英国".equalsIgnoreCase(country) ) {
+                return wcSmsService.getGsimCode(list);
+            }else if ( "菲律宾".equalsIgnoreCase(country)){
                 return wcSmsService.getGsimCode(list);
             }
             return wcSmsService.getUsCode1(list);
@@ -89,9 +91,15 @@ public class WechatController {
     }
 
     @RequestMapping(value ="sendGsimCode", method = RequestMethod.GET)
-    public void sendGsimCode(@RequestParam(value = "phone") String phone)  {
+    public void sendGsimCode(@RequestParam(value = "phone") String phone,@RequestParam(defaultValue = "英国") String country)  {
         try {
-            wcSmsService.sendGsimCode(phone);
+            if("英国".equalsIgnoreCase(country) ) {
+                 wcSmsService.sendGsimCode(phone);
+            }else if ( "菲律宾".equalsIgnoreCase(country)){
+                wcSmsService.sendGsim63Code(phone);
+            }else {
+                wcSmsService.sendGsimCode(phone);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

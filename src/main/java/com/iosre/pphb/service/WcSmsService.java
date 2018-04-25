@@ -259,6 +259,17 @@ public class WcSmsService {
         }
     }
 
+    public void sendGsim63Code(String phone) {
+        try {
+            String token = wcphoneDao.getTokenByPhone("63" + phone);
+            wcphoneDao.setStatusByPhone("63" + phone, 636);
+            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/63" + phone);
+            logger.info(result.getPayload());
+        } catch (Exception e) {
+            logger.info(e.getMessage(), e);
+        }
+    }
+
 
     public String getGsimCode(String phone) throws IOException {
 
@@ -272,6 +283,39 @@ public class WcSmsService {
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
             wcphoneDao.setStatusByPhone("44" + phone, 447);
+            String regEx = "[^0-9]";
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(retMsg.get("message").toString());
+            return m.replaceAll("").trim();
+        } else {
+            /*if (usPhoneMap.containsKey(phone)) {
+                int reqCount = usPhoneMap.get(phone);
+                if (reqCount > 60) {
+                    result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
+                    logger.info(result.getPayload());
+                } else {
+                    reqCount = reqCount + 1;
+                    usPhoneMap.put(phone, reqCount);
+                }
+            } else {
+                usPhoneMap.putIfAbsent(phone, 1);
+            }*/
+            return "400";
+        }
+    }
+
+    public String getGsim63Code(String phone) throws IOException {
+
+        String token = wcphoneDao.getTokenByPhone("63" + phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/63" + phone);
+        logger.info(result.getPayload());
+        if (result.getPayload().contains("invalid parameter!")) {
+            return "400";
+        }
+        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+
+        if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
+            wcphoneDao.setStatusByPhone("63" + phone, 637);
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(retMsg.get("message").toString());
