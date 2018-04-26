@@ -180,7 +180,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="getCountry", method = RequestMethod.GET)
-    public String getCountry()  {
+    public String getCountry(HttpServletRequest request)  {
         try {
             return wcSmsService.getCountry();
         } catch (Exception e) {
