@@ -41,7 +41,7 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
-    private final static String US_HOST_GSIM = "https://gsim.online/api/";
+    private final static String US_HOST_GSIM = "https://www.gsim.online/api/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
@@ -250,31 +250,21 @@ public class WcSmsService {
 
     public void sendGsimCode(String phone) {
         try {
-            String token = wcphoneDao.getTokenByPhone("44" + phone);
-            wcphoneDao.setStatusByPhone("44" + phone, 446);
-            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/44" + phone);
+            String token = wcphoneDao.getTokenByPhone(phone);
+            wcphoneDao.setStatusByPhone(phone, 446);
+            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/" + phone);
             logger.info(result.getPayload());
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
         }
     }
 
-    public void sendGsim63Code(String phone) {
-        try {
-            String token = wcphoneDao.getTokenByPhone("63" + phone);
-            wcphoneDao.setStatusByPhone("63" + phone, 636);
-            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/63" + phone);
-            logger.info(result.getPayload());
-        } catch (Exception e) {
-            logger.info(e.getMessage(), e);
-        }
-    }
 
 
     public String getGsimCode(String phone) throws IOException {
 
-        String token = wcphoneDao.getTokenByPhone("44" + phone);
-        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/44" + phone);
+        String token = wcphoneDao.getTokenByPhone(phone);
+        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/" + phone);
         logger.info(result.getPayload());
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
@@ -282,60 +272,16 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
-            wcphoneDao.setStatusByPhone("44" + phone, 447);
+            wcphoneDao.setStatusByPhone(phone, 447);
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(retMsg.get("message").toString());
             return m.replaceAll("").trim();
         } else {
-            /*if (usPhoneMap.containsKey(phone)) {
-                int reqCount = usPhoneMap.get(phone);
-                if (reqCount > 60) {
-                    result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
-                    logger.info(result.getPayload());
-                } else {
-                    reqCount = reqCount + 1;
-                    usPhoneMap.put(phone, reqCount);
-                }
-            } else {
-                usPhoneMap.putIfAbsent(phone, 1);
-            }*/
             return "400";
         }
     }
 
-    public String getGsim63Code(String phone) throws IOException {
-
-        String token = wcphoneDao.getTokenByPhone("63" + phone);
-        HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/63" + phone);
-        logger.info(result.getPayload());
-        if (result.getPayload().contains("invalid parameter!")) {
-            return "400";
-        }
-        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
-
-        if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
-            wcphoneDao.setStatusByPhone("63" + phone, 637);
-            String regEx = "[^0-9]";
-            Pattern p = Pattern.compile(regEx);
-            Matcher m = p.matcher(retMsg.get("message").toString());
-            return m.replaceAll("").trim();
-        } else {
-            /*if (usPhoneMap.containsKey(phone)) {
-                int reqCount = usPhoneMap.get(phone);
-                if (reqCount > 60) {
-                    result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
-                    logger.info(result.getPayload());
-                } else {
-                    reqCount = reqCount + 1;
-                    usPhoneMap.put(phone, reqCount);
-                }
-            } else {
-                usPhoneMap.putIfAbsent(phone, 1);
-            }*/
-            return "400";
-        }
-    }
 
 
     public String getUsCode1(String phone) {

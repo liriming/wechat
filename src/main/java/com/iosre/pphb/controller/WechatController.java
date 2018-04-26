@@ -79,11 +79,11 @@ public class WechatController {
             if ("美国".equalsIgnoreCase(country)){
                 return wcSmsService.getUsCode1(list);
             }else if("英国".equalsIgnoreCase(country) ) {
-                return wcSmsService.getGsimCode(list);
+                return wcSmsService.getGsimCode("44" +list);
             }else if ( "菲律宾".equalsIgnoreCase(country)){
-                return wcSmsService.getGsimCode(list);
+                return wcSmsService.getGsimCode("63" +list);
             }
-            return wcSmsService.getUsCode1(list);
+            return wcSmsService.getUsCode1("44" +list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "error";
@@ -94,11 +94,11 @@ public class WechatController {
     public void sendGsimCode(@RequestParam(value = "phone") String phone,@RequestParam(defaultValue = "英国") String country)  {
         try {
             if("英国".equalsIgnoreCase(country) ) {
-                 wcSmsService.sendGsimCode(phone);
+                 wcSmsService.sendGsimCode("44" + phone);
             }else if ( "菲律宾".equalsIgnoreCase(country)){
-                wcSmsService.sendGsim63Code(phone);
+                wcSmsService.sendGsimCode("63" + phone);
             }else {
-                wcSmsService.sendGsimCode(phone);
+                wcSmsService.sendGsimCode("44" +phone);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
