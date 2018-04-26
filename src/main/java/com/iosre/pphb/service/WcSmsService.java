@@ -644,7 +644,7 @@ public class WcSmsService {
             realname = 1;
         }
         phone = wcuserDao.getNoCheckPho(sDate, eDate, listorder, realname);
-        wcuserDao.updateNoCheckPho(phone);
+        wcuserDao.updateNoCheckPho("%" + phone);
         return phone;
     }
 
