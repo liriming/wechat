@@ -643,7 +643,11 @@ public class WcSmsService {
         if (type > 2) {
             realname = 1;
         }
-        phone = wcuserDao.getNoCheckPho(sDate, eDate, listorder, realname);
+        if(country.equalsIgnoreCase("1")) {
+            phone = wcuserDao.getNoCheckPho(sDate, eDate,country+"%", listorder, realname);
+        }else{
+            phone = wcuserDao.getNoCheckPho(sDate, eDate,country.substring(1)+"%", listorder, realname);
+        }
         wcuserDao.updateNoCheckPho("%" + country + phone);
         return phone;
     }

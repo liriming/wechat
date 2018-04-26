@@ -54,8 +54,8 @@ public interface WcuserDao {
 
 
     @Select("select right(name,10) from wcuser where  isalive=1 and export=0 and checkpho=0 and realname=#{realname} " +
-            "and ctime BETWEEN #{sDate} AND  #{eDate}  order by ctime ${listorder} limit 1 ")
-    String getNoCheckPho(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
+            "and ctime BETWEEN #{sDate} AND  #{eDate} and  right(name,11) like #{country} order by ctime ${listorder} limit 1 ")
+    String getNoCheckPho(@Param("sDate") String sDate, @Param("eDate") String eDate,@Param("country") String country, @Param("listorder") String listorder, @Param("realname") int realname);
 
     @Update("update wcuser set checkpho=1 where name like #{phone} ")
     Integer updateNoCheckPho(@Param("phone")String phone);
