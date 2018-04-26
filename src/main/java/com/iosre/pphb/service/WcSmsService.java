@@ -615,7 +615,7 @@ public class WcSmsService {
         wcuserDao.updatePhoIsalive(phone, type);
     }
 
-    public String getNoCheckPho(int type) {
+    public String getNoCheckPho(int type, String country) {
 
         if (type > 4) {
             return "类型错误";
@@ -644,7 +644,7 @@ public class WcSmsService {
             realname = 1;
         }
         phone = wcuserDao.getNoCheckPho(sDate, eDate, listorder, realname);
-        wcuserDao.updateNoCheckPho("%" + phone);
+        wcuserDao.updateNoCheckPho("%" + country + phone);
         return phone;
     }
 

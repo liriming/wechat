@@ -142,9 +142,16 @@ public class WechatController {
     }
 
     @RequestMapping(value ="getNoCheckPho", method = RequestMethod.GET)
-    public String getNoCheckPho(@RequestParam(value = "type") int type)  {
+    public String getNoCheckPho(@RequestParam(value = "type") int type,@RequestParam(value = "country") String country)  {
         try {
-            return wcSmsService.getNoCheckPho(type);
+            if ("美国".equalsIgnoreCase(country)){
+                return wcSmsService.getNoCheckPho(type,"1");
+            }else if("英国".equalsIgnoreCase(country) ) {
+                return wcSmsService.getNoCheckPho(type,"44");
+            }else if ( "菲律宾".equalsIgnoreCase(country)){
+                return wcSmsService.getNoCheckPho(type,"63");
+            }
+            return wcSmsService.getNoCheckPho(type,"44");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return e.getMessage();
