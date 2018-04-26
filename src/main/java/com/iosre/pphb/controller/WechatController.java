@@ -67,8 +67,10 @@ public class WechatController {
     public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country)  {
         if ("美国".equalsIgnoreCase(country)){
             return wcSmsService.usPhone1();
-        }else if("英国".equalsIgnoreCase(country) || "菲律宾".equalsIgnoreCase(country)) {
-            return wcSmsService.gSimPhone();
+        }else if("英国".equalsIgnoreCase(country) ) {
+            return wcSmsService.gSimPhone("gsim_key");
+        }else if ("菲律宾".equalsIgnoreCase(country)){
+            return wcSmsService.gSimPhone("gsim_ph_key");
         }
         return wcSmsService.usPhone1();
     }

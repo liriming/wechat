@@ -220,9 +220,9 @@ public class WcSmsService {
 
     }
 
-    public String gSimPhone() {
+    public String gSimPhone(String dicCloName) {
         try {
-            String key = dictionaryDao.getValueByName("gsim_key");
+            String key = dictionaryDao.getValueByName(dicCloName);
 
             if (key.contains(",")) {
                 String[] keyAry = key.split(",");
