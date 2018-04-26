@@ -238,7 +238,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0,2)) * 10);
+                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10);
                 return phone.substring(2);
             }
             return "400";
@@ -258,7 +258,6 @@ public class WcSmsService {
             logger.info(e.getMessage(), e);
         }
     }
-
 
 
     public String getGsimCode(String phone) throws IOException {
@@ -281,7 +280,6 @@ public class WcSmsService {
             return "400";
         }
     }
-
 
 
     public String getUsCode1(String phone) {
@@ -572,11 +570,24 @@ public class WcSmsService {
             int todayRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1, "1%");
             int todayWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0, "4%");
             int todayRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
-            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%");
-            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%");
+            int todayWhiteNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 0, "3%");
+            int todayRealNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 1, "3%");
+            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US - todayWhiteNum_UK - todayWhiteNum_PH;
+            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%") - todayRealNum_US - todayRealNum_UK - todayRealNum_PH;
 
-            map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + " 英国:" + todayWhiteNum_UK + " 其他:" + (todayWhiteNum_Other - todayWhiteNum_US - todayWhiteNum_UK));
-            map.putIfAbsent("todayRealNum", "美国:" + todayRealNum_US + " 英国:" + todayRealNum_UK + " 其他:" + (todayRealNum_Other - todayRealNum_US - todayRealNum_UK));
+            int todayWhiteNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "1%");
+            int todayRealNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "1%");
+            int todayWhiteNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "4%");
+            int todayRealNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "4%");
+            int todayWhiteNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "3%");
+            int todayRealNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "3%");
+            int todayWhiteNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US_CK - todayWhiteNum_UK_CK - todayWhiteNum_PH_CK;
+            int todayRealNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - todayRealNum_US_CK - todayRealNum_UK_CK - todayRealNum_PH_CK;
+
+            map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + "-" + todayWhiteNum_US_CK + " 英国:" + todayWhiteNum_UK + "-" + todayWhiteNum_UK_CK +
+                    " 菲律宾:" + todayWhiteNum_PH + "-" + todayWhiteNum_PH_CK + " 其他:" + todayWhiteNum_Other + "-" + todayWhiteNum_Other_CK);
+            map.putIfAbsent("todayRealNum", "美国:" + todayRealNum_US + "-" + todayRealNum_US_CK + " 英国:" + todayRealNum_UK + "-" + todayRealNum_UK_CK +
+                    " 菲律宾:" + todayRealNum_PH + "-" + todayRealNum_PH_CK + " 其他:" + todayRealNum_Other + "-" + todayRealNum_Other_CK);
 
             sDate = "0";
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
@@ -584,11 +595,24 @@ public class WcSmsService {
             int yesRealNum_US = wcuserDao.getExportDataNum(sDate, eDate, 1, "1%");
             int yesWhiteNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 0, "4%");
             int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
-            int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%");
-            int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%");
+            int yesWhiteNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 0, "3%");
+            int yesRealNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 1, "3%");
+            int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%") - yesWhiteNum_US - yesWhiteNum_UK - yesWhiteNum_PH;
+            int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%") - yesRealNum_US - yesRealNum_UK - yesRealNum_PH;
 
-            map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US + " 英国:" + yesWhiteNum_UK + " 其他:" + (yesWhiteNum_other - yesWhiteNum_US - yesWhiteNum_UK));
-            map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US + " 英国:" + yesRealNum_UK + " 其他:" + (yesRealNum_other - yesRealNum_UK - yesRealNum_US));
+            int yesWhiteNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "1%");
+            int yesRealNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "1%");
+            int yesWhiteNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "4%");
+            int yesRealNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "4%");
+            int yesWhiteNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "3%");
+            int yesRealNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "3%");
+            int yesWhiteNum_other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "%") - yesWhiteNum_US_CK - yesWhiteNum_UK_CK - yesWhiteNum_PH_CK;
+            int yesRealNum_other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - yesRealNum_US_CK - yesRealNum_UK_CK - yesRealNum_PH_CK;
+
+            map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US + "-" + yesWhiteNum_US_CK + " 英国:" + yesWhiteNum_UK + "-" + yesWhiteNum_UK_CK +
+                    " 菲律宾:" + yesWhiteNum_PH + "-" + yesWhiteNum_PH_CK + " 其他:" + yesWhiteNum_other  + "-" + yesWhiteNum_other_CK);
+            map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US + "-" + yesRealNum_US_CK + " 英国:" + yesRealNum_UK + "-" + yesRealNum_UK_CK +
+                    " 菲律宾:" + yesRealNum_PH + "-" + yesRealNum_PH_CK + " 其他:" + yesRealNum_other + "-" + yesRealNum_other_CK);
 
             return map;
         } catch (Exception e) {
@@ -643,10 +667,10 @@ public class WcSmsService {
         if (type > 2) {
             realname = 1;
         }
-        if(country.equalsIgnoreCase("1")) {
-            phone = wcuserDao.getNoCheckPho(sDate, eDate,country+"%", listorder, realname);
-        }else{
-            phone = wcuserDao.getNoCheckPho(sDate, eDate,country.substring(1)+"%", listorder, realname);
+        if (country.equalsIgnoreCase("1")) {
+            phone = wcuserDao.getNoCheckPho(sDate, eDate, country + "%", listorder, realname);
+        } else {
+            phone = wcuserDao.getNoCheckPho(sDate, eDate, country.substring(1) + "%", listorder, realname);
         }
         wcuserDao.updateNoCheckPho("%" + country + phone);
         return phone;

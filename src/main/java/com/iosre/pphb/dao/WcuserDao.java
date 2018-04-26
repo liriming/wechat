@@ -24,6 +24,10 @@ public interface WcuserDao {
             "and right(name,11) like #{country} and ctime BETWEEN #{sDate} AND  #{eDate} ")
     Integer getExportDataNum(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("realname") int realname, @Param("country") String country);
 
+    @Select("select count(id) from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
+            "and right(name,11) like #{country} and ctime BETWEEN #{sDate} AND  #{eDate} and checkpho = 1 ")
+    Integer getCheckPhoDataNum(@Param("sDate") String sDate, @Param("eDate") String eDate, @Param("realname") int realname, @Param("country") String country);
+
     @Update("update wcuser set rname=#{rname},rcard=#{rcard},realname=1 where phone=#{phone}")
     Integer updateRealName(@Param("phone") String phone, @Param("rname") String rname, @Param("rcard") String rcard);
 
