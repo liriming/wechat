@@ -399,6 +399,12 @@ public class WcSmsService {
             logger.info(result.getPayload());
             result = httpService.get(US_HOST_GSIM + "refund/" + key + "/44" + phone);
             logger.info(result.getPayload());
+        }else if(StringUtils.isEmpty(d62) && "菲律宾".equalsIgnoreCase(country)){
+            String key = wcphoneDao.getTokenByPhone("63" + phone);
+            HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/63" + phone);
+            logger.info(result.getPayload());
+            result = httpService.get(US_HOST_GSIM + "refund/" + key + "/63" + phone);
+            logger.info(result.getPayload());
         }
 
     }
