@@ -84,7 +84,7 @@ public class MongodbService {
 
         //高级搜索条件
         if(!StringUtils.isEmpty(advancedKey) && !StringUtils.isEmpty(advancedValue)){
-            if(XValidator.isNumber(advancedValue)){
+            if(XValidator.isNumber(advancedValue) && advancedValue.length() < 10){
                 c.and(advancedKey).in(advancedValue, Integer.parseInt(advancedValue));
             }else if("true".equals(advancedValue)||"false".equals(advancedValue)){
                 c.and(advancedKey).is("true".equals(advancedValue)? true : false);
