@@ -24,8 +24,8 @@ public class PPController {
     }
 
     @RequestMapping(value = "checkIP", method = RequestMethod.GET)
-    public String checkIP(HttpServletRequest request) {
-        return ppService.checkIP(request);
+    public String checkIP(HttpServletRequest request,@RequestParam(defaultValue = "0")int type) {
+        return ppService.checkIP(request,type);
     }
 
     @RequestMapping(value = "sWitch", method = RequestMethod.GET)

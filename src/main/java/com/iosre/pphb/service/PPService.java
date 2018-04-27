@@ -69,7 +69,7 @@ public class PPService {
         //logger.info(val);
     }
 
-    public String checkIP(HttpServletRequest request) {
+    public String checkIP(HttpServletRequest request,int type) {
         String ip = WebUtil.getLocalIp(request);
         AddressUtils addressUtils = new AddressUtils();
         try {
@@ -81,7 +81,9 @@ public class PPService {
                 return "1";
             }*/
             String blackVpns = dictionaryDao.getValueByName("black_vpn");
-            if(ipDao.checkIP(ip) && !blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))){
+            if (type == 1 && !blackVpns.contains(ip)){
+                return "1";
+            }else if(ipDao.checkIP(ip) && !blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))){
                 ipDao.insertIP(ip, address);
                 return "1";
             }
