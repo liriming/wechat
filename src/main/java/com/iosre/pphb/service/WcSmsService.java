@@ -652,7 +652,7 @@ public class WcSmsService {
         int realname = 0;
         //当天号
         if (type % 2 != 0) {
-            listorder = "DESC";
+            listorder = "ASC";
             //开始时间：当前时间-1天 结束时间：当前时间
             sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
             eDate = XDateUtils.nowToString();
