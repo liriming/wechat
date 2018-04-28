@@ -267,6 +267,9 @@ public class WcSmsService {
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
         }
+        if(result.getPayload().contains("Too many requests")){
+            return "400";
+        }
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
