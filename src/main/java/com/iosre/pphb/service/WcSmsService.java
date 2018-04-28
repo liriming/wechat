@@ -9,22 +9,18 @@ import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
 import com.iosre.pphb.util.FileUtils;
 import com.iosre.pphb.util.XDateUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -399,7 +395,7 @@ public class WcSmsService {
             logger.info(result.getPayload());
             result = httpService.get(US_HOST_GSIM + "refund/" + key + "/44" + phone);
             logger.info(result.getPayload());
-        }else if(StringUtils.isEmpty(d62) && "菲律宾".equalsIgnoreCase(country)){
+        } else if (StringUtils.isEmpty(d62) && "菲律宾".equalsIgnoreCase(country)) {
             String key = wcphoneDao.getTokenByPhone("63" + phone);
             HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/63" + phone);
             logger.info(result.getPayload());
@@ -616,7 +612,7 @@ public class WcSmsService {
             int yesRealNum_other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - yesRealNum_US_CK - yesRealNum_UK_CK - yesRealNum_PH_CK;
 
             map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US + "-" + yesWhiteNum_US_CK + " 英国:" + yesWhiteNum_UK + "-" + yesWhiteNum_UK_CK +
-                    " 菲律宾:" + yesWhiteNum_PH + "-" + yesWhiteNum_PH_CK + " 其他:" + yesWhiteNum_other  + "-" + yesWhiteNum_other_CK);
+                    " 菲律宾:" + yesWhiteNum_PH + "-" + yesWhiteNum_PH_CK + " 其他:" + yesWhiteNum_other + "-" + yesWhiteNum_other_CK);
             map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US + "-" + yesRealNum_US_CK + " 英国:" + yesRealNum_UK + "-" + yesRealNum_UK_CK +
                     " 菲律宾:" + yesRealNum_PH + "-" + yesRealNum_PH_CK + " 其他:" + yesRealNum_other + "-" + yesRealNum_other_CK);
 
@@ -714,15 +710,17 @@ public class WcSmsService {
         return result;
     }
 
+    //每天凌晨3点触发
+    @Scheduled(cron = "0 0 3 * * ?")
     public void refundExceptionPhone() {
-        List<Map<String,Object>> phoneMsg = wcuserDao.getExceptionPhone();
+        List<Map<String, Object>> phoneMsg = wcuserDao.getExceptionPhone();
 
         phoneMsg.forEach(e -> {
             String phone = e.get("phone").toString();
-            String token  = e.get("token").toString();
+            String token = e.get("token").toString();
             HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-            logger.info("refund:{},phone:{}",result.getPayload(),phone);
-            wcuserDao.updatePhoIsalive(phone,-2);
+            logger.info("refund:{},phone:{}", result.getPayload(), phone);
+            wcuserDao.updatePhoIsalive(phone, -2);
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e1) {
