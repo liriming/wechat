@@ -723,6 +723,11 @@ public class WcSmsService {
             HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
             logger.info("refund:{},phone:{}",result.getPayload(),phone);
             wcuserDao.updatePhoIsalive(phone,-2);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         });
 
     }
