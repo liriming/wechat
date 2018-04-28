@@ -263,13 +263,13 @@ public class WcSmsService {
 
         String token = wcphoneDao.getTokenByPhone(phone);
         HttpResult result = httpService.get(US_HOST_GSIM + "getMessage/" + token + "/" + phone);
-        logger.info(result.getPayload());
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
         }
         if(result.getPayload().contains("Too many requests")){
             return "400";
         }
+        logger.info(result.getPayload());
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("message") && !retMsg.get("message").toString().contains("提醒")) {
