@@ -3,6 +3,7 @@ package com.iosre.pphb.interceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.service.LogServiceImpl;
+import com.iosre.pphb.util.AddressUtils;
 import com.iosre.pphb.util.WebUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.LinkedHashSet;
@@ -51,13 +53,14 @@ public class ControllerMethodInterceptor {
      * @return
      */
     @Around("controllerMethodPointcut()")
-    public Object Interceptor(ProceedingJoinPoint pjp) {
+    public Object Interceptor(ProceedingJoinPoint pjp) throws UnsupportedEncodingException {
         long beginTime = System.currentTimeMillis();
 
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
         String controller = method.getDeclaringClass().getName().substring(26);
+        AddressUtils addressUtils = new AddressUtils();
         logger.info("请求开始，方法：{}", methodName);
 
         Set<Object> allParams = new LinkedHashSet<>();
@@ -87,7 +90,7 @@ public class ControllerMethodInterceptor {
                 HttpServletRequest request = (HttpServletRequest) arg;
                 //获取请求方的IP地址到log中
                 String ip = WebUtil.getLocalIp(request);
-                userOpLog.setIp(ip);
+                userOpLog.setIp(addressUtils.getAddresses("ip="+ip, "utf-8"));
 
                 //获取url到log中：
                 userOpLog.setUrl(request.getRequestURL().toString());
