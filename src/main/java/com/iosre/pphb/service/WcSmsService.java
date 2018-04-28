@@ -231,6 +231,9 @@ public class WcSmsService {
             if (result.getPayload().contains("invalid parameter!")) {
                 return "400";
             }
+            if(result.getPayload().contains("Too many requests")){
+                return "码子数量不足，请减少跑机数量";
+            }
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
