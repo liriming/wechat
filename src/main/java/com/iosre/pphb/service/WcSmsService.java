@@ -714,5 +714,18 @@ public class WcSmsService {
         return result;
     }
 
+    public void refundExceptionPhone() {
+        List<Map<String,Object>> phoneMsg = wcuserDao.getExceptionPhone();
+
+        phoneMsg.forEach(e -> {
+            String phone = e.get("phone").toString();
+            String token  = e.get("token").toString();
+            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
+            logger.info("refund:{},phone:{}",result.getPayload(),phone);
+            wcuserDao.updatePhoIsalive(phone,-2);
+        });
+
+    }
+
 
 }

@@ -64,10 +64,13 @@ public interface WcuserDao {
     @Update("update wcuser set checkpho=1 where name like #{phone} ")
     Integer updateNoCheckPho(@Param("phone")String phone);
 
-    @Update("update wcuser set isalive=#{isalive} where name=#{phone} ")
+    @Update("update wcuser set isalive=#{isalive} where right(a.`name`,12)=#{phone} ")
     Integer updatePhoIsalive(@Param("phone")String phone,@Param("isalive")Integer isalive);
 
     @Select("select ifnull(right(name,11),'0') from wcuser where isalive=1 and right(name,10)=#{phone} ")
     String checkPhone(@Param("phone") String phone);
+
+    @Select("SELECT b.phone as phone,b.token as token FROM wcuser a ,wcphone b where right(a.`name`,12)=b.phone AND a.isalive=-1")
+    List<Map<String,Object>> getExceptionPhone();
 
 }
