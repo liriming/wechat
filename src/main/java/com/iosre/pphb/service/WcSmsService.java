@@ -725,10 +725,12 @@ public class WcSmsService {
             String phone = e.get("phone").toString();
             String token = e.get("token").toString();
             HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-            logger.info("refund:{},phone:{}", result.getPayload(), phone);
+            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
             wcuserDao.updatePhoIsalive(phone, -2);
             try {
                 Thread.sleep(10000);
+                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
+                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
