@@ -88,7 +88,7 @@ public class PPService {
                 return "1";
             }
 
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         return "0";

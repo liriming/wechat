@@ -1,5 +1,7 @@
 package com.iosre.pphb.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,84 +9,50 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.Map;
 
 /**
  * 根据IP地址获取详细的地域信息
+ *
  * @author Lwl
  * @dateJan 26, 2016
  */
 public class AddressUtils {
 
+    private final static ObjectMapper jsonMapper = new ObjectMapper();
+
     /**
-     *
-     * @param content
-     *      请求的参数 格式为：name=xxx&pwd=xxx
-     * @param encodingString
-     *      服务器端请求编码。如GBK,UTF-8等
+     * @param content        请求的参数 格式为：name=xxx&pwd=xxx
+     * @param encodingString 服务器端请求编码。如GBK,UTF-8等
      * @return
      * @throws UnsupportedEncodingException
      */
     public String getAddresses(String content, String encodingString)
-            throws UnsupportedEncodingException {
+            throws Exception {
         // 这里调用pconline的接口
         String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
         // 从http://whois.pconline.com.cn取得IP所在的省市区信息
         String returnStr = this.getResult(urlStr, content, encodingString);
+        System.out.println(returnStr);
         if (returnStr != null) {
-            // 处理返回的省市区信息
-            String[] temp = returnStr.split(",");
-            if(temp.length<3){
-                return "0";//无效IP，局域网测试
-            }
-            String region = (temp[5].split(":"))[1].replaceAll("\"", "");
-            region = decodeUnicode(region);// 省份
+            Map<String,Object> result = jsonMapper.readValue(returnStr,Map.class);
 
-            String country = "";
-            String area = "";
-            // String region = "";
-            String city = "";
-            String county = "";
-            String isp = "";
-            for (int i = 0; i < temp.length; i++) {
-                switch (i) {
-                    case 1:
-                        country = (temp[i].split(":"))[2].replaceAll("\"", "");
-                        country = decodeUnicode(country);// 国家
-                        break;
-                    case 3:
-                        area = (temp[i].split(":"))[1].replaceAll("\"", "");
-                        area = decodeUnicode(area);// 地区
-                        break;
-                    case 5:
-                        region = (temp[i].split(":"))[1].replaceAll("\"", "");
-                        region = decodeUnicode(region);// 省份
-                        break;
-                    case 7:
-                        city = (temp[i].split(":"))[1].replaceAll("\"", "");
-                        city = decodeUnicode(city);// 市区
-                        break;
-                    case 9:
-                        county = (temp[i].split(":"))[1].replaceAll("\"", "");
-                        county = decodeUnicode(county);// 地区
-                        break;
-                    case 11:
-                        isp = (temp[i].split(":"))[1].replaceAll("\"", "");
-                        isp = decodeUnicode(isp); // ISP公司
-                        break;
-                }
+            if(0 == (Integer)result.get("code")){
+                Map<String,Object> data = (Map<String,Object>)result.get("data");
+
+                return data.get("ip") + "," + decodeUnicode(data.get("country").toString()) + "," + data.get("city") + "," + data.get("county");
+
             }
 
-            return new StringBuffer(country).append(area).append(",").append(region).append(city).append(county).append(",").append(isp).toString();
         }
-        return null;
+        return content;
     }
+
     /**
-     * @param urlStr
-     *      请求的地址
-     * @param content
-     *      请求的参数 格式为：name=xxx&pwd=xxx
-     * @param encoding
-     *      服务器端请求编码。如GBK,UTF-8等
+     * @param urlStr   请求的地址
+     * @param content  请求的参数 格式为：name=xxx&pwd=xxx
+     * @param encoding 服务器端请求编码。如GBK,UTF-8等
      * @return
      */
     private String getResult(String urlStr, String content, String encoding) {
@@ -123,18 +91,19 @@ public class AddressUtils {
         }
         return null;
     }
+
     /**
      * unicode 转换成 中文
      *
-     * @author fanhui 2007-3-15
      * @param theString
      * @return
+     * @author fanhui 2007-3-15
      */
     public static String decodeUnicode(String theString) {
         char aChar;
         int len = theString.length();
         StringBuffer outBuffer = new StringBuffer(len);
-        for (int x = 0; x < len;) {
+        for (int x = 0; x < len; ) {
             aChar = theString.charAt(x++);
             if (aChar == '\\') {
                 aChar = theString.charAt(x++);
@@ -195,18 +164,20 @@ public class AddressUtils {
         }
         return outBuffer.toString();
     }
+
     // 测试
     public static void main(String[] args) {
+
         AddressUtils addressUtils = new AddressUtils();
         // 测试ip 219.136.134.157 中国=华南=广东省=广州市=越秀区=电信
-        String ip = "125.70.11.136";
+        String ip = "219.136.134.157";
         String address = "";
         try {
-            address = addressUtils.getAddresses("ip="+ip, "utf-8");
-        } catch (UnsupportedEncodingException e) {
+            address = addressUtils.getAddresses("ip=" + ip, "utf-8");
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("222.216.200.179".substring(0,"222.216.200.179".indexOf(".")));
+        System.out.println(address);
 
         // 输出结果为：广东省,广州市,越秀区
     }

@@ -53,7 +53,7 @@ public class ControllerMethodInterceptor {
      * @return
      */
     @Around("controllerMethodPointcut()")
-    public Object Interceptor(ProceedingJoinPoint pjp) throws UnsupportedEncodingException {
+    public Object Interceptor(ProceedingJoinPoint pjp) throws Exception {
         long beginTime = System.currentTimeMillis();
 
         MethodSignature signature = (MethodSignature) pjp.getSignature();
