@@ -199,13 +199,4 @@ public class WechatController {
         }
     }
 
-    @RequestMapping(value ="refundExceptionPhone", method = RequestMethod.GET)
-    public void refundExceptionPhone()  {
-        try {
-             wcSmsService.refundExceptionPhone();
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
 }

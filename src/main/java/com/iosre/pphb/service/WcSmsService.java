@@ -394,6 +394,20 @@ public class WcSmsService {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "", country);
         }
 
+        if(isalive == -1){
+            String token = wcphoneDao.getTokenByPhone(phone);
+            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
+            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
+            wcuserDao.updatePhoIsalive(phone, -2);
+            try {
+                Thread.sleep(5000);
+                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
+                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        }
+
 
         if (StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
             String key = wcphoneDao.getTokenByPhone("44" + phone);
@@ -714,28 +728,6 @@ public class WcSmsService {
             return "0";
         }
         return result;
-    }
-
-    //每天凌晨3点触发
-    @Scheduled(cron = "0 0 3 * * ?")
-    public void refundExceptionPhone() {
-        List<Map<String, Object>> phoneMsg = wcuserDao.getExceptionPhone();
-
-        phoneMsg.forEach(e -> {
-            String phone = e.get("phone").toString();
-            String token = e.get("token").toString();
-            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
-            wcuserDao.updatePhoIsalive(phone, -2);
-            try {
-                Thread.sleep(10000);
-                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
-                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-        });
-
     }
 
 
