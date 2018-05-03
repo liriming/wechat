@@ -393,19 +393,6 @@ public class WcSmsService {
             wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "", country);
         }
 
-        if(isalive == -1){
-            String token = wcphoneDao.getTokenByPhone(phone);
-            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
-            wcuserDao.updatePhoIsalive(phone, -2);
-            try {
-                Thread.sleep(5000);
-                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
-                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-        }
 
 
         if (StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
@@ -658,6 +645,20 @@ public class WcSmsService {
 
     public void isalive(Integer type, String phone) {
         wcuserDao.updatePhoIsalive(phone, type);
+
+        if(type == -1){
+            String token = wcphoneDao.getTokenByPhone(phone);
+            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
+            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
+            wcuserDao.updatePhoIsalive(phone, -2);
+            try {
+                Thread.sleep(5000);
+                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
+                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     public String getNoCheckPho(int type, String country) {
