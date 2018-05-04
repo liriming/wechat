@@ -199,4 +199,14 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="updateGsimKey", method = RequestMethod.GET)
+    public String updateGsimKey(@RequestParam(value = "key") String key)  {
+        try {
+            return wcSmsService.updateGsimKey(key);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return e.getMessage();
+        }
+    }
+
 }

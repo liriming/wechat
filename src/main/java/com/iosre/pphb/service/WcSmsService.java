@@ -731,4 +731,25 @@ public class WcSmsService {
     }
 
 
+    public String updateGsimKey(String key) {
+
+        dictionaryDao.updateValueByName("gsim_key",key);
+        String[] keys = key.split(",");
+        String ret = "";
+        for(String k : keys){
+            HttpResult result = httpService.get("https://gsim.online/api/credits/" + k.trim());
+            if (result.getPayload().contains("invalid parameter!")) {
+                ret += k.trim() + ": 0" + "<br>";
+            }
+            try {
+                Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+                ret += k.trim() + ": " + retMsg.get("credits") + "<br>";
+            } catch (IOException e) {
+                ret += k.trim() + ": 0" + "<br>";
+            }
+        }
+        return ret;
+    }
+
+
 }

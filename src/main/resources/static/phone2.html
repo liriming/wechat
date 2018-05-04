@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <meta charset="UTF-8">
-    <title>美国号码1</title>
+    <title>英国号码</title>
 
     <script src="js/jquery-2.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -16,19 +16,14 @@
             height: 40px;
             width: 60px;
         }
-
-        .server {
-            height: 20px;
-            width: 400px;
-        }
     </style>
 </head>
 <body>
 
 
 <div>
-    <textarea rows="40" cols="80" id="phone"> </textarea><br><br>
-    服务器:<input type="text" id="server" class="server" value="">
+    key:<span style="color:red;">(一次最多10个key，并要以英文逗号区分)</span><br><br>
+    <textarea rows="20" cols="80" id="key"> </textarea><br><br>
     <button type="button" class="phone" onclick="exportPhone()">导入</button>
     <br>
     <p id="msg"></p>
@@ -39,21 +34,16 @@
 <script>
 
     function exportPhone() {
-        var text = $("#phone").val();
-        var sp = $("#server").val();
-        if (sp === "") {
-            alert("请输入服务器地址");
-        }
-        var list = text.split("\n");
+        $("#msg").val("");
+        var text = $("#key").val();
         $.ajax({
             type: "GET",
-            url: "/wc/exportPhone1",
-            data: {list: list.toString(), server: sp},
-            dataType: "json",
+            url: "/wc/updateGsimKey",
+            data: {key: text.toString()},
             success: function (data) {
-                var html = "成功导入" + data + "个号码";
-                $("#msg").text(html);
-                $("#phone").val("")
+                var html = "成功导入:<br>" + data;
+                $("#msg").html(html);
+                $("#key").val("")
             }
         });
     }
