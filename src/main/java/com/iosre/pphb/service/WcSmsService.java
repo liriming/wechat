@@ -189,7 +189,7 @@ public class WcSmsService {
         }
     }
 
-    public String usPhone() {
+    public String usPhone(String ip) {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
         if (phoneMsg == null) {
@@ -197,12 +197,12 @@ public class WcSmsService {
         }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
-        wcphoneDao.setStatus(id, 1);
+        wcphoneDao.setStatusAndIP(id, 1,ip);
         return phone;
 
     }
 
-    public String usPhone1() {
+    public String usPhone1(String ip) {
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
         if (phoneMsg == null) {
@@ -210,12 +210,12 @@ public class WcSmsService {
         }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
-        wcphoneDao.setStatus(id, 1);
+        wcphoneDao.setStatusAndIP(id, 1,ip);
         return phone.substring(1, phone.length());
 
     }
 
-    public String gSimPhone(String dicCloName) {
+    public String gSimPhone(String dicCloName,String ip) {
         try {
             String key = dictionaryDao.getValueByName(dicCloName);
 
@@ -236,7 +236,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10);
+                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10,ip);
                 return phone.substring(2);
             }
             return "400";

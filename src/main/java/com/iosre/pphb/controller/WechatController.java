@@ -65,14 +65,15 @@ public class WechatController {
 
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
     public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country)  {
+        String ip = WebUtil.getLocalIp(request);
         if ("美国".equalsIgnoreCase(country)){
-            return wcSmsService.usPhone1();
+            return wcSmsService.usPhone1(ip);
         }else if("英国".equalsIgnoreCase(country) ) {
-            return wcSmsService.gSimPhone("gsim_key");
+            return wcSmsService.gSimPhone("gsim_key",ip);
         }else if ("菲律宾".equalsIgnoreCase(country)){
-            return wcSmsService.gSimPhone("gsim_ph_key");
+            return wcSmsService.gSimPhone("gsim_ph_key",ip);
         }
-        return wcSmsService.usPhone1();
+        return wcSmsService.usPhone1(ip);
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
