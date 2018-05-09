@@ -2,6 +2,7 @@ package com.iosre.pphb.controller;
 
 import com.iosre.pphb.service.WcSmsService;
 import com.iosre.pphb.service.WechatService;
+import com.iosre.pphb.util.AddressUtils;
 import com.iosre.pphb.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +65,10 @@ public class WechatController {
     }
 
     @RequestMapping(value ="usPhone", method = RequestMethod.GET)
-    public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country)  {
+    public String usPhone(HttpServletRequest request,@RequestParam(value = "country") String country) throws Exception {
+        AddressUtils addressUtils = new AddressUtils();
         String ip = WebUtil.getLocalIp(request);
+        ip = addressUtils.getAddresses("ip="+ip, "utf-8");
         if ("美国".equalsIgnoreCase(country)){
             return wcSmsService.usPhone1(ip);
         }else if("英国".equalsIgnoreCase(country) ) {

@@ -5,6 +5,8 @@ import com.iosre.pphb.dto.Page;
 import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.http.HttpService;
 import com.iosre.pphb.service.MongodbService;
+import com.iosre.pphb.util.AddressUtils;
+import com.iosre.pphb.util.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +46,10 @@ public class GsimController {
     @RequestMapping(value = "sendSms", method = RequestMethod.GET)
     public String sendSms(HttpServletRequest request, @RequestParam("key") String key, @RequestParam("phone") String phone) {
         try{
-            wcphoneDao.insertGsimPhone(phone,key,7);
+            AddressUtils addressUtils = new AddressUtils();
+            String ip = WebUtil.getLocalIp(request);
+            ip = addressUtils.getAddresses("ip="+ip, "utf-8");
+            wcphoneDao.insertGsimPhone(phone,key,7,ip);
             return httpService.get(US_HOST_GSIM + "sendSms/" + key + "/" + phone).getPayload();
         }catch (Exception e){
             return e.getMessage();
