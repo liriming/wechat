@@ -647,16 +647,20 @@ public class WcSmsService {
         wcuserDao.updatePhoIsalive(phone, type);
 
         if(type == -1){
-            String token = wcphoneDao.getTokenByPhone(phone);
-            HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-            logger.info("send sms:{},phone:{}", result.getPayload(), phone);
-            wcuserDao.updatePhoIsalive(phone, -2);
-            try {
-                Thread.sleep(5000);
-                result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
-                logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+            if(phone.startsWith("44")) {
+                String token = wcphoneDao.getTokenByPhone(phone);
+                HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
+                logger.info("send sms:{},phone:{}", result.getPayload(), phone);
+                wcuserDao.updatePhoIsalive(phone, -2);
+                try {
+                    Thread.sleep(5000);
+                    result = httpService.get("https://gsim.online/api/refund/" + token + "/" + phone);
+                    logger.info("refund sms:{},phone:{}", result.getPayload(), phone);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+                wcuserDao.updatePhoIsalive(phone, -2);
             }
         }
     }
