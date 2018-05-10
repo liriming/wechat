@@ -429,6 +429,8 @@ public class WcSmsService {
                 exportData = wcuserDao.getUsExportData(ids);
             }else if(country.equalsIgnoreCase("英国")){
                 exportData = wcuserDao.getUkExportData(ids);
+            }else{
+                exportData = wcuserDao.getUsExportData(ids);
             }
             if (exportData.size() == 0) {
                 return "没有数据了!";
@@ -437,12 +439,12 @@ public class WcSmsService {
             List<String> data = new ArrayList<>(exportData.size());
 
             exportData.forEach(e -> {
-                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62")+ "----" + e.get("ctime");
+                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62");
                 data.add(msg);
             });
             wcuserDao.updateExportStatus(ids);
             FileUtils.writeToTxt(response, data);
-            return "";
+            return "完成";
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return e.getMessage();

@@ -17,7 +17,7 @@ public interface WcuserDao {
 
     @Select({
             " <script> ",
-            " select id,name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
+            " select id,right(name,10) as name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
             " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
             " #{item} ",
             " </foreach> ",
@@ -28,7 +28,7 @@ public interface WcuserDao {
 
     @Select({
             " <script> ",
-            " select id,name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
+            " select id,right(name,10) as name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
             " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
             " #{item} ",
             " </foreach> ",
