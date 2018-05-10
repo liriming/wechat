@@ -1,5 +1,7 @@
 package com.iosre.pphb.controller;
 
+import com.iosre.pphb.dto.Page;
+import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.service.WcSmsService;
 import com.iosre.pphb.service.WechatService;
 import com.iosre.pphb.util.AddressUtils;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -117,10 +122,17 @@ public class WechatController {
         wcSmsService.uploadData(ip,data);
     }
 
-  /*  @RequestMapping(value ="exportData", method = RequestMethod.GET)
-    public String exportData(HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "count") int count,@RequestParam(value = "psw") String psw,@RequestParam(value = "type") int type)  {
-        return wcSmsService.exportData(response, count, psw, type);
-    }*/
+    @RequestMapping(value ="exportData", method = RequestMethod.GET)
+    public String exportData(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "psw") String psw, @RequestParam(value = "list") String list, @RequestParam(value = "country") String country)  {
+
+        List<Integer> ids = new ArrayList<>();
+        String[] l = list.split(",");
+
+        for (String i : l){
+            ids.add(Integer.parseInt(i));
+        }
+        return wcSmsService.exportData(response,psw,ids,country);
+    }
 
     @RequestMapping(value ="statistics", method = RequestMethod.GET)
     public Map<String,Object> statistics()  {
@@ -218,4 +230,8 @@ public class WechatController {
         wcSmsService.resetPhone();
     }
 
+    @RequestMapping(value = "search", method = RequestMethod.POST)
+    public Page<Map<String,String>> search(HttpServletRequest request, @RequestBody Map<String, Object> params) {
+        return wcSmsService.search(params);
+    }
 }

@@ -13,10 +13,9 @@ public class FileUtils {
 
     // 输出TXT
     public static void writeToTxt(HttpServletResponse response, List<String> list) {
-
         response.setContentType("text/plain");// 一下两行关键的设置
         response.addHeader("Content-Disposition",
-                "attachment;filename=62.txt");// filename指定默认的名字
+                "attachment;filename=" + list.size()  +".txt");// filename指定默认的名字
         BufferedOutputStream buff = null;
         StringBuffer write = new StringBuffer();
         String enter = "\r\n";

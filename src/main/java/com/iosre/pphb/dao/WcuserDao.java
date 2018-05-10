@@ -15,9 +15,27 @@ public interface WcuserDao {
                        @Param("ip") String ip, @Param("realname") Integer realname, @Param("rname") String rname, @Param("rcard") String rcard, @Param("country") String country);
 
 
-    @Select("select id,name,psw,_62 from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
-            "and ctime BETWEEN #{sDate} AND  #{eDate} order by ctime ${listorder} limit #{count} ")
-    List<Map<String, Object>> getExportData(@Param("count") int count, @Param("sDate") String sDate, @Param("eDate") String eDate, @Param("listorder") String listorder, @Param("realname") int realname);
+    @Select({
+            " <script> ",
+            " select id,name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
+            " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
+            " #{item} ",
+            " </foreach> ",
+            " and right(name,11) like '1%'",
+            " </script> "
+    })
+    List<Map<String, Object>> getUsExportData(@Param("list") List<Integer> list);
+
+    @Select({
+            " <script> ",
+            " select id,name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
+            " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
+            " #{item} ",
+            " </foreach> ",
+            " and right(name,12) like '44%'",
+            " </script> "
+    })
+    List<Map<String, Object>> getUkExportData(@Param("list") List<Integer> list);
 
 
     @Select("select count(id) from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
@@ -72,5 +90,14 @@ public interface WcuserDao {
 
     @Select("SELECT b.phone as phone,b.token as token FROM wcuser a ,wcphone b where right(a.name,12)=b.phone AND a.isalive=-1")
     List<Map<String,Object>> getExceptionPhone();
+
+
+    @Select("select id,name,psw,concat(left(_62,50),'...') as _62,export,realname,checkpho,ctime,exporttime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
+            "and ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '1%' order by ctime ${sort} limit #{count} ")
+    List<Map<String, String>> searchUsData(Map<String,Object> params);
+
+    @Select("select id,name,psw,concat(left(_62,50),'...') as _62,export,realname,checkpho,ctime,exporttime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
+            "and ctime BETWEEN #{bTime} AND  #{eTime} and right(name,12) like '44%' order by ctime ${sort} limit #{count} ")
+    List<Map<String, String>> searchUkData(Map<String,Object> params);
 
 }

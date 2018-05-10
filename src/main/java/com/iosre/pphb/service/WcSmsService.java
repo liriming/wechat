@@ -5,6 +5,8 @@ import com.iosre.pphb.dao.DictionaryDao;
 import com.iosre.pphb.dao.RealnameDao;
 import com.iosre.pphb.dao.WcphoneDao;
 import com.iosre.pphb.dao.WcuserDao;
+import com.iosre.pphb.dto.Page;
+import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
 import com.iosre.pphb.util.FileUtils;
@@ -24,6 +26,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 public class WcSmsService {
@@ -415,48 +419,28 @@ public class WcSmsService {
 
     }
 
-    public String exportData(HttpServletResponse response, int count, String psw, int type) {
+    public String exportData(HttpServletResponse response,String psw,List<Integer> ids,String country) {
         try {
             if (!psw.equals("liriming221")) {
                 return "密码错误";
             }
-            String listorder;
-            String sDate;
-            String eDate;
-            int realname = 0;
-            //当天号
-            if (type % 2 != 0) {
-                listorder = "DESC";
-                //开始时间：当前时间-1天 结束时间：当前时间
-                sDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
-                eDate = XDateUtils.nowToString();
+            List<Map<String, Object>> exportData = new ArrayList<>();
+            if(country.equalsIgnoreCase("美国")) {
+                exportData = wcuserDao.getUsExportData(ids);
+            }else if(country.equalsIgnoreCase("英国")){
+                exportData = wcuserDao.getUkExportData(ids);
             }
-            //隔天号
-            else {
-                listorder = "ASC";
-                //开始时间：历史时间 结束时间：当前时间 -1天
-                sDate = "0";
-                eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
-            }
-            if (type > 2) {
-                realname = 1;
-            }
-            List<Map<String, Object>> exportData = wcuserDao.getExportData(count, sDate, eDate, listorder, realname);
             if (exportData.size() == 0) {
                 return "没有数据了!";
             }
 
             List<String> data = new ArrayList<>(exportData.size());
-            List<Integer> exportId = new ArrayList<>(exportData.size());
 
             exportData.forEach(e -> {
-                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62");
+                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62")+ "----" + e.get("ctime");
                 data.add(msg);
-                if (!StringUtils.isEmpty(e.get("id"))) {
-                    exportId.add((Integer) e.get("id"));
-                }
             });
-            wcuserDao.updateExportStatus(exportId);
+            wcuserDao.updateExportStatus(ids);
             FileUtils.writeToTxt(response, data);
             return "";
         } catch (Exception e) {
@@ -759,5 +743,43 @@ public class WcSmsService {
         return ret;
     }
 
+    public Page<Map<String,String>> search(Map<String, Object> params){
+
+        params = (Map<String, Object>) params.get("params");
+
+        int count = Integer.parseInt( params.get("count").toString());
+        String sort = params.get("sort").toString().equals("顺序")? "ASC" : "DESC";
+        int export = params.get("export").toString().equals("已导出")? 1 : 0;
+        int checkpho = params.get("checkpho").toString().equals("已检测")? 1 : 0;
+        int realname = params.get("realname").toString().equals("已实名")? 1 : 0;
+        String bTime = params.get("bTime").toString();
+        String eTime = params.get("eTime").toString();
+
+        Map<String,Object> searchParams = new HashedMap();
+        searchParams.put("count",count);
+        searchParams.put("sort",sort);
+        searchParams.put("export",export);
+        searchParams.put("checkpho",checkpho);
+        searchParams.put("realname",realname);
+        searchParams.put("bTime",bTime);
+        searchParams.put("eTime",eTime);
+        Page<Map<String,String>> page = new Page<>(0, count);
+        List<Map<String,String>> data = new ArrayList<>();
+        if (params.get("country").equals("美国")){
+            data = wcuserDao.searchUsData(searchParams);
+        }else if (params.get("country").equals("英国")){
+            data = wcuserDao.searchUkData(searchParams);
+        }
+
+        for(Map m : data){
+            if (!StringUtils.isEmpty(m.get("exporttime"))) {
+                m.put("exporttime", m.get("exporttime").toString());
+            }
+            m.put("ctime",m.get("ctime").toString());
+        }
+
+        page.setResults(data);
+        return page;
+    }
 
 }
