@@ -48,4 +48,7 @@ public interface WcphoneDao {
     @Select("SELECT token FROM wcphone where phone = #{phone} order by id desc limit 1")
     String getTokenByPhone(@Param("phone")String phone);
 
+    @Update("Update wcphone set status=-1 WHERE token=(SELECT * from (SELECT token FROM wcphone WHERE status=0 LIMIT 1) t) AND status=0")
+    void resetPhone();
+
 }

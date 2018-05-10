@@ -213,4 +213,9 @@ public class WechatController {
         }
     }
 
+    @RequestMapping(value ="resetPhone", method = RequestMethod.GET)
+    public void resetPhone()  {
+        wcSmsService.resetPhone();
+    }
+
 }

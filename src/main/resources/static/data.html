@@ -65,6 +65,7 @@
 <div align="center">
     <h2 style="color:blue" id="h2"></h2>
     <h3><a href="javascript:void(0)" onclick="aClick()">重置计算时间</a></h3>
+    <h5><a href="javascript:void(0)" onclick="bClick()">接收不到验证码？</a></h5>
     <table>
         <tbody>
         <tr>
@@ -261,6 +262,19 @@
             $.ajax({
                 type: "GET",
                 url: "/wc/uploadCountTime",
+                data: null,
+                dataType: "json"
+            })
+            location.replace(document.referrer);
+        }
+    }
+
+    function bClick() {
+        var aConfirm = confirm("清除当前接收不到验证码的token，确认吗？");
+        if (aConfirm == true) {
+            $.ajax({
+                type: "GET",
+                url: "/wc/resetPhone",
                 data: null,
                 dataType: "json"
             })

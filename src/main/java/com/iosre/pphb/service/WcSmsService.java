@@ -370,6 +370,10 @@ public class WcSmsService {
         dictionaryDao.updateValueByName("start_count_time", XDateUtils.nowToString());
     }
 
+    public void resetPhone() {
+        wcphoneDao.resetPhone();
+    }
+
     public void uploadData(String ip, String data) {
 
         String[] datas = data.split(",");
