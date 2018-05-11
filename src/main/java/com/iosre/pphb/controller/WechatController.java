@@ -75,26 +75,26 @@ public class WechatController {
         String ip = WebUtil.getLocalIp(request);
         ip = addressUtils.getAddresses("ip="+ip, "utf-8");
         if ("美国".equalsIgnoreCase(country)){
-            return wcSmsService.usPhone1(ip);
+            return wcSmsService.usPhone(ip);
         }else if("英国".equalsIgnoreCase(country) ) {
             return wcSmsService.gSimPhone("gsim_key",ip);
         }else if ("菲律宾".equalsIgnoreCase(country)){
             return wcSmsService.gSimPhone("gsim_ph_key",ip);
         }
-        return wcSmsService.usPhone1(ip);
+        return wcSmsService.usPhone(ip);
     }
 
     @RequestMapping(value ="getUsCode", method = RequestMethod.GET)
     public String getUsCode(HttpServletRequest request,@RequestParam(value = "list") String list,@RequestParam(value = "country") String country)  {
         try {
             if ("美国".equalsIgnoreCase(country)){
-                return wcSmsService.getUsCode1(list);
+                return wcSmsService.getUsCode(list);
             }else if("英国".equalsIgnoreCase(country) ) {
                 return wcSmsService.getGsimCode("44" +list);
             }else if ( "菲律宾".equalsIgnoreCase(country)){
                 return wcSmsService.getGsimCode("63" +list);
             }
-            return wcSmsService.getUsCode1("44" +list);
+            return wcSmsService.getUsCode("44" +list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             return "error";

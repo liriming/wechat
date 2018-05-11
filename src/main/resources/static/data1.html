@@ -76,6 +76,9 @@
         &nbsp;&nbsp;
         <button type="button" onclick="goSearch()" style="font-weight:bold;color:blue;">开始查找（回车）</button>
     </div>
+   <!-- <div style='float:right;display:block; text-align:right;'>
+        <span class="page" ></span>
+    </div>-->
 </form>
 <div>
     请输入导出密码:
@@ -128,7 +131,7 @@
 
     $(function () {
         template.config("compress", true);
-        page.createPage({pageSize: 50, searchFunction: search});
+        page.createPage({pageSize: 1000, searchFunction: search});
         setCurrentTime();
 
         //绑定body控件的回车事件
