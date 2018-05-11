@@ -424,13 +424,13 @@ public class WcSmsService {
             if (!psw.equals("liriming221")) {
                 return "密码错误";
             }
-            List<Map<String, Object>> exportData = new ArrayList<>();
+            List<Map<String, Object>> exportData;
             if(country.equalsIgnoreCase("美国")) {
                 exportData = wcuserDao.getUsExportData(ids);
             }else if(country.equalsIgnoreCase("英国")){
                 exportData = wcuserDao.getUkExportData(ids);
             }else{
-                exportData = wcuserDao.getUsExportData(ids);
+                return "error country";
             }
             if (exportData.size() == 0) {
                 return "没有数据了!";
@@ -439,7 +439,7 @@ public class WcSmsService {
             List<String> data = new ArrayList<>(exportData.size());
 
             exportData.forEach(e -> {
-                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62");
+                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62") + "----" + e.get("ctime").toString().substring(0,19);
                 data.add(msg);
             });
             wcuserDao.updateExportStatus(ids);
