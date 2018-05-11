@@ -92,12 +92,14 @@ public interface WcuserDao {
     List<Map<String,Object>> getExceptionPhone();
 
 
-    @Select("select id,name,psw,concat(left(_62,50),'...') as _62,export,realname,checkpho,ctime,exporttime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
-            "and ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '1%' order by ctime ${sort} limit #{count} ")
+    @Select("select a.id,a.name,a.psw,concat(left(a._62,50),'...') as _62,a.export,a.realname,a.checkpho,a.ctime,a.exporttime,a.ip," +
+            "b.ip as reip from wcuser a,wcphone b where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
+            "and a.ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '1%' AND RIGHT(a.name,10) = right(b.phone,10) order by a.ctime ${sort} limit #{count} ")
     List<Map<String, String>> searchUsData(Map<String,Object> params);
 
-    @Select("select id,name,psw,concat(left(_62,50),'...') as _62,export,realname,checkpho,ctime,exporttime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
-            "and ctime BETWEEN #{bTime} AND  #{eTime} and right(name,12) like '44%' order by ctime ${sort} limit #{count} ")
+    @Select("select a.id,a.name,a.psw,concat(left(a._62,50),'...') as _62,a.export,a.realname,a.checkpho,a.ctime,a.exporttime,a.ip," +
+            "b.ip as reip from wcuser a,wcphone b where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
+            "and a.ctime BETWEEN #{bTime} AND  #{eTime} and right(name,12) like '44%' AND RIGHT(a.name,10) = right(b.phone,10) order by a.ctime ${sort} limit #{count} ")
     List<Map<String, String>> searchUkData(Map<String,Object> params);
 
 }
