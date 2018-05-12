@@ -81,9 +81,9 @@ public class PPService {
                 return "1";
             }*/
             String blackVpns = dictionaryDao.getValueByName("black_vpn");
-            if (type == 1 && !blackVpns.contains(ip) && ip.startsWith("166.48.180")){
+            if (type == 1 && !blackVpns.contains(ip) ){
                 return "1";
-            }else if(ipDao.checkIP(ip) && !blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))){
+            }else if(ipDao.checkIP(ip) && !blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))&& ip.startsWith("166.48.180")){
                 ipDao.insertIP(ip, address);
                 return "1";
             }
