@@ -17,7 +17,7 @@ public interface WcuserDao {
 
     @Select({
             " <script> ",
-            " select id,right(name,10) as name,psw,_62,ctime from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and id in   ",
+            " select a.id,right(name,10) as name,psw,_62,a.ctime,b.token from wcuser a,wcphone b where (_62 is not null or _62 != '') and isalive=1 and export=0 AND right(a.`name`,10)=b.phone and a.id in   ",
             " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
             " #{item} ",
             " </foreach> ",
