@@ -440,6 +440,9 @@ public class WcSmsService {
 
             exportData.forEach(e -> {
                 String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62") + "----" + e.get("ctime").toString().substring(0,19);
+                if(e.containsKey("token")){
+                    msg +=  "----" + e.get("token");
+                }
                 data.add(msg);
             });
             wcuserDao.updateExportStatus(ids);
