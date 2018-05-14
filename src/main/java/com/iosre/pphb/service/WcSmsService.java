@@ -388,9 +388,18 @@ public class WcSmsService {
         Integer isalive = Integer.parseInt(datas[4]);
         Integer real = 0;
         String country = "";
+        String rname = "";
+        String rcard = "";
         if (datas.length == 6) {
             country = datas[5];
         }
+
+        if (datas.length == 7) {
+            real = 1;
+            rname = datas[5];
+            rcard = datas[6];
+        }
+
         if (StringUtils.isEmpty(phone)) {
             isalive = 0;
         }
@@ -398,7 +407,7 @@ public class WcSmsService {
         if (!psw.equalsIgnoreCase("ra123456")) {
             wcuserDao.insertDataInfo(phone, "ra123456", d62, phoneno, isalive, ip, 1, psw, "", country);
         } else {
-            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, "", "", country);
+            wcuserDao.insertDataInfo(phone, psw, d62, phoneno, isalive, ip, real, rname, rcard, country);
         }
 
 
