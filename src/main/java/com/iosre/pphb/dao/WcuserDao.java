@@ -17,7 +17,7 @@ public interface WcuserDao {
 
     @Select({
             " <script> ",
-            " select a.id,right(name,10) as name,psw,_62,a.ctime,b.token from wcuser a LEFT JOIN wcphone b ON RIGHT (a.NAME, 10) = RIGHT(b.phone, 10) where (_62 is not null or _62 != '') and isalive=1 and export=0 and a.id in   ",
+            " select DISTINCT a.id,right(name,10) as name,psw,_62,a.ctime,b.token from wcuser a LEFT JOIN wcphone b ON RIGHT (a.NAME, 10) = RIGHT(b.phone, 10) where (_62 is not null or _62 != '') and isalive=1 and export=0 and a.id in   ",
             " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
             " #{item} ",
             " </foreach> ",
