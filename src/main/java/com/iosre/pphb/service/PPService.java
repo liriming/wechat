@@ -81,7 +81,7 @@ public class PPService {
                 return "1";
             }*/
             String blackVpns = dictionaryDao.getValueByName("black_vpn");
-            if (type == 1 && !blackVpns.contains(ip) && !address.contains("中国")){
+            if (type == 1 && !blackVpns.contains(ip) && !address.contains("广西")){
                 return "1";
             }else if(ipDao.checkIP(ip) && !blackVpns.contains(ip.substring(0,ip.lastIndexOf(".")))){
                 ipDao.insertIP(ip, address);
