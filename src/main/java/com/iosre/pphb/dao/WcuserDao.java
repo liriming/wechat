@@ -94,7 +94,7 @@ public interface WcuserDao {
 
     @Select("select DISTINCT a.id,a.name,a.psw,concat(left(a._62,50),'...') as _62,a.export,a.realname,a.checkpho,a.ctime,a.exporttime,a.ip," +
             "b.ip as reip from wcuser a LEFT JOIN wcphone b ON RIGHT (a.NAME, 10) = RIGHT(b.phone, 10) where (_62 is not null or _62 != '') and isalive=1 and export=#{export} and realname=#{realname} and checkpho=#{checkpho} " +
-            "and a.ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '1%' AND b.ip is not null order by a.ctime ${sort} limit #{count} ")
+            "and a.ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '1%' order by a.ctime ${sort} limit #{count} ")
     List<Map<String, String>> searchUsData(Map<String,Object> params);
 
     @Select("select a.id,a.name,a.psw,concat(left(a._62,50),'...') as _62,a.export,a.realname,a.checkpho,a.ctime,a.exporttime,a.ip," +
