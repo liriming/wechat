@@ -9,6 +9,7 @@ import com.iosre.pphb.dto.Page;
 import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
+import com.iosre.pphb.util.AddressUtils;
 import com.iosre.pphb.util.FileUtils;
 import com.iosre.pphb.util.XDateUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -380,7 +381,7 @@ public class WcSmsService {
         wcphoneDao.resetPhone();
     }
 
-    public void uploadData(String ip, String data) {
+    public void uploadData(String ip, String data) throws Exception {
 
         String[] datas = data.split(",");
         String phone = datas[0];
@@ -404,6 +405,10 @@ public class WcSmsService {
 
         if (StringUtils.isEmpty(phone)) {
             isalive = 0;
+        }
+        AddressUtils addressUtils = new AddressUtils();
+        if (StringUtils.isEmpty(d62)){
+            ip = addressUtils.getAddresses("ip="+ip, "utf-8");
         }
 
         if (!psw.equalsIgnoreCase("ra123456")) {

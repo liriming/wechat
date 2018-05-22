@@ -62,7 +62,7 @@
 <form name="searchForm">
     <div>
 			<span style="padding:6px;border:1px solid blue; ">
-                数量：<input type="number" name="count" min="1" max="1000" value="50" />&nbsp;
+                数量：<input type="number" name="count" min="1" max="1000" value="50"/>&nbsp;
                 <select name="country" id="country"><option>美国</option><option>英国</option><option>菲律宾</option></select>
 				<select name="sort"> <option>顺序</option><option>倒序</option></select>&nbsp;
 				<select name="export"> <option>未导出</option><option>已导出</option></select>&nbsp;
@@ -74,15 +74,16 @@
 			</span>&nbsp;
         <button type="button" onclick="reset();setCurrentTime();">重置</button>
         &nbsp;&nbsp;
-        <button type="button" onclick="goSearch()" style="font-weight:bold;color:blue;">开始查找（回车）</button>
+        <button type="button" id="search" onclick="goSearch()" style="font-weight:bold;color:blue;">开始查找（回车）</button>
     </div>
-   <!-- <div style='float:right;display:block; text-align:right;'>
-        <span class="page" ></span>
-    </div>-->
+    <!-- <div style='float:right;display:block; text-align:right;'>
+         <span class="page" ></span>
+     </div>-->
 </form>
 <div>
     请输入导出密码:
-    <input type="password" id="psw" value="">&nbsp;&nbsp; <button type="button" onclick="goExport()" style="font-weight:bold;color:blue;">开始导出</button>
+    <input type="password" id="psw" value="">&nbsp;&nbsp;
+    <button type="button" onclick="goExport()" style="font-weight:bold;color:blue;">开始导出</button>
 </div>
 
 <div style="float:left">
@@ -256,7 +257,6 @@
 
         form.submit();//表单提交
     }
-
 
 
 </script>
