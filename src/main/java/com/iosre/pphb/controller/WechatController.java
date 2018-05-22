@@ -117,7 +117,7 @@ public class WechatController {
     }
 
     @RequestMapping(value ="uploadData", method = RequestMethod.GET)
-    public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data)  {
+    public void uploadData(HttpServletRequest request,@RequestParam(value = "data") String data) throws Exception {
         String ip = WebUtil.getLocalIp(request);
         wcSmsService.uploadData(ip,data);
     }
