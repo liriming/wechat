@@ -4,7 +4,7 @@
 (function(_win, $) {
 	"use strict";
 	
-	var projectName = "/pphb";
+	var projectName = "";
 	var loginUrl = "login.html";
 
 	var returnCode = {
