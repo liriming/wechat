@@ -236,7 +236,15 @@ public class WechatController {
     }
 
     @RequestMapping(value = "getSysConfig", method = RequestMethod.POST)
-    public List<Map<String,String>> getSysConfig() {
+    public Map<String,Object> getSysConfig() {
         return wcSmsService.getSysConfig();
+    }
+
+    @RequestMapping(value = "updateSysConfig", method = RequestMethod.GET)
+    public void updateSysConfig(@RequestParam(value = "id") int id, @RequestParam(value = "clo_value") String clo_value) {
+        int success =  wcSmsService.updateSysConfig(id,clo_value);
+        if (success == 1){
+
+        }
     }
 }

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -202,7 +203,7 @@ public class WcSmsService {
         }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
-        wcphoneDao.setStatusAndIP(id, 1,ip);
+        wcphoneDao.setStatusAndIP(id, 1, ip);
         return phone;
 
     }
@@ -215,12 +216,12 @@ public class WcSmsService {
         }
         String phone = phoneMsg.get("phone").toString();
         int id = (Integer) phoneMsg.get("id");
-        wcphoneDao.setStatusAndIP(id, 1,ip);
+        wcphoneDao.setStatusAndIP(id, 1, ip);
         return phone.substring(1, phone.length());
 
     }
 
-    public String gSimPhone(String dicCloName,String ip) {
+    public String gSimPhone(String dicCloName, String ip) {
         try {
             String key = dictionaryDao.getValueByName(dicCloName);
 
@@ -235,13 +236,13 @@ public class WcSmsService {
             if (result.getPayload().contains("invalid parameter!")) {
                 return "400";
             }
-            if(result.getPayload().contains("Too many requests")){
+            if (result.getPayload().contains("Too many requests")) {
                 return "码子数量不足，请减少跑机数量";
             }
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
-                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10,ip);
+                wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10, ip);
                 return phone.substring(2);
             }
             return "400";
@@ -270,7 +271,7 @@ public class WcSmsService {
         if (result.getPayload().contains("invalid parameter!")) {
             return "400";
         }
-        if(result.getPayload().contains("Too many requests")){
+        if (result.getPayload().contains("Too many requests")) {
             return "400";
         }
         logger.info(result.getPayload());
@@ -412,7 +413,6 @@ public class WcSmsService {
         }
 
 
-
         if (StringUtils.isEmpty(d62) && "英国".equalsIgnoreCase(country)) {
             String key = wcphoneDao.getTokenByPhone("44" + phone);
             HttpResult result = httpService.get(US_HOST_GSIM + "block/" + key + "/44" + phone);
@@ -429,17 +429,17 @@ public class WcSmsService {
 
     }
 
-    public String exportData(HttpServletResponse response,String psw,List<Integer> ids,String country) {
+    public String exportData(HttpServletResponse response, String psw, List<Integer> ids, String country) {
         try {
             if (!psw.equals("liriming221")) {
                 return "密码错误";
             }
             List<Map<String, Object>> exportData;
-            if(country.equalsIgnoreCase("美国")) {
+            if (country.equalsIgnoreCase("美国")) {
                 exportData = wcuserDao.getUsExportData(ids);
-            }else if(country.equalsIgnoreCase("英国")){
+            } else if (country.equalsIgnoreCase("英国")) {
                 exportData = wcuserDao.getUkExportData(ids);
-            }else{
+            } else {
                 return "error country";
             }
             if (exportData.size() == 0) {
@@ -449,9 +449,9 @@ public class WcSmsService {
             List<String> data = new ArrayList<>(exportData.size());
 
             exportData.forEach(e -> {
-                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62") + "----" + e.get("ctime").toString().substring(0,19);
-                if(e.containsKey("token")){
-                    msg +=  "----" + e.get("token");
+                String msg = e.get("name") + "----" + e.get("psw") + "----" + e.get("_62") + "----" + e.get("ctime").toString().substring(0, 19);
+                if (e.containsKey("token")) {
+                    msg += "----" + e.get("token");
                 }
                 data.add(msg);
             });
@@ -649,8 +649,8 @@ public class WcSmsService {
     public void isalive(Integer type, String phone) {
         wcuserDao.updatePhoIsalive(phone, type);
 
-        if(type == -1){
-            if(phone.startsWith("44")) {
+        if (type == -1) {
+            if (phone.startsWith("44")) {
                 String token = wcphoneDao.getTokenByPhone(phone);
                 HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
                 logger.info("send sms:{},phone:{}", result.getPayload(), phone);
@@ -662,7 +662,7 @@ public class WcSmsService {
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
-            }else{
+            } else {
                 wcuserDao.updatePhoIsalive(phone, -2);
             }
         }
@@ -740,10 +740,10 @@ public class WcSmsService {
 
     public String updateGsimKey(String key) {
 
-        dictionaryDao.updateValueByName("gsim_key",key);
+        dictionaryDao.updateValueByName("gsim_key", key);
         String[] keys = key.split(",");
         String ret = "";
-        for(String k : keys){
+        for (String k : keys) {
             HttpResult result = httpService.get("https://gsim.online/api/credits/" + k.trim());
             if (result.getPayload().contains("invalid parameter!")) {
                 ret += k.trim() + ": 0" + "<br>";
@@ -758,49 +758,56 @@ public class WcSmsService {
         return ret;
     }
 
-    public Page<Map<String,String>> search(Map<String, Object> params){
+    public Page<Map<String, String>> search(Map<String, Object> params) {
 
         params = (Map<String, Object>) params.get("params");
 
-        int count = Integer.parseInt( params.get("count").toString());
-        String sort = params.get("sort").toString().equals("顺序")? "ASC" : "DESC";
-        int export = params.get("export").toString().equals("已导出")? 1 : 0;
-        int checkpho = params.get("checkpho").toString().equals("已检测")? 1 : 0;
-        int realname = params.get("realname").toString().equals("已实名")? 1 : 0;
+        int count = Integer.parseInt(params.get("count").toString());
+        String sort = params.get("sort").toString().equals("顺序") ? "ASC" : "DESC";
+        int export = params.get("export").toString().equals("已导出") ? 1 : 0;
+        int checkpho = params.get("checkpho").toString().equals("已检测") ? 1 : 0;
+        int realname = params.get("realname").toString().equals("已实名") ? 1 : 0;
         String bTime = params.get("bTime").toString();
         String eTime = params.get("eTime").toString();
 
-        Map<String,Object> searchParams = new HashedMap();
-        searchParams.put("count",count);
-        searchParams.put("sort",sort);
-        searchParams.put("export",export);
-        searchParams.put("checkpho",checkpho);
-        searchParams.put("realname",realname);
-        searchParams.put("bTime",bTime);
-        searchParams.put("eTime",eTime);
-        Page<Map<String,String>> page = new Page<>(0, count);
-        List<Map<String,String>> data = new ArrayList<>();
-        if (params.get("country").equals("美国")){
+        Map<String, Object> searchParams = new HashedMap();
+        searchParams.put("count", count);
+        searchParams.put("sort", sort);
+        searchParams.put("export", export);
+        searchParams.put("checkpho", checkpho);
+        searchParams.put("realname", realname);
+        searchParams.put("bTime", bTime);
+        searchParams.put("eTime", eTime);
+        Page<Map<String, String>> page = new Page<>(0, count);
+        List<Map<String, String>> data = new ArrayList<>();
+        if (params.get("country").equals("美国")) {
             data = wcuserDao.searchUsData(searchParams);
-        }else if (params.get("country").equals("英国")){
+        } else if (params.get("country").equals("英国")) {
             data = wcuserDao.searchUkData(searchParams);
         }
 
-        for(Map m : data){
+        for (Map m : data) {
             if (!StringUtils.isEmpty(m.get("exporttime"))) {
                 m.put("exporttime", m.get("exporttime").toString());
             }
-            m.put("ctime",m.get("ctime").toString());
+            m.put("ctime", m.get("ctime").toString());
         }
 
         page.setResults(data);
         return page;
     }
 
-    public List<Map<String,String>> getSysConfig(){
+    public Map<String, Object> getSysConfig() {
 
-        return dictionaryDao.getSysConfig();
+        List<Map<String, Object>> data = dictionaryDao.getSysConfig();
+        Map<String, Object> result = new HashedMap();
+        result.put("results", data);
+        return result;
+    }
 
+    public int updateSysConfig(int id, String clo_value) {
+
+        return dictionaryDao.updateValueById(clo_value,id);
     }
 
 }
