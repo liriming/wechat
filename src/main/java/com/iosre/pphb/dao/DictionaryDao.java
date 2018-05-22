@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.List;
+import java.util.Map;
+
 public interface DictionaryDao {
 
 
@@ -15,4 +18,7 @@ public interface DictionaryDao {
 
     @Select("select clo_value from pphb.dictionary where clo_name=#{0}")
     String getValueByName(String clo_name);
+
+    @Select("select * from pphb.dictionary")
+    List<Map<String,String>> getSysConfig();
 }

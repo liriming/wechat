@@ -234,4 +234,9 @@ public class WechatController {
     public Page<Map<String,String>> search(HttpServletRequest request, @RequestBody Map<String, Object> params) {
         return wcSmsService.search(params);
     }
+
+    @RequestMapping(value = "getSysConfig", method = RequestMethod.POST)
+    public List<Map<String,String>> getSysConfig() {
+        return wcSmsService.getSysConfig();
+    }
 }

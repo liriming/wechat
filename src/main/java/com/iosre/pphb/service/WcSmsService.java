@@ -39,7 +39,7 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.96.24.143/sms_wx/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
 //    private final static String US_HOST = "http://47.96.24.143/sms2/api/sms/getByToken?token=";
-    private final static String US_HOST = "http://47.98.196.47/sms2/api/sms/getByToken?token=";
+//    private final static String US_HOST = "http://47.98.196.47/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
     private final static String US_HOST_GSIM = "https://www.gsim.online/api/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
@@ -336,7 +336,7 @@ public class WcSmsService {
 
         Map<String, Object> map = wcphoneDao.getToken(phone);
 
-        HttpResult result = httpService.get(US_HOST + map.get("token"));
+        HttpResult result = httpService.get(dictionaryDao.getValueByName("us_host") + map.get("token"));
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
         int id = (Integer) map.get("id");
 
@@ -795,6 +795,12 @@ public class WcSmsService {
 
         page.setResults(data);
         return page;
+    }
+
+    public List<Map<String,String>> getSysConfig(){
+
+        return dictionaryDao.getSysConfig();
+
     }
 
 }
