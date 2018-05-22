@@ -8,7 +8,6 @@
     <script src="js/jquery-2.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/template.js"></script>
-    <script src="js/sys.js"></script>
     <script src="js/date.tools.js"></script>
     <script src="js/x-page-old.js"></script>
 
@@ -111,8 +110,14 @@
     }
 
     function search() {
-        sys.ajax("/wc/getSysConfig", {
+      /*  sys.ajax("/wc/getSysConfig", {
             callback: pageQueryCallback
+        });*/
+        $.ajax({
+            type: "POST",
+            url: "/wc/getSysConfig",
+            contentType: "application/json",
+            success: pageQueryCallback
         });
     }
 
