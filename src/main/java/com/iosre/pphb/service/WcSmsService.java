@@ -255,10 +255,12 @@ public class WcSmsService {
 
     public void sendGsimCode(String phone) {
         try {
-            String token = wcphoneDao.getTokenByPhone(phone);
-            wcphoneDao.setStatusByPhone(phone, 446);
-            HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/" + phone);
-            logger.info(result.getPayload());
+            if(phone.startsWith("447")) {
+                String token = wcphoneDao.getTokenByPhone(phone);
+                wcphoneDao.setStatusByPhone(phone, 446);
+                HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/" + phone);
+                logger.info(result.getPayload());
+            }
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
         }
