@@ -41,7 +41,7 @@ public class AddressUtils {
             if(0 == (Integer)result.get("code")){
                 Map<String,Object> data = (Map<String,Object>)result.get("data");
 
-                return data.get("ip") + "," + decodeUnicode(data.get("country").toString()) + "," + data.get("city") + "," + data.get("county");
+                return data.get("ip") + "," + decodeUnicode(data.get("country").toString());
 
             }
 
