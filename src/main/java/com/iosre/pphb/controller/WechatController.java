@@ -82,6 +82,8 @@ public class WechatController {
             return wcSmsService.gSimPhone("gsim_ph_key",ip);
         }else if ( "俄罗斯".equalsIgnoreCase(country)){
             return wcSmsService.rusPhone("rus_key",ip,"RU");
+        } else if ( "乌克兰".equalsIgnoreCase(country)){
+            return wcSmsService.rusPhone("kz_key",ip,"KZ");
         }
         return wcSmsService.usPhone(ip);
     }
@@ -97,6 +99,8 @@ public class WechatController {
                 return wcSmsService.getGsimCode("63" +list);
             }else if ( "俄罗斯".equalsIgnoreCase(country)){
                 return wcSmsService.getRusCode(list,"rus_key");
+            }else if ( "乌克兰".equalsIgnoreCase(country)){
+                return wcSmsService.getRusCode(list,"kz_key");
             }
             return wcSmsService.getUsCode("44" +list);
         } catch (IOException e) {
