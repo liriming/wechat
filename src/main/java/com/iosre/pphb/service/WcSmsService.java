@@ -590,8 +590,10 @@ public class WcSmsService {
             int todayRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
             int todayWhiteNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 0, "3%");
             int todayRealNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 1, "3%");
-            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US - todayWhiteNum_UK - todayWhiteNum_PH;
-            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%") - todayRealNum_US - todayRealNum_UK - todayRealNum_PH;
+            int todayWhiteNum_RUS = wcuserDao.getExportDataNum(sDate, eDate, 0, "7%");
+            int todayRealNum_RUS = wcuserDao.getExportDataNum(sDate, eDate, 1, "7%");
+            int todayWhiteNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US - todayWhiteNum_UK - todayWhiteNum_PH - todayWhiteNum_RUS;
+            int todayRealNum_Other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%") - todayRealNum_US - todayRealNum_UK - todayRealNum_PH - todayRealNum_RUS;
 
             int todayWhiteNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "1%");
             int todayRealNum_US_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "1%");
@@ -599,13 +601,15 @@ public class WcSmsService {
             int todayRealNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "4%");
             int todayWhiteNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "3%");
             int todayRealNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "3%");
-            int todayWhiteNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US_CK - todayWhiteNum_UK_CK - todayWhiteNum_PH_CK;
-            int todayRealNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - todayRealNum_US_CK - todayRealNum_UK_CK - todayRealNum_PH_CK;
+            int todayWhiteNum_RUS_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "7%");
+            int todayRealNum_RUS_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "7%");
+            int todayWhiteNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "%") - todayWhiteNum_US_CK - todayWhiteNum_UK_CK - todayWhiteNum_PH_CK - todayWhiteNum_RUS_CK;
+            int todayRealNum_Other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - todayRealNum_US_CK - todayRealNum_UK_CK - todayRealNum_PH_CK - todayRealNum_RUS_CK;
 
             map.putIfAbsent("todayWhiteNum", "美国:" + todayWhiteNum_US + "-" + todayWhiteNum_US_CK + " 英国:" + todayWhiteNum_UK + "-" + todayWhiteNum_UK_CK +
-                    " 菲律宾:" + todayWhiteNum_PH + "-" + todayWhiteNum_PH_CK + " 其他:" + todayWhiteNum_Other + "-" + todayWhiteNum_Other_CK);
+                    " 菲律宾:" + todayWhiteNum_PH + "-" + todayWhiteNum_PH_CK + " 俄罗斯:" + todayWhiteNum_RUS + "-" + todayWhiteNum_RUS_CK + " 其他:" + todayWhiteNum_Other + "-" + todayWhiteNum_Other_CK);
             map.putIfAbsent("todayRealNum", "美国:" + todayRealNum_US + "-" + todayRealNum_US_CK + " 英国:" + todayRealNum_UK + "-" + todayRealNum_UK_CK +
-                    " 菲律宾:" + todayRealNum_PH + "-" + todayRealNum_PH_CK + " 其他:" + todayRealNum_Other + "-" + todayRealNum_Other_CK);
+                    " 菲律宾:" + todayRealNum_PH + "-" + todayRealNum_PH_CK + " 俄罗斯:" + todayRealNum_RUS + "-" + todayRealNum_RUS_CK + " 其他:" + todayRealNum_Other + "-" + todayRealNum_Other_CK);
 
             sDate = "0";
             eDate = XDateUtils.timestampToString((System.currentTimeMillis() - 24 * 60 * 60 * 1000) / 1000, XDateUtils.DatePattern.DATE_TIME.getPattern());
@@ -615,6 +619,8 @@ public class WcSmsService {
             int yesRealNum_UK = wcuserDao.getExportDataNum(sDate, eDate, 1, "4%");
             int yesWhiteNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 0, "3%");
             int yesRealNum_PH = wcuserDao.getExportDataNum(sDate, eDate, 1, "3%");
+            int yesWhiteNum_RUS = wcuserDao.getExportDataNum(sDate, eDate, 0, "7%");
+            int yesRealNum_RUS = wcuserDao.getExportDataNum(sDate, eDate, 1, "7%");
             int yesWhiteNum_other = wcuserDao.getExportDataNum(sDate, eDate, 0, "%") - yesWhiteNum_US - yesWhiteNum_UK - yesWhiteNum_PH;
             int yesRealNum_other = wcuserDao.getExportDataNum(sDate, eDate, 1, "%") - yesRealNum_US - yesRealNum_UK - yesRealNum_PH;
 
@@ -624,13 +630,15 @@ public class WcSmsService {
             int yesRealNum_UK_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "4%");
             int yesWhiteNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "3%");
             int yesRealNum_PH_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "3%");
+            int yesWhiteNum_PH_RUS = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "7%");
+            int yesRealNum_PH_RUS = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "7%");
             int yesWhiteNum_other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 0, "%") - yesWhiteNum_US_CK - yesWhiteNum_UK_CK - yesWhiteNum_PH_CK;
             int yesRealNum_other_CK = wcuserDao.getCheckPhoDataNum(sDate, eDate, 1, "%") - yesRealNum_US_CK - yesRealNum_UK_CK - yesRealNum_PH_CK;
 
             map.putIfAbsent("yesWhiteNum", "美国:" + yesWhiteNum_US + "-" + yesWhiteNum_US_CK + " 英国:" + yesWhiteNum_UK + "-" + yesWhiteNum_UK_CK +
-                    " 菲律宾:" + yesWhiteNum_PH + "-" + yesWhiteNum_PH_CK + " 其他:" + yesWhiteNum_other + "-" + yesWhiteNum_other_CK);
+                    " 菲律宾:" + yesWhiteNum_PH + "-" + yesWhiteNum_PH_CK + " 俄罗斯:" + yesWhiteNum_RUS + "-" + yesWhiteNum_PH_RUS + " 其他:" + yesWhiteNum_other + "-" + yesWhiteNum_other_CK);
             map.putIfAbsent("yesRealNum", "美国:" + yesRealNum_US + "-" + yesRealNum_US_CK + " 英国:" + yesRealNum_UK + "-" + yesRealNum_UK_CK +
-                    " 菲律宾:" + yesRealNum_PH + "-" + yesRealNum_PH_CK + " 其他:" + yesRealNum_other + "-" + yesRealNum_other_CK);
+                    " 菲律宾:" + yesRealNum_PH + "-" + yesRealNum_PH_CK + " 俄罗斯:" + yesRealNum_RUS + "-" + yesRealNum_PH_RUS + " 其他:" + yesRealNum_other + "-" + yesRealNum_other_CK);
 
             return map;
         } catch (Exception e) {
@@ -791,6 +799,8 @@ public class WcSmsService {
             data = wcuserDao.searchUsData(searchParams);
         } else if (params.get("country").equals("英国")) {
             data = wcuserDao.searchUkData(searchParams);
+        }else if (params.get("country").equals("俄罗斯")) {
+            data = wcuserDao.searchRusData(searchParams);
         }
 
         for (Map m : data) {
