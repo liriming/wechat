@@ -876,6 +876,7 @@ public class WcSmsService {
         String key = dictionaryDao.getValueByName(dicCloName);
 
         HttpResult result = httpService.get(RUS_HOST + "get_sms?token=" + key + "&request_id=" + map.get("token"));
+        logger.info(result.getPayload());
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("sms")) {
