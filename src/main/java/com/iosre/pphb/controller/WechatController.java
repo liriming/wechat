@@ -81,7 +81,7 @@ public class WechatController {
         }else if ("菲律宾".equalsIgnoreCase(country)){
             return wcSmsService.gSimPhone("gsim_ph_key",ip);
         }else if ( "俄罗斯".equalsIgnoreCase(country)){
-            return wcSmsService.rusPhone("rus_key",ip,country);
+            return wcSmsService.rusPhone("rus_key",ip,"RU");
         }
         return wcSmsService.usPhone(ip);
     }
