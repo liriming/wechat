@@ -6,7 +6,6 @@ import com.iosre.pphb.dao.RealnameDao;
 import com.iosre.pphb.dao.WcphoneDao;
 import com.iosre.pphb.dao.WcuserDao;
 import com.iosre.pphb.dto.Page;
-import com.iosre.pphb.dto.UserOpLog;
 import com.iosre.pphb.http.HttpResult;
 import com.iosre.pphb.http.HttpService;
 import com.iosre.pphb.util.AddressUtils;
@@ -18,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 public class WcSmsService {
@@ -44,6 +40,7 @@ public class WcSmsService {
 //    private final static String US_HOST = "http://47.98.196.47/sms2/api/sms/getByToken?token=";
     private final static String US_HOST1 = "http://118.24.62.102/tp5/public/?key=";
     private final static String US_HOST_GSIM = "https://www.gsim.online/api/";
+    private final static String RUS_HOST = "http://smsregs.ru:4000/api/v1/";
     //    private final static String US_HOST = "http://47.52.63.207/sms_wx/api/sms/getByToken?token=";/**/
     private final static String ITEM_ID = "0";
     private static HttpService httpService = new HttpService(300000);
@@ -432,6 +429,12 @@ public class WcSmsService {
             logger.info(result.getPayload());
             result = httpService.get(US_HOST_GSIM + "refund/" + key + "/63" + phone);
             logger.info(result.getPayload());
+        }else if (StringUtils.isEmpty(d62) && "俄罗斯".equalsIgnoreCase(country)) {
+            Map<String, Object> map = wcphoneDao.getToken(phone);
+            String key = dictionaryDao.getValueByName("rus_key");
+            HttpResult result = httpService.get(RUS_HOST + "set_status?token=" + key + "&request_id=" + map.get("token") + "&status=USED");
+            logger.info(result.getPayload());
+            wcphoneDao.setStatusByPhone(phone, -72);
         }
 
     }
@@ -656,7 +659,13 @@ public class WcSmsService {
             result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
             logger.info(result.getPayload());
             wcphoneDao.setStatusByPhone("44" + phone, -441);
-        } else {
+        }else if("俄罗斯".equalsIgnoreCase(country)){
+            Map<String, Object> map = wcphoneDao.getToken(phone);
+            String key = dictionaryDao.getValueByName("rus_key");
+            httpService.get(RUS_HOST + "set_status?token=" + key + "&request_id=" + map.get("token") + "&status=USED");
+            wcphoneDao.setStatusByPhone(phone, -71);
+        }
+        else {
             wcphoneDao.setStatusByPhone(phone, -1);
         }
     }
@@ -825,6 +834,56 @@ public class WcSmsService {
     public int updateSysConfig(int id, String clo_value) {
 
         return dictionaryDao.updateValueById(clo_value,id);
+    }
+
+    public String rusPhone(String dicCloName, String ip, String country) {
+        try {
+            String key = dictionaryDao.getValueByName(dicCloName);
+
+            if (key.contains(",")) {
+                String[] keyAry = key.split(",");
+                int index = (int) (Math.random() * keyAry.length);
+                key = keyAry[index];
+            }
+
+            HttpResult result = httpService.get(RUS_HOST + "get_number?token=" + key + "&service=WECHAT&country=" + country);
+            logger.info(result.getPayload());
+            if (result.getPayload().contains("invalid parameter!")) {
+                return "400";
+            }
+            if (result.getPayload().contains("Too many requests")) {
+                return "码子数量不足，请减少跑机数量";
+            }
+            Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+            if (retMsg.containsKey("phone_number")) {
+                String phone = retMsg.get("phone_number").toString();
+                String country_code = retMsg.get("country_code").toString();
+                String full_number = retMsg.get("full_number").toString();
+                String request_id = retMsg.get("request_id").toString();
+                wcphoneDao.insertGsimPhone(phone, request_id, Integer.parseInt(country_code) * 10, ip);
+                return phone;
+            }
+            return "400";
+        } catch (Exception e) {
+            logger.info(e.getMessage(), e);
+            return "400";
+        }
+    }
+
+    public String getRusCode(String phone, String dicCloName) throws IOException {
+
+        Map<String, Object> map = wcphoneDao.getToken(phone);
+        String key = dictionaryDao.getValueByName(dicCloName);
+
+        HttpResult result = httpService.get(RUS_HOST + "get_sms?token=" + key + "&request_id=" + map.get("token"));
+        Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
+
+        if (retMsg.containsKey("sms")) {
+            wcphoneDao.setStatusByPhone(phone,2);
+            return retMsg.get("sms").toString();
+        } else {
+            return "400";
+        }
     }
 
 }
