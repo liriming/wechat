@@ -176,6 +176,8 @@ public class WechatController {
                 return wcSmsService.getNoCheckPho(type,"44");
             }else if ( "菲律宾".equalsIgnoreCase(country)){
                 return wcSmsService.getNoCheckPho(type,"63");
+            }else if ( "俄罗斯".equalsIgnoreCase(country)){
+                return wcSmsService.getNoCheckPho(type,"7");
             }
             return wcSmsService.getNoCheckPho(type,"44");
         } catch (Exception e) {
