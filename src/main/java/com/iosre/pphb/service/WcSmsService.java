@@ -347,7 +347,7 @@ public class WcSmsService {
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(result.getPayload());
             wcphoneDao.setStatus(id, 2);
-            return m.replaceAll("").trim() + m.replaceAll("").trim();
+            return m.replaceAll("").trim() + m.replaceAll("").trim() + m.replaceAll("").trim();
         } else {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
