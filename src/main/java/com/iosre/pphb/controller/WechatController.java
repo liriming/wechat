@@ -105,7 +105,7 @@ public class WechatController {
             return wcSmsService.getUsCode("44" +list);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
-            return "error";
+            return "400";
         }
     }
 

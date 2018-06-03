@@ -46,6 +46,7 @@ public class WcSmsService {
     private static HttpService httpService = new HttpService(300000);
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
+    private static Map<String, String> usPhoneCodeMap = new ConcurrentHashMap<>();
     public final static Logger logger = LoggerFactory.getLogger(WcSmsService.class);
     private final static ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -335,6 +336,10 @@ public class WcSmsService {
 
     public String getUsCode(String phone) throws IOException {
 
+        if(usPhoneCodeMap.containsKey(phone)){
+            return  usPhoneCodeMap.get(phone);
+        }
+
         Map<String, Object> map = wcphoneDao.getToken(phone);
 
         HttpResult result = httpService.get(dictionaryDao.getValueByName("us_host") + map.get("token"));
@@ -347,18 +352,10 @@ public class WcSmsService {
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(result.getPayload());
             wcphoneDao.setStatus(id, 2);
-            return m.replaceAll("").trim();
+            String code = m.replaceAll("").trim();
+            usPhoneCodeMap.put(phone, code);
+            return code;
         } else {
-            if (usPhoneMap.containsKey(phone)) {
-                int reqCount = usPhoneMap.get(phone);
-                if (reqCount > 10) {
-                    wcphoneDao.setStatus(id, 0);
-                } else {
-                    usPhoneMap.putIfAbsent(phone, reqCount++);
-                }
-            } else {
-                usPhoneMap.putIfAbsent(phone, 1);
-            }
             return "400";
         }
     }
