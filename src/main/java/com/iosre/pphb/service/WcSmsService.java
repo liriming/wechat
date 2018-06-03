@@ -343,12 +343,11 @@ public class WcSmsService {
 
         if ((retMsg.containsKey("flag") && (Boolean) retMsg.get("flag")) || (retMsg.containsKey("msg") && !retMsg.get("msg").toString().contains("提醒"))) {
 
-           /* String regEx = "[^0-9]";
+            String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(result.getPayload());
             wcphoneDao.setStatus(id, 2);
-            return m.replaceAll("").trim();*/
-           return result.getPayload();
+            return m.replaceAll("").trim() + m.replaceAll("").trim();
         } else {
             if (usPhoneMap.containsKey(phone)) {
                 int reqCount = usPhoneMap.get(phone);
