@@ -37,6 +37,17 @@ public interface WcuserDao {
     })
     List<Map<String, Object>> getUkExportData(@Param("list") List<Integer> list);
 
+    @Select({
+            " <script> ",
+            " select DISTINCT a.id,right(name,10) as name,psw,_62,a.ctime,b.token from wcuser a LEFT JOIN wcphone b ON RIGHT (a.NAME, 10) = RIGHT(b.phone, 10) where (_62 is not null or _62 != '') and isalive=1 and export=0 and a.id in   ",
+            " <foreach item='item' collection='list' open='(' separator=',' close=')'> ",
+            " #{item} ",
+            " </foreach> ",
+            " and right(name,11) like '7%'",
+            " </script> "
+    })
+    List<Map<String, Object>> getRusExportData(@Param("list") List<Integer> list);
+
 
     @Select("select count(id) from wcuser where (_62 is not null or _62 != '') and isalive=1 and export=0 and realname=#{realname} " +
             "and right(name,11) like #{country} and ctime BETWEEN #{sDate} AND  #{eDate} ")

@@ -449,6 +449,8 @@ public class WcSmsService {
                 exportData = wcuserDao.getUsExportData(ids);
             } else if (country.equalsIgnoreCase("英国")) {
                 exportData = wcuserDao.getUkExportData(ids);
+            }else if (country.equalsIgnoreCase("俄罗斯")) {
+                exportData = wcuserDao.getRusExportData(ids);
             } else {
                 return "error country";
             }
