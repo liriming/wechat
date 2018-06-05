@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class WcSmsService {
     private static Map<String, String> phoneMsgIdMap = new ConcurrentHashMap<>();
     private static Map<String, Integer> usPhoneMap = new ConcurrentHashMap<>();
     private static Map<String, String> usPhoneCodeMap = new ConcurrentHashMap<>();
+    private static Map<String, String> usPhoneNumberMap = new ConcurrentHashMap<>();
     public final static Logger logger = LoggerFactory.getLogger(WcSmsService.class);
     private final static ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -253,7 +255,7 @@ public class WcSmsService {
 
     public void sendGsimCode(String phone) {
         try {
-            if(phone.startsWith("447")) {
+            if (phone.startsWith("447")) {
                 String token = wcphoneDao.getTokenByPhone(phone);
                 wcphoneDao.setStatusByPhone(phone, 446);
                 HttpResult result = httpService.get(US_HOST_GSIM + "sendSms/" + token + "/" + phone);
@@ -336,8 +338,8 @@ public class WcSmsService {
 
     public String getUsCode(String phone) throws IOException {
 
-        if(usPhoneCodeMap.containsKey(phone)){
-            return  usPhoneCodeMap.get(phone);
+        if (usPhoneCodeMap.containsKey(phone)) {
+            return usPhoneCodeMap.get(phone);
         }
 
         Map<String, Object> map = wcphoneDao.getToken(phone);
@@ -403,8 +405,8 @@ public class WcSmsService {
             isalive = 0;
         }
         AddressUtils addressUtils = new AddressUtils();
-        if (StringUtils.isEmpty(d62)){
-            ip = addressUtils.getAddresses("ip="+ip, "utf-8");
+        if (StringUtils.isEmpty(d62)) {
+            ip = addressUtils.getAddresses("ip=" + ip, "utf-8");
         }
 
         if (!psw.equalsIgnoreCase("ra123456")) {
@@ -426,7 +428,7 @@ public class WcSmsService {
             logger.info(result.getPayload());
             result = httpService.get(US_HOST_GSIM + "refund/" + key + "/63" + phone);
             logger.info(result.getPayload());
-        }else if (StringUtils.isEmpty(d62) && "俄罗斯".equalsIgnoreCase(country)) {
+        } else if (StringUtils.isEmpty(d62) && "俄罗斯".equalsIgnoreCase(country)) {
             Map<String, Object> map = wcphoneDao.getToken(phone);
             String key = dictionaryDao.getValueByName("rus_key");
             HttpResult result = httpService.get(RUS_HOST + "set_status?token=" + key + "&request_id=" + map.get("token") + "&status=USED");
@@ -446,7 +448,7 @@ public class WcSmsService {
                 exportData = wcuserDao.getUsExportData(ids);
             } else if (country.equalsIgnoreCase("英国")) {
                 exportData = wcuserDao.getUkExportData(ids);
-            }else if (country.equalsIgnoreCase("俄罗斯")) {
+            } else if (country.equalsIgnoreCase("俄罗斯")) {
                 exportData = wcuserDao.getRusExportData(ids);
             } else {
                 return "error country";
@@ -658,13 +660,12 @@ public class WcSmsService {
             result = httpService.get(US_HOST_GSIM + "refund/" + token + "/44" + phone);
             logger.info(result.getPayload());
             wcphoneDao.setStatusByPhone("44" + phone, -441);
-        }else if("俄罗斯".equalsIgnoreCase(country)){
+        } else if ("俄罗斯".equalsIgnoreCase(country)) {
             Map<String, Object> map = wcphoneDao.getToken(phone);
             String key = dictionaryDao.getValueByName("rus_key");
             httpService.get(RUS_HOST + "set_status?token=" + key + "&request_id=" + map.get("token") + "&status=USED");
             wcphoneDao.setStatusByPhone(phone, -71);
-        }
-        else {
+        } else {
             wcphoneDao.setStatusByPhone(phone, -1);
         }
     }
@@ -807,7 +808,7 @@ public class WcSmsService {
             data = wcuserDao.searchUsData(searchParams);
         } else if (params.get("country").equals("英国")) {
             data = wcuserDao.searchUkData(searchParams);
-        }else if (params.get("country").equals("俄罗斯")) {
+        } else if (params.get("country").equals("俄罗斯")) {
             data = wcuserDao.searchRusData(searchParams);
         }
 
@@ -832,11 +833,18 @@ public class WcSmsService {
 
     public int updateSysConfig(int id, String clo_value) {
 
-        return dictionaryDao.updateValueById(clo_value,id);
+        return dictionaryDao.updateValueById(clo_value, id);
     }
 
     public String rusPhone(String dicCloName, String ip, String country) {
         try {
+
+            if (usPhoneNumberMap.containsKey(ip)) {
+                String phone = usPhoneNumberMap.get(ip);
+                usPhoneNumberMap.remove(ip);
+                return phone;
+            }
+
             String key = dictionaryDao.getValueByName(dicCloName);
 
             if (key.contains(",")) {
@@ -859,6 +867,7 @@ public class WcSmsService {
                 String country_code = retMsg.get("country_code").toString();
                 String full_number = retMsg.get("full_number").toString();
                 String request_id = retMsg.get("request_id").toString();
+                usPhoneNumberMap.put(ip, phone);
                 wcphoneDao.insertGsimPhone(phone, request_id, Integer.parseInt(country_code) * 10, ip);
                 return phone;
             }
@@ -871,6 +880,12 @@ public class WcSmsService {
 
     public String getRusCode(String phone, String dicCloName) throws IOException {
 
+        if (usPhoneCodeMap.containsKey(phone)) {
+            String code = usPhoneCodeMap.get(phone);
+            usPhoneCodeMap.remove(phone);
+            return code;
+        }
+
         Map<String, Object> map = wcphoneDao.getToken(phone);
         String key = dictionaryDao.getValueByName(dicCloName);
 
@@ -879,7 +894,8 @@ public class WcSmsService {
         Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
 
         if (retMsg.containsKey("sms")) {
-            wcphoneDao.setStatusByPhone(phone,2);
+            wcphoneDao.setStatusByPhone(phone, 2);
+            usPhoneCodeMap.put(phone, retMsg.get("sms").toString());
             return retMsg.get("sms").toString();
         } else {
             return "400";
