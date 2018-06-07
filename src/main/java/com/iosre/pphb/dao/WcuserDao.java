@@ -22,6 +22,7 @@ public interface WcuserDao {
             " #{item} ",
             " </foreach> ",
             " and right(name,11) like '1%'",
+            " order by a.ctime asc",
             " </script> "
     })
     List<Map<String, Object>> getUsExportData(@Param("list") List<Integer> list);
@@ -33,6 +34,7 @@ public interface WcuserDao {
             " #{item} ",
             " </foreach> ",
             " and right(name,12) like '44%'",
+            " order by a.ctime asc",
             " </script> "
     })
     List<Map<String, Object>> getUkExportData(@Param("list") List<Integer> list);
@@ -44,6 +46,7 @@ public interface WcuserDao {
             " #{item} ",
             " </foreach> ",
             " and right(name,11) like '7%'",
+            " order by a.ctime asc",
             " </script> "
     })
     List<Map<String, Object>> getRusExportData(@Param("list") List<Integer> list);
