@@ -197,12 +197,18 @@ public class WcSmsService {
     }
 
     public String usPhone(String ip) {
+        if (usPhoneNumberMap.containsKey(ip)) {
+            String phone = usPhoneNumberMap.get(ip);
+            usPhoneNumberMap.remove(ip);
+            return phone;
+        }
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
         if (phoneMsg == null) {
             return "400";
         }
         String phone = phoneMsg.get("phone").toString();
+        usPhoneNumberMap.put(ip,phone);
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatusAndIP(id, 1, ip);
         return phone;
@@ -211,11 +217,18 @@ public class WcSmsService {
 
     public String usPhone1(String ip) {
 
+        if (usPhoneNumberMap.containsKey(ip)) {
+            String phone = usPhoneNumberMap.get(ip);
+            usPhoneNumberMap.remove(ip);
+            return phone;
+        }
+
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
         if (phoneMsg == null) {
             return "400";
         }
         String phone = phoneMsg.get("phone").toString();
+        usPhoneNumberMap.put(ip,phone);
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatusAndIP(id, 1, ip);
         return phone.substring(1, phone.length());
@@ -224,6 +237,11 @@ public class WcSmsService {
 
     public String gSimPhone(String dicCloName, String ip) {
         try {
+            if (usPhoneNumberMap.containsKey(ip)) {
+                String phone = usPhoneNumberMap.get(ip);
+                usPhoneNumberMap.remove(ip);
+                return phone;
+            }
             String key = dictionaryDao.getValueByName(dicCloName);
 
             if (key.contains(",")) {
@@ -243,6 +261,7 @@ public class WcSmsService {
             Map<String, Object> retMsg = jsonMapper.readValue(result.getPayload(), Map.class);
             if (retMsg.containsKey("number")) {
                 String phone = retMsg.get("number").toString();
+                usPhoneNumberMap.put(ip,phone);
                 wcphoneDao.insertGsimPhone(phone, key, Integer.parseInt(phone.substring(0, 2)) * 10, ip);
                 return phone.substring(2);
             }
