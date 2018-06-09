@@ -197,18 +197,17 @@ public class WcSmsService {
     }
 
     public String usPhone(String ip) {
-        if (usPhoneNumberMap.containsKey(ip)) {
+       /* if (usPhoneNumberMap.containsKey(ip)) {
             String phone = usPhoneNumberMap.get(ip);
             usPhoneNumberMap.remove(ip);
             return phone;
-        }
+        }*/
 
         Map<String, Object> phoneMsg = wcphoneDao.getPhoneMsg();
         if (phoneMsg == null) {
             return "400";
         }
         String phone = phoneMsg.get("phone").toString();
-        usPhoneNumberMap.put(ip,phone);
         int id = (Integer) phoneMsg.get("id");
         wcphoneDao.setStatusAndIP(id, 1, ip);
         return phone;
