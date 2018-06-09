@@ -370,7 +370,7 @@ public class WcSmsService {
         int id = (Integer) map.get("id");
 
         if ((retMsg.containsKey("flag") && (Boolean) retMsg.get("flag")) || (retMsg.containsKey("msg") && !retMsg.get("msg").toString().contains("提醒"))) {
-
+            logger.info(result.getPayload());
             String regEx = "[^0-9]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(result.getPayload());
