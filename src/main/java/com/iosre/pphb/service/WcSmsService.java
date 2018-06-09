@@ -358,7 +358,9 @@ public class WcSmsService {
     public String getUsCode(String phone) throws IOException {
 
         if (usPhoneCodeMap.containsKey(phone)) {
-            return usPhoneCodeMap.get(phone);
+            String code = usPhoneCodeMap.get(phone);
+            usPhoneCodeMap.remove(phone);
+            return code;
         }
 
         Map<String, Object> map = wcphoneDao.getToken(phone);
