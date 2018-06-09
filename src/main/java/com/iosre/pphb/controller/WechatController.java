@@ -117,7 +117,7 @@ public class WechatController {
             }else if ( "菲律宾".equalsIgnoreCase(country)){
                 wcSmsService.sendGsimCode("63" + phone);
             }else {
-                wcSmsService.sendGsimCode("44" +phone);
+                wcSmsService.sendGsimCode(phone);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
