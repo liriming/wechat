@@ -357,11 +357,11 @@ public class WcSmsService {
 
     public String getUsCode(String phone) throws IOException {
 
-        if (usPhoneCodeMap.containsKey(phone)) {
+      /*  if (usPhoneCodeMap.containsKey(phone)) {
             String code = usPhoneCodeMap.get(phone);
             usPhoneCodeMap.remove(phone);
             return code;
-        }
+        }*/
 
         Map<String, Object> map = wcphoneDao.getToken(phone);
 
@@ -376,7 +376,7 @@ public class WcSmsService {
             Matcher m = p.matcher(result.getPayload());
             wcphoneDao.setStatus(id, 2);
             String code = m.replaceAll("").trim();
-            usPhoneCodeMap.put(phone, code);
+//            usPhoneCodeMap.put(phone, code);
             return code;
         } else {
             return "400";
