@@ -922,4 +922,12 @@ public class WcSmsService {
         }
     }
 
+    public Map<String, Object> getHourCount(){
+
+        List<Map<String, Object>> data = wcuserDao.getHourCount();
+        Map<String, Object> result = new HashedMap();
+        result.put("results", data);
+        return result;
+    }
+
 }

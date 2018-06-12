@@ -257,4 +257,9 @@ public class WechatController {
 
         }
     }
+
+    @RequestMapping(value ="getHourCount", method = RequestMethod.GET)
+    public Map<String, Object> getHourCount()  {
+        return wcSmsService.getHourCount();
+    }
 }

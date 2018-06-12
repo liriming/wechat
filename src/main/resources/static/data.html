@@ -57,6 +57,41 @@
             width: 20px;
             height: 20px
         }
+
+        #sysMain {
+            height: 2400px;
+            width: 2400px;
+            padding-top: 90px;
+            text-align: center;
+        }
+
+        #fullbg {
+            background-color: gray;
+            left: 0;
+            opacity: 0.5;
+            position: absolute;
+            top: 0;
+            z-index: 3;
+            filter: alpha(opacity = 50);
+            -moz-opacity: 0.5;
+            -khtml-opacity: 0.5;
+        }
+
+        #dialog {
+            background-color: #fff;
+            border: 5px solid rgba(0, 0, 0, 0.4);
+            height: 60s0px;
+            left: 50%;
+            margin: -200px 0 0 -200px;
+            padding: 1px;
+            position: fixed !important; /* 娴姩瀵硅瘽妗� */
+            position: absolute;
+            top: 50%;
+            width: 400px;
+            z-index: 5;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 
 </head>
@@ -65,7 +100,7 @@
 <div align="center">
     <h2 style="color:blue" id="h2"></h2>
     <h3><a href="javascript:void(0)" onclick="aClick()">重置计算时间</a></h3>
-    <h5><a href="javascript:void(0)" onclick="bClick()">接收不到验证码？</a></h5>
+    <h5><a href="javascript:void(0)" onclick="bClick()">时间段统计</a></h5>
     <table>
         <tbody>
         <tr>
@@ -178,7 +213,26 @@
     <button type="button" class="export" onclick="exportData()">导出</button>
     <br>-->
 </div>
+<div id="sysMain"></div>
 </body>
+
+
+<script id="hourCountListTpl" type="text/html">
+    <table class="table table-striped table-condensed table-hover">
+        <tbody>
+        <tr>
+            <th>小时</th>
+            <th>数量</th>
+        </tr>
+        {{each results as item i}}
+        <tr>
+            <td>{{item.Hour}}时</td>
+            <td>{{item.Count}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
 
 <script>
     $(function () {
@@ -270,72 +324,51 @@
     }
 
     function bClick() {
-        var aConfirm = confirm("清除当前接收不到验证码的token，确认吗？");
-        if (aConfirm == true) {
-            $.ajax({
-                type: "GET",
-                url: "/wc/resetPhone",
-                data: null,
-                dataType: "json"
-            })
-            location.replace(document.referrer);
+        $.ajax({
+            type: "GET",
+            url: "/wc/getHourCount",
+            data: null,
+            dataType: "json",
+            success: function(result){
+                var html = getHourCountCallback(result);
+                $("#sysMain").empty();
+                $("#sysMain").append(html);
+                var bh = $("body").height();
+                var bw = $("body").width();
+                $("#fullbg").css({
+                    height : bh,
+                    width : bw,
+                    display : "block"
+                });
+                $("#dialog").show();
+            }
+
+        });
+    }
+
+    function getHourCountCallback(result) {
+        resultList = result
+        if (resultList.length == 0) {
+            return;
         }
+        var html = template('hourCountListTpl', result);
+
+        return getHourCountHtml(html);
+    }
+
+    function getHourCountHtml(html) {
+        return "<div id='fullbg'></div> "
+            + "<div id='dialog'> "
+            + "<p class='close'><a href='#' onclick='closeBg();'>关闭</a></p> "
+            + html
+            + "</div> ";
+    }
+
+    //关闭灰色 jQuery 遮罩
+    function closeBg() {
+        $("#fullbg,#dialog").hide();
     }
     
-   /* function exportData() {
-        var url = 'wc/exportData';
-        var num = 1000000;
-        var psw = $("#psw").val();
-        if (psw === "") {
-            alert("请输入密码");
-        }
-        var type = $("input[name='r']:checked").val();
-
-        /!**
-         * 使用form表单来发送请求
-         * 1.method属性用来设置请求的类型——post还是get
-         * 2.action属性用来设置请求路径。
-         *
-         *!/
-        var form = $("<form>");//定义一个form表单
-        form.attr("style", "display:none");
-        form.attr("target", "");
-        form.attr("method", "get");  //请求类型
-        form.attr("action", url);   //请求地址
-        $("body").append(form);//将表单放置在web中
-
-        /!**
-         * input标签主要用来传递请求所需的参数：
-         *
-         * 1.name属性是传递请求所需的参数名.
-         * 2.value属性是传递请求所需的参数值.
-         *
-         * 3.当为get类型时，请求所需的参数用input标签来传递，直接写在URL后面是无效的。
-         * 4.当为post类型时，queryString参数直接写在URL后面，formData参数则用input标签传递
-         *       有多少数据则使用多少input标签
-         *
-         *!/
-        var input1 = $("<input>");
-        input1.attr("type", "hidden");
-        input1.attr("name", "psw");
-        input1.attr("value", psw);
-        form.append(input1);
-
-        var input2 = $("<input>");
-        input2.attr("type", "hidden");
-        input2.attr("name", "count");
-        input2.attr("value", num);
-        form.append(input2);
-
-        var input3 = $("<input>");
-        input3.attr("type", "hidden");
-        input3.attr("name", "type");
-        input3.attr("value", type);
-        form.append(input3);
-
-        form.submit();//表单提交
-
-    }*/
 
 </script>
 

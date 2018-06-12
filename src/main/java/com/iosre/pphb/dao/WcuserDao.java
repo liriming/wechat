@@ -121,4 +121,8 @@ public interface WcuserDao {
             "and a.ctime BETWEEN #{bTime} AND  #{eTime} and right(name,11) like '7%' order by a.ctime ${sort} limit #{count} ")
     List<Map<String, String>> searchRusData(Map<String,Object> params);
 
+
+    @Select("SELECT HOUR(ctime) as Hour,count(*) as Count FROM wcuser WHERE isalive=1 AND ctime like CONCAT(FROM_UNIXTIME(UNIX_TIMESTAMP(),'%Y-%m-%d'),'%') AND export=0 GROUP BY HOUR(ctime) ORDER BY Hour(ctime)")
+    List<Map<String, Object>> getHourCount();
+
 }
