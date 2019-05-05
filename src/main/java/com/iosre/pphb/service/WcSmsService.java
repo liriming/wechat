@@ -697,7 +697,7 @@ public class WcSmsService {
             if (phone.startsWith("44")) {
                 String token = wcphoneDao.getTokenByPhone(phone);
                 HttpResult result = httpService.get("https://gsim.online/api/sendSecondSms/" + token + "/" + phone);
-                logger.info("send sms:{},phone:{}", result.getPayload(), phone);
+//                logger.info("send sms:{},phone:{}", result.getPayload(), phone);
                 wcuserDao.updatePhoIsalive(phone, -2);
                 try {
                     Thread.sleep(5000);
